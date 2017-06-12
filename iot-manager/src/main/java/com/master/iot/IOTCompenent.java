@@ -1,13 +1,17 @@
 package com.master.iot;
 
-public class IOTCompenent {
+import java.io.Serializable;
+
+public class IOTCompenent implements Serializable {
+
+	private static final long serialVersionUID = -6926115521392878254L;
 
 	private String name;
 
 	private boolean on;
-	
+
 	private int index = -1;
-	
+
 	public IOTCompenent(String name, boolean on, int index) {
 		this.name = name;
 		this.on = on;
@@ -33,5 +37,5 @@ public class IOTCompenent {
 	public int getIndex() {
 		return index;
 	}
-	
+
 }

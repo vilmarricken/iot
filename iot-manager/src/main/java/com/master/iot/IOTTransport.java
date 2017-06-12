@@ -1,19 +1,33 @@
 package com.master.iot;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.Socket;
 
-public abstract class IOTTransport {
+public class IOTTransport {
 
-	byte[] transport(byte[] send, OutputStream out, InputStream in) throws Exception {
+	private Socket socket;
+
+	private InputStream in;
+
+	private OutputStream out;
+
+	public IOTTransport(Socket socket) throws Exception {
+		this.socket = socket;
+		this.in = this.socket.getInputStream();
+		this.out = this.socket.getOutputStream();
+	}
+
+	byte[] transport(byte[] send) throws Exception {
 		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 		try {
-			out.write(send);
-			out.write(-1);
+			this.out.write(send);
+			this.out.write(-1);
 			int t = 0;
 			do {
-				t = in.read();
+				t = this.in.read();
 				if (t != 255) {
 					buffer.write(t);
 				}
@@ -27,29 +41,19 @@ public abstract class IOTTransport {
 		}
 	}
 
-	void setControllerName(String id, OutputStream out, InputStream in) throws Exception {
-		byte idBytes[] = id.getBytes();
-		byte send[] = new byte[idBytes.length + 1];
-		send[0] = 0;
-		System.arraycopy(idBytes, 0, send, 1, idBytes.length);
-		transport(send, out, in);
-		String newName = getControllerName(out, in);
-		if (newName == null) {
-			throw new Exception("Erro ao trocar o nome do component");
+	void close() {
+		try {
+			this.socket.close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		if (!newName.equals(id)) {
-			throw new Exception("Não foi possível trocar o nome do component");
-		}
+		this.in = null;
+		this.out = null;
+		this.socket = null;
 	}
 
-	String getControllerName(OutputStream out, InputStream in) throws Exception {
-		byte[] r = transport(new byte[] { (byte) 1 }, out, in);
-		if (r.length == 0) {
-			return null;
-		}
-		return new String(r, 0, r.length);
+	public boolean isOpen() {
+		return this.socket != null;
 	}
-
-	abstract void close();
 
 }

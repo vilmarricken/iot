@@ -1,32 +1,30 @@
 package com.master.iot;
 
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.Serializable;
 import java.net.Socket;
 
-public class IOTController extends IOTTransport {
+public class IOTController implements Serializable {
 
-	private enum COMMAND {
-		CHANGE_NAME, INFO, STATE, ON, OFF
+	private static final long serialVersionUID = -1057493262219216697L;
+
+	public enum COMMAND {
+		INFO, STATE, ON, OFF
 	}
 
-	private String id;
+	private final String id;
+	
+	private String name;
 
 	private IOTCompenent components[];
 
-	private Socket socket;
+	private transient IOTTransport transport;
 
-	private InputStream in;
+	public IOTController(String id) {
+		this.id = id;
+	}
 
-	private OutputStream out;
-
-	private IOTManager iotManager;
-
-	public IOTController(Socket socket, IOTManager iotManager) throws Exception {
-		this.socket = socket;
-		this.in = this.socket.getInputStream();
-		this.out = this.socket.getOutputStream();
-		this.iotManager = iotManager;
+	public void connect(Socket socket) throws Exception {
+		this.transport = new IOTTransport(socket);
 		start();
 	}
 
@@ -49,7 +47,7 @@ public class IOTController extends IOTTransport {
 	}
 
 	private byte[] checkState() throws Exception {
-		return transport(new byte[] { 2 }, this.out, this.in);
+		return this.transport.transport(new byte[] { 2 });
 	}
 
 	public void state() throws Exception {
@@ -57,36 +55,20 @@ public class IOTController extends IOTTransport {
 	}
 
 	private void start() throws Exception {
-		this.info();
-		this.iotManager.addComponent(this);
 		stateStart(checkState());
 	}
 
-	public void info() throws Exception {
-		String id = getControllerName(this.out, this.in);
-		if (id == null) {
-			this.id = this.iotManager.newID();
-			this.setControllerName(this.id, out, in);
-			this.iotManager.addComponent(this);
-		} else {
-			this.id = id;
-		}
-	}
-
-	public void changeControllerName(String id) throws Exception {
-		setControllerName(id, this.out, this.in);
-		String currentId = this.id;
-		this.id = id;
-		this.iotManager.changeId(currentId, id);
+	public void changeControllerName(String name) throws Exception {
+		this.name = name;
 	}
 
 	public void on(byte port) throws Exception {
-		transport(new byte[] { 3, port }, out, in);
+		this.transport.transport(new byte[] { 3, port });
 		this.components[port].setOn(true);
 	}
 
 	public void off(byte port) throws Exception {
-		transport(new byte[] { 4, port }, out, in);
+		this.transport.transport(new byte[] { 4, port });
 		this.components[port].setOn(false);
 	}
 
@@ -106,20 +88,22 @@ public class IOTController extends IOTTransport {
 	public String getId() {
 		return this.id;
 	}
+	
+	public String getName() {
+		return name;
+	}
 
 	public void close() {
 		try {
-			if (this.socket != null) {
-				this.socket.close();
-			}
-			this.iotManager.remove(this.id);
+			this.transport.close();
+			this.transport = null;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public boolean isOpen() {
+		return this.transport != null && this.transport.isOpen();
 	}
 
 }
