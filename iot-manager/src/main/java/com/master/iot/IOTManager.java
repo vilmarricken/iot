@@ -15,41 +15,109 @@ import java.util.Set;
 
 public class IOTManager {
 
-	private Map<String, IOTController> controllers = new HashMap<>();
-
 	private static final IOTManager INSTANCE = new IOTManager();
 
-	public static void main(String[] args) {
+	public static IOTManager getInstance() {
+		return IOTManager.INSTANCE;
+	}
+
+	public static void main(final String[] args) {
 		IOTManager.getInstance().run();
 	}
 
+	private Map<String, IOTController> controllers = new HashMap<>();
+
 	private IOTManager() {
-		read();
+		this.read();
 	}
 
-	public static IOTManager getInstance() {
-		return INSTANCE;
+	public void changeControllerName(final String currentId, final String newId) throws Exception {
+		this.get(currentId).changeControllerName(newId);
+	}
+
+	void changeId(final String currentID, final String newId) {
+		final IOTController component = this.controllers.get(currentID);
+		this.controllers.put(newId, component);
+	}
+
+	private IOTController get(final String id) {
+		return this.controllers.get(id);
+	}
+
+	private String getAddress(final String address) {
+		System.out.println("Client address: " + address);
+		if (address.startsWith("/")) {
+			return address.substring(1);
+		}
+		return address;
+	}
+
+	private File getFile() {
+		return new File("iot.bin");
+	}
+
+	public void list() {
+		final Set<Entry<String, IOTController>> values = this.controllers.entrySet();
+		for (final Entry<String, IOTController> entry : values) {
+			final IOTController c = entry.getValue();
+			System.out.println(c.getId() + " - " + c.getName() + " - " + (c.isOpen() ? "Open" : "Closed"));
+			final IOTCompenent[] cs = c.getComponents();
+			for (final IOTCompenent iotCompenent : cs) {
+				System.out.println(iotCompenent.getIndex() + " - " + iotCompenent.getName() + " - " + iotCompenent.isOn());
+			}
+		}
+
+	}
+
+	public void off(final String id, final byte port) throws Exception {
+		this.get(id).off(port);
+	}
+
+	public void on(final String id, final byte port) throws Exception {
+		this.get(id).on(port);
+	}
+
+	@SuppressWarnings("unchecked")
+	private void read() {
+		final File file = this.getFile();
+		if (file.exists()) {
+			try {
+				final FileInputStream in = new FileInputStream(file);
+				final ObjectInputStream o = new ObjectInputStream(in);
+				this.controllers = (Map<String, IOTController>) o.readObject();
+				o.close();
+				in.close();
+			} catch (final Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void remove(final String key) {
+		this.controllers.remove(key);
 	}
 
 	private void run() {
 		ServerSocket sc = null;
 		try {
 			try {
-				sc = new ServerSocket(1000);
-			} catch (IOException e) {
+				sc = new ServerSocket(800);
+			} catch (final IOException e) {
 				e.printStackTrace();
 			}
 			while (true) {
 				try {
-					Socket socket = sc.accept();
-					String key = socket.getInetAddress().toString();
+					System.out.println("Aguardando");
+					final Socket socket = sc.accept();
+					final String key = this.getAddress(socket.getInetAddress().toString());
+					socket.close();
 					IOTController controller = this.controllers.get(key);
 					if (controller == null) {
 						controller = new IOTController(key);
 						this.controllers.put(key, controller);
 					}
-					controller.connect(socket);
-				} catch (Exception e) {
+					controller.connect();
+				} catch (final Exception e) {
 					e.printStackTrace();
 				}
 			}
@@ -57,84 +125,25 @@ public class IOTManager {
 			if (sc != null) {
 				try {
 					sc.close();
-				} catch (IOException e) {
+				} catch (final IOException e) {
 					e.printStackTrace();
 				}
 			}
 		}
 	}
 
-	private File getFile() {
-		return new File("iot.bin");
-	}
-
-	@SuppressWarnings("unchecked")
-	private void read() {
-		File file = getFile();
-		if (file.exists()) {
-			try {
-				FileInputStream in = new FileInputStream(file);
-				ObjectInputStream o = new ObjectInputStream(in);
-				this.controllers = (Map<String, IOTController>) o.readObject();
-				o.close();
-				in.close();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
 	public void save() {
 		try {
-			FileOutputStream out = new FileOutputStream(getFile());
-			ObjectOutputStream o = new ObjectOutputStream(out);
+			final FileOutputStream out = new FileOutputStream(this.getFile());
+			final ObjectOutputStream o = new ObjectOutputStream(out);
 			o.writeObject(this.controllers);
 			o.flush();
 			o.close();
 			out.flush();
 			out.close();
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	void changeId(String currentID, String newId) {
-		IOTController component = controllers.get(currentID);
-		controllers.put(newId, component);
-	}
-
-	public void changeControllerName(String currentId, String newId) throws Exception {
-		this.get(currentId).changeControllerName(newId);
-	}
-
-	private IOTController get(String id) {
-		return this.controllers.get(id);
-	}
-
-	public void on(String id, byte port) throws Exception {
-		this.get(id).on(port);
-	}
-
-	public void off(String id, byte port) throws Exception {
-		this.get(id).off(port);
-	}
-
-	public void remove(String key) {
-		this.controllers.remove(key);
-	}
-
-	public void list() {
-		Set<Entry<String, IOTController>> values = controllers.entrySet();
-		for (Entry<String, IOTController> entry : values) {
-			IOTController c = entry.getValue();
-			System.out.println(c.getId() + " - " + c.getName() + " - " + (c.isOpen() ? "Open" : "Closed"));
-			IOTCompenent[] cs = c.getComponents();
-			for (IOTCompenent iotCompenent : cs) {
-				System.out.println(
-						iotCompenent.getIndex() + " - " + iotCompenent.getName() + " - " + iotCompenent.isOn());
-			}
-		}
-
 	}
 
 }

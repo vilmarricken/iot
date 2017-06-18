@@ -1,59 +1,64 @@
 package com.master.iot;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.Arrays;
 
 public class IOTTransport {
 
-	private Socket socket;
+	private final String address;
 
-	private InputStream in;
+	private final boolean onLine = false;
 
-	private OutputStream out;
+	private final int port;
 
-	public IOTTransport(Socket socket) throws Exception {
-		this.socket = socket;
-		this.in = this.socket.getInputStream();
-		this.out = this.socket.getOutputStream();
-	}
-
-	byte[] transport(byte[] send) throws Exception {
-		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-		try {
-			this.out.write(send);
-			this.out.write(-1);
-			int t = 0;
-			do {
-				t = this.in.read();
-				if (t != 255) {
-					buffer.write(t);
-				}
-			} while (t != 255);
-			byte[] ret = buffer.toByteArray();
-			buffer.reset();
-			return ret;
-		} catch (Exception e) {
-			close();
-			throw e;
-		}
+	public IOTTransport(final String address, final int port) {
+		this.address = address;
+		this.port = port;
 	}
 
 	void close() {
-		try {
-			this.socket.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		this.in = null;
-		this.out = null;
-		this.socket = null;
 	}
 
 	public boolean isOpen() {
-		return this.socket != null;
+		return this.onLine;
+	}
+
+	byte[] transport(final String send) throws Exception {
+
+		final Socket socket = new Socket(this.address, this.port);
+
+		final InputStream in = socket.getInputStream();
+
+		final OutputStream out = socket.getOutputStream();
+
+		final ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+		try {
+			final byte[] b = send.getBytes();
+			System.out.println(Arrays.toString(b));
+			out.write(b);
+			int t = 0;
+			do {
+				t = in.read();
+				System.out.println(t);
+				if (t != '\r') {
+					buffer.write(t);
+				}
+			} while (t != '\r');
+			final byte[] ret = buffer.toByteArray();
+			System.out.println(new String(ret));
+			buffer.reset();
+			socket.close();
+			in.close();
+			out.close();
+			return ret;
+		} catch (final Exception e) {
+			this.close();
+			throw e;
+		}
+
 	}
 
 }
