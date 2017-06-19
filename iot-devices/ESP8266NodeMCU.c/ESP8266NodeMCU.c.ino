@@ -46,18 +46,14 @@ bool connectServer(WiFiClient client) {
 }
 
 void sendState(WiFiClient client) {
-  Serial.print("Send: ");
   for( int i = 0; i < 8; i++ ) {
-        Serial.print(i);
-        Serial.print(" - ");
-        Serial.println(deviceState[i]);
-        if( deviceState[i] == 1 ) {
-          client.print( (char)1 );
-        } else {
-          client.print( (char)2 );
-        }
+    if( deviceState[i] == 1 ) {
+      client.print( (char)1 );
+    } else {
+      client.print( (char)0 );
+    }
   }
-  client.print((char)-1);
+  client.print('\r');
 }
 
 void onDevice(int pos) {
