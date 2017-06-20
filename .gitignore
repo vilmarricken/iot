@@ -1,0 +1,11 @@
+iot-manager/.classpath
+iot-manager/.project
+iot-manager/target/iot-manager-1.0-SNAPSHOT.jar
+iot-manager/target/maven-archiver/
+iot-manager/target/maven-status/
+iot-server/.classpath
+iot-server/.project
+iot-server/.settings/
+iot-server/WebContent/WEB-INF/classes/
+iot-server/WebContent/WEB-INF/lib/
+iot-server/target/
