@@ -8,6 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -31,13 +32,8 @@ public class IOTManager {
 		this.read();
 	}
 
-	public void changeControllerName(final String currentId, final String newId) throws Exception {
-		this.get(currentId).changeControllerName(newId);
-	}
-
-	void changeId(final String currentID, final String newId) {
-		final IOTController component = this.controllers.get(currentID);
-		this.controllers.put(newId, component);
+	public void changeControllerName(final String id, final String name) throws Exception {
+		this.get(id).setName(name);
 	}
 
 	private IOTController get(final String id) {
@@ -56,17 +52,8 @@ public class IOTManager {
 		return new File("iot.bin");
 	}
 
-	public void list() {
-		final Set<Entry<String, IOTController>> values = this.controllers.entrySet();
-		for (final Entry<String, IOTController> entry : values) {
-			final IOTController c = entry.getValue();
-			System.out.println(c.getId() + " - " + c.getName() + " - " + (c.isOpen() ? "Open" : "Closed"));
-			final IOTCompenent[] cs = c.getComponents();
-			for (final IOTCompenent iotCompenent : cs) {
-				System.out.println(iotCompenent.getIndex() + " - " + iotCompenent.getName() + " - " + iotCompenent.isOn());
-			}
-		}
-
+	public Collection<IOTController> list() {
+		return this.controllers.values();
 	}
 
 	public void off(final String id, final byte port) throws Exception {
