@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>IoT Mansion</title>
+<script src="/iot-server/js/jquery-3.2.1.min.js"></script>
+<script>
+$(document).ready(function(){
+    $("button").click(function(){
+        $.get("demo_test.asp", function(data, status){
+            alert("Data: " + data + "\nStatus: " + status);
+        });
+    });
+});
+</script>
+</head>
+<body>
+
+</body>
+</html>
