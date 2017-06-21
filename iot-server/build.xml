@@ -1,0 +1,45 @@
+<project basedir="." default="mvn" name="iot-server" >
+	<property name="project.jar.name" value="${project.name}-${project.version}.jar" />
+	<property name="project.jar.dir" value="target/${project.jar.name}" />
+
+	<!-- Define the main properties of this project -->
+	<property name="src.dir" value="${src.dir}" />
+	<property name="test.dir" value="${test.dir}" />
+	<property name="build.dir" value="${build.dir}" />
+	<property name="lib.junit.dir" value="${project.libraries}" />
+	<property name="classes.dir" value="${build.dir}/${classes.dir}" />
+	<property name="reports.dir" value="${build.dir}/${reports.dir}" />
+	<property name="reports.junit.xml.dir" value="${build.dir}/${reports.dir}/${reports.junit.xml.dir}" />
+
+	<target name="mvn" depends="clean">
+		<exec dir="." executable="cmd.exe">
+			<arg line="/c mvn clean package source:jar install -DdownloadSource=true" />
+		</exec>
+	</target>
+	<target name="mvn.test" depends="clean">
+		<exec dir="." executable="cmd.exe">
+			<arg line="/c mvn clean package source:jar install" />
+		</exec>
+	</target>
+	<target name="eclipse" depends="clean">
+		<exec dir="." executable="cmd.exe">
+			<arg line="/c mvn eclipse:eclipse -DdownloadSources" />
+		</exec>
+	</target>
+	<target name="clean">
+		<exec dir="." executable="cmd.exe">
+			<arg line="/c mvn eclipse:clean" />
+		</exec>
+	</target>
+	<!--
+	<target name="copy.jar" depends="mvn">
+		<copy file="${project.jar.dir}" tofile="${sesuite.lib.dir}/${project.name}-${project.version.prefix}.jar" overwrite="true" />
+	</target>
+	<target name="copy" depends="mvn">
+		<property name="projectName" value="se-dynamic-entity-persistence" />
+		<property name="projectJar" value="${projectName}-${project.version}.jar" />
+		<property name="copyTo" value="..\..\System\platform\webapps\softexpert\WEB-INF\lib" />
+		<copy file="target/${projectJar}" tofile="${copyTo}\${projectJar}" overwrite="true" />
+	</target>
+	-->
+</project>
