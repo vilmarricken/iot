@@ -15,10 +15,10 @@
 
 	<servlet>
 		<servlet-name>Jersey Web Application</servlet-name>
-		<!--
 		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
-		-->
+		<!--
 		<servlet-class>com.master.iot.servlet.TesteServlet</servlet-class>
+		-->
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet-mapping>

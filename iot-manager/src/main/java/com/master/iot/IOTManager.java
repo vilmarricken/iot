@@ -11,14 +11,17 @@ import java.net.Socket;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
-public class IOTManager {
+public class IOTManager implements Runnable {
 
 	private static final IOTManager INSTANCE = new IOTManager();
 
+	private boolean running = false;
+
 	public static IOTManager getInstance() {
+		if (!INSTANCE.isRunning()) {
+			INSTANCE.start();
+		}
 		return IOTManager.INSTANCE;
 	}
 
@@ -84,10 +87,15 @@ public class IOTManager {
 		this.controllers.remove(key);
 	}
 
-	private void run() {
+	public void start(){
+		new Thread(this).start();
+	}
+	
+	public void run() {
 		ServerSocket sc = null;
 		try {
 			try {
+				this.running = true;
 				sc = new ServerSocket(800);
 			} catch (final IOException e) {
 				e.printStackTrace();
@@ -131,6 +139,10 @@ public class IOTManager {
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public boolean isRunning() {
+		return running;
 	}
 
 }

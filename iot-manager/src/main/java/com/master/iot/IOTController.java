@@ -20,6 +20,7 @@ public class IOTController implements Serializable {
 
 	public IOTController(final String id) {
 		this.id = id;
+		components = new IOTCompenent[] { new IOTCompenent("luz", false, 0), new IOTCompenent("irrigação", true, 1) };
 	}
 
 	public void setName(String name) {
@@ -101,8 +102,7 @@ public class IOTController implements Serializable {
 	private void stateStart(final byte[] state) throws Exception {
 		this.components = new IOTCompenent[state.length];
 		for (int i = 0; i < state.length; i++) {
-			this.components[i] = new IOTCompenent("Component " + i,
-					state[i] == 1, i);
+			this.components[i] = new IOTCompenent("Component " + i, state[i] == 1, i);
 		}
 	}
 

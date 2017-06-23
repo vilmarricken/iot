@@ -56,7 +56,7 @@ public class IOTClient {
 	static void send(byte[] send, OutputStream out) throws Exception {
 		try {
 			out.write(send);
-			out.write(-1);
+			out.write('\r');
 		} catch (Exception e) {
 			throw e;
 		}
