@@ -10,3 +10,6 @@ iot-server/WebContent/WEB-INF/classes/
 iot-server/WebContent/WEB-INF/lib/
 iot-server/target/
 iot-manager/.settings/
+bin/
+iot-manager/target/.gitignore
+iot-manager/target/classes/

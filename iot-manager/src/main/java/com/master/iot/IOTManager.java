@@ -77,9 +77,17 @@ public class IOTManager implements Runnable {
 				this.controllers = (Map<String, IOTController>) o.readObject();
 				o.close();
 				in.close();
+				startControllers();
 			} catch (final Exception e) {
 				e.printStackTrace();
 			}
+		}
+	}
+
+	private void startControllers() throws Exception {
+		Collection<IOTController> controllers = this.controllers.values();
+		for (IOTController controller : controllers) {
+			controller.start();
 		}
 	}
 
@@ -111,7 +119,8 @@ public class IOTManager implements Runnable {
 						controller = new IOTController(key);
 						this.controllers.put(key, controller);
 					}
-					controller.connect();
+					controller.start();
+					save();
 				} catch (final Exception e) {
 					e.printStackTrace();
 				}

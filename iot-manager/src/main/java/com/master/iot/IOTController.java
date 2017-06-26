@@ -20,7 +20,7 @@ public class IOTController implements Serializable {
 
 	public IOTController(final String id) {
 		this.id = id;
-		components = new IOTCompenent[] { new IOTCompenent("luz", false, 0), new IOTCompenent("irrigação", true, 1) };
+		this.name = id;
 	}
 
 	public void setName(String name) {
@@ -28,7 +28,14 @@ public class IOTController implements Serializable {
 	}
 
 	private byte[] checkState() throws Exception {
-		return this.transport.transport("1\r");
+		return this.getTransport().transport("1\r");
+	}
+
+	private IOTTransport getTransport() throws Exception {
+		if(this.transport == null || !this.transport.isOpen()){
+			connect();
+		}
+		return this.transport;
 	}
 
 	public void close() {
@@ -40,9 +47,8 @@ public class IOTController implements Serializable {
 		}
 	}
 
-	public void connect() throws Exception {
+	private void connect() throws Exception {
 		this.transport = new IOTTransport(this.id, 1001);
-		this.start();
 	}
 
 	@Override
@@ -75,16 +81,16 @@ public class IOTController implements Serializable {
 	}
 
 	public void off(final byte port) throws Exception {
-		this.transport.transport("3" + port + "\r");
+		this.getTransport().transport("3" + port + "\r");
 		this.components[port].setOn(false);
 	}
 
 	public void on(final int port) throws Exception {
-		this.transport.transport("2" + port + "\r");
+		this.getTransport().transport("2" + port + "\r");
 		this.components[port].setOn(true);
 	}
 
-	private void start() throws Exception {
+	public void start() throws Exception {
 		this.stateStart(this.checkState());
 	}
 
@@ -104,6 +110,7 @@ public class IOTController implements Serializable {
 		for (int i = 0; i < state.length; i++) {
 			this.components[i] = new IOTCompenent("Component " + i, state[i] == 1, i);
 		}
+		
 	}
 
 }

@@ -10,7 +10,7 @@ public class IOTTransport {
 
 	private final String address;
 
-	private final boolean onLine = false;
+	private boolean onLine = false;
 
 	private final int port;
 
@@ -53,8 +53,10 @@ public class IOTTransport {
 			socket.close();
 			in.close();
 			out.close();
+			this.onLine = true;
 			return ret;
 		} catch (final Exception e) {
+			this.onLine = false	;
 			this.close();
 			throw e;
 		}
