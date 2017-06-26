@@ -6,6 +6,8 @@ import java.net.Socket;
 
 public class Teste {
 
+	private static int deviceState[] = { 0, 0, 1, 0, 0, 0, 0, 0 };
+
 	public static void main(final String[] args) throws Exception {
 		// final ServerSocket sc = new ServerSocket(800);
 		// final Socket s = sc.accept();
@@ -13,23 +15,37 @@ public class Teste {
 		// final OutputStream out = s.getOutputStream();
 		int t = 0;
 		// while (true) {
-		Socket s = new Socket("127.0.0.1", 800);
-		final InputStream in = s.getInputStream();
-		final OutputStream out = s.getOutputStream();
-		final String msg = "Servidor para cliente: " + t++ + "\r";
-		System.out.println(msg);
-		out.write((msg).getBytes());
-		final ByteArrayOutputStream stream = new ByteArrayOutputStream(512);
-		int r = in.read();
-		while (r != '\r' && r != -1) {
-			System.out.println(r);
-			stream.write(r);
-			r = in.read();
+		Socket s = new Socket("127.0.0.1", 1000);
+		s.close();
+		final ServerSocket sc = new ServerSocket(1001);
+		while (true) {
+			s = sc.accept();
+			final InputStream in = s.getInputStream();
+			final OutputStream out = s.getOutputStream();
+			int op = in.read();
+			switch (op) {
+			case 49:
+				for (int x : deviceState) {
+					out.write(x);
+				}
+				out.write('\r');
+				break;
+			case 50:
+				int p1 = in.read();
+				deviceState[p1 - 48] = 1;
+				out.write('0');
+				out.write('\r');
+				break;
+			case 51:
+				int p2 = in.read();
+				deviceState[p2 - 48] = 0;
+				out.write('0');
+				out.write('\r');
+				break;
+			default:
+				break;
+			}
 		}
-		System.out.println("------------------");
-		System.out.println(new String(stream.toByteArray()));
-		System.out.println("------------------");
-		// }
 	}
 
 	public Teste() {

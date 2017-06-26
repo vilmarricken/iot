@@ -23,14 +23,13 @@ import com.master.iot.IOTManager;
 @Path("controllers")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public class ProductResource implements Serializable {
+public class ControllerResource implements Serializable {
 
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Teste list() {
-		Teste t = new Teste();
-		t.setName("XX");
-		return t;
+	public Collection<IOTController> list() {
+		IOTManager instance = IOTManager.getInstance();
+		return instance.list();
 	}
 	/*
 	 * @GET public Collection<IOTController> list() { return

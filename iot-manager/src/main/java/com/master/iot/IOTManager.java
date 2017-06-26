@@ -26,7 +26,7 @@ public class IOTManager implements Runnable {
 	}
 
 	public static void main(final String[] args) {
-		IOTManager.getInstance().run();
+		IOTManager.getInstance();
 	}
 
 	private Map<String, IOTController> controllers = new HashMap<>();
@@ -96,7 +96,7 @@ public class IOTManager implements Runnable {
 		try {
 			try {
 				this.running = true;
-				sc = new ServerSocket(800);
+				sc = new ServerSocket(1000);
 			} catch (final IOException e) {
 				e.printStackTrace();
 			}
