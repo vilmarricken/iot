@@ -3,6 +3,9 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>IoT Mansion</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="css/bootstrap-3.3.7.min.css">
+<script src="js/bootstrap-3.3.7.min.js"></script>
 <script src="js/jquery-3.2.1.min.js"></script>
 <script>
 $(document).ready(function(){
@@ -20,14 +23,16 @@ $(document).ready(function(){
 function buildControllers(data){
 	if(data.length > 0){
 		for(i = 0; i < data.length; i++ ){
-			$(buildData(data[i])).appendTo("#content");
+			$(buildData(data[i])).appendTo("#container");
 			//$(buildDetail(data[i])).appendTo("#content");
 		}
 	}
 }
 
 function buildData(data){
-	var ret = "<table id='data' width='10%' border='1'><tbody><tr><td>" + data.name + "</td><td><div align='center'>Remover</div></td><td><div align='center'>Editar</div></td><td><div align='center'>Detalhes</div></td></tr><tr><td colspan=4><div id='detail-"+ data.id +"'>";
+	var ret = "<table class='table' id='data' border='1'>";
+	ret += "<thead><tr><th style='width: 80%'>Componente</th><th style='width: 20%' colspan='3'>Ações</th></tr></thead>";
+	ret += "<tbody><tr><td>" + data.name + "</td><td><div align='center' style='width: 10px;'>Remover</div></td><td><div align='center'>Editar</div></td><td><div align='center'>Detalhes</div></td></tr><tr><td colspan=4><div id='detail-"+ data.id +"'>";
 	ret += buildDetail(data);
 	ret += "</div></td></tr></tbody></table>";
 	return ret;
@@ -47,7 +52,7 @@ function buildDetail(data){
 </script>
 </head>
 <body>
-<div id="content">
+<div id="container">
 <button>Atualizar</button>
 
 </div>
