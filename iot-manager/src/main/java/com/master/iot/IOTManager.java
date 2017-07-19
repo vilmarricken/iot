@@ -39,7 +39,7 @@ public class IOTManager implements Runnable {
 		this.get(id).setName(name);
 	}
 
-	private IOTController get(final String id) {
+	public IOTController get(final String id) {
 		return this.controllers.get(id);
 	}
 
