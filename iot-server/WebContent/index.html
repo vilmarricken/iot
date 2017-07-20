@@ -5,14 +5,13 @@
 <title>IoT Mansion</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="css/bootstrap-3.3.7.min.css">
-<script src="js/bootstrap-3.3.7.min.js"></script>
 <script src="js/jquery-3.2.1.min.js"></script>
+<script src="js/bootstrap-3.3.7.min.js"></script>
 <script>
 var controllers = [];
 $(document).ready(function(){
-    $("button").click(function(){
-    	
-    });
+	alert("ready");
+	listControllers();
 });
 
 function back(){
@@ -20,31 +19,39 @@ function back(){
 	listControllers();
 }
 
-function controller(id){
+function region( id ){
 	controllers.push(id);
 	listControllers();
 }
 
+function controllerOff( id ) {
+	alert("Off " + id);
+}
+
+function controllerOn( id ) {
+	alert("On " + id);
+}
+
 function listControllers(){
-	var action = "/iot/house/controllers";
+	debugger;
+	var action = "/iot/rest/house/controllers";
 	if( controllers.length > 0 ){
-		action += "/" controllers[controllers.length - 1]; 
+		action += "/" + controllers[controllers.length - 1]; 
 	}
+	debugger;
     $.get(action, function(data, status){
         if(status == 'success'){
-			$("#data").detach();
 			$("#data").detach();
 			buildControllers(data);
 		}
     });
 }
 
-
 function buildControllers(data){
-	$(buildData(data[i])).appendTo("#container");
-	var ret = "<p>";
+	var ret = "<div id=\"data\">";
 	if(data.length > 0){
 		for(i = 0; i < data.length; i++ ){
+			ret += "<p>";
 			if(data[i].type == "REGION"){
 				ret += buildRegion(data[i]);
 			} else if(data[i].type == "CONTROLLER"){
@@ -52,10 +59,23 @@ function buildControllers(data){
 			} else {
 				ret += data[i].toString();
 			}
+			ret += "</p>";
 		}
 	}
-	ret += "</p>";
-	return ret;
+	ret += "</div>";
+	debugger;
+	$(ret).appendTo("#container");
+}
+
+function buildRegion( controller ) {
+	return "<button type=\"button\" class=\"btn btn-primary\" onClick=\"region('" + controller.id + "')\">" + controller.name + "</button>";
+}
+
+function buildController( controller ) {
+	if( controller.on ) {
+		return "<button type=\"button\" class=\"btn btn-success\" onClick=\"controllerOff('" + controller.id + "')\">" + controller.name + "</button>";
+	}
+	return "<button type=\"button\" class=\"btn btn-danger\" onClick=\"controllerOn('" + controller.id + "')\">" + controller.name + "</button>";
 }
 
 </script>
