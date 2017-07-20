@@ -3,9 +3,9 @@
 
 ESP8266WiFiMulti WiFiMulti;
 
-WiFiServer server(1000);
+WiFiServer server(1001);
 
-int deviceState[] = {0, 0, 1, 0, 0, 0, 0, 0};
+int deviceState[] = {0, 1, 0, 0, 0, 0, 0, 0};
 
 int device[] = {D0, D1,  D2 , D3 ,D4 , D5, D6, D7};
 
@@ -36,26 +36,30 @@ void setup() {
 }
 
 void loop() {
+  Serial.print("Connected ");
+  Serial.println(connected);
   if( connected == 0 ) {
-    const uint16_t port = 800;
+    const uint16_t port = 1000;
     const char * host = "192.168.25.20"; // ip or dns
     Serial.print("connecting to ");
-    Serial.println(host);
+    Serial.print(host);
+    Serial.print(" on port ");
+    Serial.println(port);
     WiFiClient client;
     while (!client.connect(host, port)) {
       Serial.println("connection failed");
       Serial.println("wait 5 sec...");
       delay(5000);
-      for( int i = 0; i < 8; i++ ) {
-        if(deviceState[i] == 1) {
-          onDevice(i);
-        } else {
-          offDevice(i);
-        }
-      }
       return;
     }
     connected = 1;
+    for( int i = 0; i < 8; i++ ) {
+      if(deviceState[i] == 1) {
+        onDevice(i);
+      } else {
+        offDevice(i);
+      }
+    }
     delay(500);
     client.stop();
   }
