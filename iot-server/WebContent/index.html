@@ -10,7 +10,6 @@
 <script>
 var controllers = [];
 $(document).ready(function(){
-	alert("ready");
 	listControllers();
 });
 
@@ -64,7 +63,7 @@ function buildControllers(data){
 	}
 	ret += "</div>";
 	debugger;
-	$(ret).appendTo("#container");
+	$(ret).appendTo("#controllers");
 }
 
 function buildRegion( controller ) {
@@ -81,9 +80,11 @@ function buildController( controller ) {
 </script>
 </head>
 <body>
-<div id="container">
-<button>Atualizar</button>
-
-</div>
+	<div id="container">
+		<div class="header clearfix">
+		</div>
+	</div>
+	<div id="controllers" class="row marketing">
+	</div>
 </body>
 </html>
