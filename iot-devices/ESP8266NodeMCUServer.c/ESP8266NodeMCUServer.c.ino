@@ -5,7 +5,7 @@ ESP8266WiFiMulti WiFiMulti;
 
 WiFiServer server(1001);
 
-int deviceState[] = {0, 1, 0, 0, 0, 0, 0, 0};
+int deviceState[] = {0, 0, 0, 0, 0, 0, 0, 0};
 
 int device[] = {D0, D1,  D2 , D3 ,D4 , D5, D6, D7};
 

@@ -24,11 +24,21 @@ function region( id ){
 }
 
 function controllerOff( id ) {
-	alert("Off " + id);
+	var action = "/iot/rest/house/controllers/off";
+	action += "/" + controllers[controllers.length - 1] + "/" + id; 
+	$.get(action, function(data, status){
+    	listControllers();    
+    });
+    listControllers();
 }
 
 function controllerOn( id ) {
-	alert("On " + id);
+	var action = "/iot/rest/house/controllers/on";
+	action += "/" + controllers[controllers.length - 1] + "/" + id; 
+	$.get(action, function(data, status){
+		listControllers();    
+    });
+    listControllers();
 }
 
 function listControllers(){
