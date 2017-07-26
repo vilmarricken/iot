@@ -4,75 +4,8 @@
 <meta charset="ISO-8859-1">
 <title>IoT Mansion</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="css/bootstrap-3.3.7.min.css">
-<script src="js/bootstrap-3.3.7.min.js"></script>
-<script src="js/jquery-3.2.1.min.js"></script>
-<script>
-$(document).ready(function(){
-    $("button").click(function(){
-        $.get("/iot/rest/controllers", function(data, status){
-            if(status == 'success'){
-				$("#data").detach();
-				$("#data").detach();
-				buildControllers(data);
-			}
-        });
-    });
-});
-
-function buildControllers(data){
-	if(data.length > 0){
-		for(i = 0; i < data.length; i++ ){
-			$(buildData(data[i])).appendTo("#container");
-			//$(buildDetail(data[i])).appendTo("#content");
-		}
-	}
-}
-
-function buildData(data){
-	var ret = "<table class='table' id='data' border='1'>";
-	ret += "<thead><tr><th style='width: 80%'>Componente</th><th style='width: 20%' colspan='3'>Ações</th></tr></thead>";
-	ret += "<tbody><tr><td>" + data.name + "</td><td><div align='center' style='width: 10px;'>Remover</div></td><td><div align='center'>Editar</div></td><td><div align='center'>Detalhes</div></td></tr><tr><td colspan=4><div id='detail-"+ data.id +"'>";
-	ret += buildDetail(data);
-	ret += "</div></td></tr></tbody></table>";
-	return ret;
-}
-
-function buildDetail(data){
-	var ret = "<div id='detail-" + data.id + "'>";
-	ret += "<table border='1'><tbody>";
-	for(i = 0; i < data.components.length; i++ ){
-	ret += "<tr><td>" + data.components[i].name + "</td><td><div align='center'>" + (data.components[i].on ? "Ligado" : "Deslidado") + "</div></td></tr>";
-	}
-	ret += "</tbody></table>";
-	ret += "</div>";
-	return ret;
-}
-
-</script>
 </head>
 <body>
-<div id="container">
-	<table class='table' id='data' border='1'>
-		<thead>
-			<tr>
-				<th style='width: 80%'>Componente</th>
-				<th style='width: 20%' colspan='3'>Ações</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td>data.name</td>
-				<td><div align='center' style='width: 10px;'>Remover</div></td>
-				<td><div align='center'>Editar</div></td>
-				<td><div align='center'>Detalhes</div></td>
-			</tr>
-			<tr>
-				<td colspan=4><div id='detail-data.id'></div></td>
-			</tr>
-		</tbody>
-	</table>
-
-</div>
+OK
 </body>
 </html>
