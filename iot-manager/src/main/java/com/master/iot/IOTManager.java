@@ -35,7 +35,8 @@ public class IOTManager implements Runnable {
 		this.read();
 	}
 
-	public void changeControllerName(final String id, final String name) throws Exception {
+	public void changeControllerName(final String id, final String name)
+			throws Exception {
 		this.get(id).setName(name);
 	}
 
@@ -95,24 +96,21 @@ public class IOTManager implements Runnable {
 		this.controllers.remove(key);
 	}
 
-	public void start(){
+	public void start() {
 		new Thread(this).start();
 	}
-	
+
 	public void run() {
 		ServerSocket sc = null;
 		try {
-			try {
-				this.running = true;
-				sc = new ServerSocket(1000);
-			} catch (final IOException e) {
-				e.printStackTrace();
-			}
+			this.running = true;
+			sc = new ServerSocket(1000);
 			while (true) {
 				try {
 					System.out.println("Aguardando");
 					final Socket socket = sc.accept();
-					final String key = this.getAddress(socket.getInetAddress().toString());
+					final String key = this.getAddress(socket.getInetAddress()
+							.toString());
 					socket.close();
 					IOTController controller = this.controllers.get(key);
 					if (controller == null) {
@@ -125,6 +123,8 @@ public class IOTManager implements Runnable {
 					e.printStackTrace();
 				}
 			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		} finally {
 			if (sc != null) {
 				try {

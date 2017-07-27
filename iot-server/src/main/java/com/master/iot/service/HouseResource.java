@@ -31,8 +31,7 @@ public class HouseResource implements Serializable {
 		Collection<IOTController> controllers = instance.list();
 		Collection<Controller> regions = new ArrayList<>();
 		for (IOTController controller : controllers) {
-			regions.add(new Controller(controller.getId(),
-					controller.getName(), false, Type.REGION));
+			regions.add(new Controller(controller.getId(), controller.getName(), false, Type.REGION));
 		}
 		return regions;
 	}
@@ -40,31 +39,21 @@ public class HouseResource implements Serializable {
 	@GET
 	@Path("controllers/on/{id}/{component}")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public void on(@PathParam("id") String id,@PathParam("component") String component) {
+	public void on(@PathParam("id") String id, @PathParam("component") String component) throws Exception {
 		System.out.println("On - " + id + " - " + component);
 		IOTManager instance = IOTManager.getInstance();
 		IOTController controller = instance.get(id);
-		try {
-			controller.on(Integer.valueOf(component));
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		controller.on(Integer.valueOf(component));
 	}
 
 	@GET
 	@Path("controllers/off/{id}/{component}")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public void off(@PathParam("id") String id,@PathParam("component") String component) {
+	public void off(@PathParam("id") String id, @PathParam("component") String component) throws Exception {
 		System.out.println("On - " + id + " - " + component);
 		IOTManager instance = IOTManager.getInstance();
 		IOTController controller = instance.get(id);
-		try {
-			controller.off((byte)Integer.valueOf(component).intValue());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		controller.off((byte) Integer.valueOf(component).intValue());
 	}
 
 	@GET
@@ -76,9 +65,7 @@ public class HouseResource implements Serializable {
 		IOTCompenent[] compenents = controller.getComponents();
 		List<Controller> controllers = new ArrayList<>();
 		for (IOTCompenent iotCompenent : compenents) {
-			controllers.add(new Controller(String.valueOf(iotCompenent
-					.getIndex()), iotCompenent.getName(), iotCompenent.isOn(),
-					Type.CONTROLLER));
+			controllers.add(new Controller(String.valueOf(iotCompenent.getIndex()), iotCompenent.getName(), iotCompenent.isOn(), Type.CONTROLLER));
 		}
 		return controllers;
 	}

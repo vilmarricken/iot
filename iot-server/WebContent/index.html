@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="css/bootstrap-3.3.7.min.css">
 <script src="js/jquery-3.2.1.min.js"></script>
 <script src="js/bootstrap-3.3.7.min.js"></script>
+<script src="js/master-core.js"></script>
 <script>
 var controllers = [];
 $(document).ready(function(){
@@ -26,34 +27,30 @@ function region( id ){
 function controllerOff( id ) {
 	var action = "/iot/rest/house/controllers/off";
 	action += "/" + controllers[controllers.length - 1] + "/" + id; 
-	$.get(action, function(data, status){
-    	listControllers();    
-    });
-    listControllers();
+	masterRequest({url: action, success: function(data, status){listControllers();}});
 }
 
 function controllerOn( id ) {
 	var action = "/iot/rest/house/controllers/on";
 	action += "/" + controllers[controllers.length - 1] + "/" + id; 
-	$.get(action, function(data, status){
-		listControllers();    
-    });
-    listControllers();
+	masterRequest({url: action, success: function(data, status){listControllers();}});
 }
 
 function listControllers(){
-	debugger;
 	var action = "/iot/rest/house/controllers";
 	if( controllers.length > 0 ){
 		action += "/" + controllers[controllers.length - 1]; 
 	}
 	debugger;
-    $.get(action, function(data, status){
-        if(status == 'success'){
-			$("#data").detach();
-			buildControllers(data);
+	masterRequest(
+		{
+			url: action, 
+			success: function(data, status){
+				$("#data").detach();
+				buildControllers(data);
+			}
 		}
-    });
+	);
 }
 
 function buildControllers(data){
