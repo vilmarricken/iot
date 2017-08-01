@@ -23,7 +23,7 @@ public class MasterEntityManager implements javax.persistence.EntityManager {
 	private EntityManager entityManager;
 
 	private MasterEntityManagerFactory masterEntityManagerFactory;
-	
+
 	public MasterEntityManager(EntityManager entityManager, MasterEntityManagerFactory masterEntityManagerFactory) {
 		this.entityManager = entityManager;
 		this.masterEntityManagerFactory = masterEntityManagerFactory;
@@ -31,308 +31,257 @@ public class MasterEntityManager implements javax.persistence.EntityManager {
 
 	@Override
 	public void clear() {
-		// TODO Auto-generated method stub
-
+		this.entityManager.clear();
 	}
 
 	@Override
 	public void close() {
-		// TODO Auto-generated method stub
-
+		this.entityManager.close();
 	}
 
 	@Override
 	public boolean contains(Object arg0) {
-		// TODO Auto-generated method stub
-		return false;
+		return this.entityManager.contains(arg0);
 	}
 
 	@Override
 	public <T> EntityGraph<T> createEntityGraph(Class<T> arg0) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.entityManager.createEntityGraph(arg0);
 	}
 
 	@Override
 	public EntityGraph<?> createEntityGraph(String arg0) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.entityManager.createEntityGraph(arg0);
 	}
 
 	@Override
 	public Query createNamedQuery(String arg0) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.entityManager.createNamedQuery(arg0);
 	}
 
 	@Override
 	public <T> TypedQuery<T> createNamedQuery(String arg0, Class<T> arg1) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.createNamedQuery(arg0, arg1);
 	}
 
 	@Override
 	public StoredProcedureQuery createNamedStoredProcedureQuery(String arg0) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.entityManager.createNamedStoredProcedureQuery(arg0);
 	}
 
 	@Override
 	public Query createNativeQuery(String arg0) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.entityManager.createNamedQuery(arg0);
 	}
 
 	@Override
-	public Query createNativeQuery(String arg0, Class arg1) {
-		// TODO Auto-generated method stub
-		return null;
+	public Query createNativeQuery(String arg0, @SuppressWarnings("rawtypes") Class arg1) {
+		return this.entityManager.createNativeQuery(arg0, arg1);
 	}
 
 	@Override
 	public Query createNativeQuery(String arg0, String arg1) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.entityManager.createNativeQuery(arg0, arg1);
 	}
 
 	@Override
 	public Query createQuery(String arg0) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.entityManager.createQuery(arg0);
 	}
 
 	@Override
 	public <T> TypedQuery<T> createQuery(CriteriaQuery<T> arg0) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.createQuery(arg0);
 	}
 
 	@Override
-	public Query createQuery(CriteriaUpdate arg0) {
-		// TODO Auto-generated method stub
-		return null;
+	public Query createQuery(@SuppressWarnings("rawtypes") CriteriaUpdate arg0) {
+		return this.entityManager.createQuery(arg0);
 	}
 
 	@Override
-	public Query createQuery(CriteriaDelete arg0) {
-		// TODO Auto-generated method stub
-		return null;
+	public Query createQuery(@SuppressWarnings("rawtypes") CriteriaDelete arg0) {
+		return this.createQuery(arg0);
 	}
 
 	@Override
 	public <T> TypedQuery<T> createQuery(String arg0, Class<T> arg1) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.createQuery(arg0, arg1);
 	}
 
 	@Override
 	public StoredProcedureQuery createStoredProcedureQuery(String arg0) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.createStoredProcedureQuery(arg0);
 	}
 
 	@Override
-	public StoredProcedureQuery createStoredProcedureQuery(String arg0, Class... arg1) {
-		// TODO Auto-generated method stub
-		return null;
+	public StoredProcedureQuery createStoredProcedureQuery(String arg0, @SuppressWarnings("rawtypes") Class... arg1) {
+		return this.entityManager.createStoredProcedureQuery(arg0, arg1);
 	}
 
 	@Override
 	public StoredProcedureQuery createStoredProcedureQuery(String arg0, String... arg1) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.entityManager.createStoredProcedureQuery(arg0, arg1);
 	}
 
 	@Override
 	public void detach(Object arg0) {
-		// TODO Auto-generated method stub
-
+		this.entityManager.detach(arg0);
 	}
 
 	@Override
 	public <T> T find(Class<T> arg0, Object arg1) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.entityManager.find(arg0, arg1);
 	}
 
 	@Override
 	public <T> T find(Class<T> arg0, Object arg1, Map<String, Object> arg2) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.entityManager.find(arg0, arg1, arg2);
 	}
 
 	@Override
 	public <T> T find(Class<T> arg0, Object arg1, LockModeType arg2) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.entityManager.find(arg0, arg1, arg2);
 	}
 
 	@Override
 	public <T> T find(Class<T> arg0, Object arg1, LockModeType arg2, Map<String, Object> arg3) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.entityManager.find(arg0, arg1, arg2, arg3);
 	}
 
 	@Override
 	public void flush() {
-		// TODO Auto-generated method stub
-
+		this.entityManager.flush();
 	}
 
 	@Override
 	public CriteriaBuilder getCriteriaBuilder() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.entityManager.getCriteriaBuilder();
 	}
 
 	@Override
 	public Object getDelegate() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.entityManager.getDelegate();
 	}
 
 	@Override
 	public EntityGraph<?> getEntityGraph(String arg0) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.entityManager.getEntityGraph(arg0);
 	}
 
 	@Override
 	public <T> List<EntityGraph<? super T>> getEntityGraphs(Class<T> arg0) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.entityManager.getEntityGraphs(arg0);
 	}
 
 	@Override
 	public EntityManagerFactory getEntityManagerFactory() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.masterEntityManagerFactory;
 	}
 
 	@Override
 	public FlushModeType getFlushMode() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.entityManager.getFlushMode();
 	}
 
 	@Override
 	public LockModeType getLockMode(Object arg0) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.entityManager.getLockMode(arg0);
 	}
 
 	@Override
 	public Metamodel getMetamodel() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.entityManager.getMetamodel();
 	}
 
 	@Override
 	public Map<String, Object> getProperties() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.entityManager.getProperties();
 	}
 
 	@Override
 	public <T> T getReference(Class<T> arg0, Object arg1) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.entityManager.getReference(arg0, arg1);
 	}
 
 	@Override
 	public EntityTransaction getTransaction() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.entityManager.getTransaction();
 	}
 
 	@Override
 	public boolean isJoinedToTransaction() {
-		// TODO Auto-generated method stub
-		return false;
+		return this.entityManager.isJoinedToTransaction();
 	}
 
 	@Override
 	public boolean isOpen() {
-		// TODO Auto-generated method stub
-		return false;
+		return this.entityManager.isOpen();
 	}
 
 	@Override
 	public void joinTransaction() {
-		// TODO Auto-generated method stub
-
+		this.entityManager.joinTransaction();
 	}
 
 	@Override
 	public void lock(Object arg0, LockModeType arg1) {
-		// TODO Auto-generated method stub
-
+		this.entityManager.lock(arg0, arg1);
 	}
 
 	@Override
 	public void lock(Object arg0, LockModeType arg1, Map<String, Object> arg2) {
-		// TODO Auto-generated method stub
-
+		this.entityManager.lock(arg0, arg1, arg2);
 	}
 
 	@Override
 	public <T> T merge(T arg0) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.entityManager.merge(arg0);
 	}
 
 	@Override
 	public void persist(Object arg0) {
-		// TODO Auto-generated method stub
-
+		this.entityManager.persist(arg0);
 	}
 
 	@Override
 	public void refresh(Object arg0) {
-		// TODO Auto-generated method stub
-
+		this.entityManager.refresh(arg0);
 	}
 
 	@Override
 	public void refresh(Object arg0, Map<String, Object> arg1) {
-		// TODO Auto-generated method stub
-
+		this.entityManager.refresh(arg0, arg1);
 	}
 
 	@Override
 	public void refresh(Object arg0, LockModeType arg1) {
-		// TODO Auto-generated method stub
-
+		this.entityManager.refresh(arg0, arg1);
 	}
 
 	@Override
 	public void refresh(Object arg0, LockModeType arg1, Map<String, Object> arg2) {
-		// TODO Auto-generated method stub
-
+		this.entityManager.refresh(arg0, arg1, arg2);
 	}
 
 	@Override
 	public void remove(Object arg0) {
-		// TODO Auto-generated method stub
-
+		this.entityManager.remove(arg0);
 	}
 
 	@Override
 	public void setFlushMode(FlushModeType arg0) {
-		// TODO Auto-generated method stub
-
+		this.entityManager.setFlushMode(arg0);
 	}
 
 	@Override
 	public void setProperty(String arg0, Object arg1) {
-		// TODO Auto-generated method stub
-
+		this.entityManager.setProperty(arg0, arg1);
 	}
 
 	@Override
 	public <T> T unwrap(Class<T> arg0) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.entityManager.unwrap(arg0);
 	}
 
 }
