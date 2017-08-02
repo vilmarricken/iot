@@ -16,7 +16,7 @@ public class MasterEntityManagerFactory implements EntityManagerFactory {
 
 	private EntityManagerFactory entityManagerFactory;
 
-	public MasterEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
+	MasterEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
 		this.entityManagerFactory = entityManagerFactory;
 	}
 
