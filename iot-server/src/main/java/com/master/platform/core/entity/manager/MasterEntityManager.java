@@ -1,4 +1,4 @@
-package com.master.iot.core.entity.manager;
+package com.master.platform.core.entity.manager;
 
 import java.util.List;
 import java.util.Map;
