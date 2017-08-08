@@ -1,4 +1,4 @@
-package com.master.platform.core.web;
+package com.master.platform.core.web.filter;
 
 import java.io.IOException;
 
@@ -20,11 +20,11 @@ import com.master.platform.core.thread.ApplicationThread;
 import com.master.platform.core.thread.ApplicationThreadContext;
 import com.master.platform.core.thread.ApplicationThreadWeb;
 
-public class MasterApplicationFilter implements Filter {
+public class MasterResourceFilter implements Filter {
 
 	private static final Logger log = LogManager.getLogger(ResourceManager.class);
 
-	public MasterApplicationFilter() {
+	public MasterResourceFilter() {
 	}
 
 	@Override
@@ -40,9 +40,9 @@ public class MasterApplicationFilter implements Filter {
 				try {
 					chain.doFilter(request, response);
 				} catch (IOException e) {
-					MasterApplicationFilter.log.error(e.getMessage(), e);
+					MasterResourceFilter.log.error(e.getMessage(), e);
 				} catch (ServletException e) {
-					MasterApplicationFilter.log.error(e.getMessage(), e);
+					MasterResourceFilter.log.error(e.getMessage(), e);
 				}
 			}
 		}).run();
