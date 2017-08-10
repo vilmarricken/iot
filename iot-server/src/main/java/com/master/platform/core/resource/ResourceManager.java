@@ -20,19 +20,23 @@ public class ResourceManager {
 			Thread currentThread = Thread.currentThread();
 			ResourceManager.log.warn("Recource is already active in thread " + currentThread.getName() + "(" + currentThread.getId() + ")" + ": " + old);
 		}
+		resource.setResourceManager(this);
 		ResourceManager.RESOURCES.set(resource);
 		if (ResourceManager.log.isTraceEnabled()) {
-
+			log.trace("Resource started: " + resource);
 		}
 	}
 
 	public void finish() {
-		Resource old = ResourceManager.RESOURCES.get();
-		if (old == null) {
+		Resource resource = ResourceManager.RESOURCES.get();
+		if (resource == null) {
 			Thread currentThread = Thread.currentThread();
 			ResourceManager.log.warn("Recource is not active in thread " + currentThread.getName() + "(" + currentThread.getId() + ")");
 		}
 		ResourceManager.RESOURCES.remove();
+		if (ResourceManager.log.isTraceEnabled()) {
+			log.trace("Resource finished: " + resource);
+		}
 	}
 
 	public static ResourceManager get() {

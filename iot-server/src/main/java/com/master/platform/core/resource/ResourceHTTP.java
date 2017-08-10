@@ -3,7 +3,7 @@ package com.master.platform.core.resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class ResourceHTTP extends ResourceBase {
+public class ResourceHTTP extends Resource {
 
 	private HttpServletRequest request;
 

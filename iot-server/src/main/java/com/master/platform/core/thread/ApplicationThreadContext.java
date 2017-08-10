@@ -2,8 +2,10 @@ package com.master.platform.core.thread;
 
 public interface ApplicationThreadContext {
 
-	void init();
-	
+	void error();
+
 	void finish();
-	
+
+	void init();
+
 }

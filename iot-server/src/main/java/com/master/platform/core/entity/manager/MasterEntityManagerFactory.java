@@ -21,13 +21,13 @@ public class MasterEntityManagerFactory implements EntityManagerFactory {
 	}
 
 	@Override
-	public <T> void addNamedEntityGraph(String arg0, EntityGraph<T> arg1) {
-		this.entityManagerFactory.addNamedEntityGraph(arg0, arg1);
+	public <T> void addNamedEntityGraph(String graphName, EntityGraph<T> entityGraph) {
+		this.entityManagerFactory.addNamedEntityGraph(graphName, entityGraph);
 	}
 
 	@Override
-	public void addNamedQuery(String arg0, Query arg1) {
-		this.entityManagerFactory.addNamedQuery(arg0, arg1);
+	public void addNamedQuery(String name, Query query) {
+		this.entityManagerFactory.addNamedQuery(name, query);
 	}
 
 	@Override

@@ -9,41 +9,40 @@ import org.apache.logging.log4j.Logger;
 import com.master.platform.core.resource.ResourceHTTP;
 import com.master.platform.core.resource.ResourceManager;
 
-public class ApplicationThreadWeb implements ApplicationThreadContext {
-
-	private static final String OPEN_TRANSACTION_PARAMETER = "openTransaction";
+public class ApplicationThreadWeb extends ApplicationThreadContextAbstract {
 
 	private static final Logger log = LogManager.getLogger(ApplicationThreadWeb.class);
 
-	private HttpServletRequest request;
+	private static final String OPEN_TRANSACTION_PARAMETER = "openTransaction";
 
-	private HttpServletResponse response;
+	private final HttpServletRequest request;
 
-	public ApplicationThreadWeb(HttpServletRequest request, HttpServletResponse response) {
+	private final HttpServletResponse response;
+
+	public ApplicationThreadWeb(final HttpServletRequest request, final HttpServletResponse response) {
 		this.request = request;
 		this.response = response;
 	}
 
 	@Override
-	public void init() {
-		ResourceManager.get().start(new ResourceHTTP(this.request, this.response));
-		boolean isActiveTransaction = isActiveTransaction();
-	}
-
-	private boolean isActiveTransaction() {
-		String openTransactionParameter = this.request.getParameter(OPEN_TRANSACTION_PARAMETER);
-		if (log.isDebugEnabled()) {
-			log.debug("Transaction parameter: " + openTransactionParameter);
-		}
-		if (openTransactionParameter == null || openTransactionParameter.trim().length() == 0) {
-return this.request.getMethod()
-		}
-		return false;
+	public void finish() {
+		ResourceManager.get().finish();
 	}
 
 	@Override
-	public void finish() {
-		ResourceManager.get().finish();
+	public void init() {
+		this.setResource(new ResourceHTTP(this.request, this.response));
+	}
+
+	protected boolean isActiveTransaction() {
+		final String openTransactionParameter = this.request.getParameter(ApplicationThreadWeb.OPEN_TRANSACTION_PARAMETER);
+		if (ApplicationThreadWeb.log.isDebugEnabled()) {
+			ApplicationThreadWeb.log.debug("Transaction parameter: " + openTransactionParameter);
+		}
+		if (openTransactionParameter == null || openTransactionParameter.trim().length() == 0) {
+			return "POST".equalsIgnoreCase(this.request.getMethod());
+		}
+		return openTransactionParameter.equals("true");
 	}
 
 }
