@@ -8,31 +8,46 @@ public class DaoEntityFake implements DaoEntity {
 	}
 
 	@Override
-	public void setInt(String attribute, int value) {
+	public void addKey(final DaoValueItem value) {
 	}
 
 	@Override
-	public void setInt(String attribute, Integer value) {
+	public void addValue(final DaoValueItem value) {
 	}
 
 	@Override
-	public void setString(String attribute, String value) {
+	public DaoValueItem buildBoolean(final String attribute, final boolean value) {
+		return null;
 	}
 
 	@Override
-	public void setDouble(String attribute, double value) {
+	public DaoValueItem buildBoolean(final String attribute, final Boolean value) {
+		return null;
 	}
 
 	@Override
-	public void setDouble(String attribute, Double value) {
+	public DaoValueItem buildDouble(final String attribute, final double value) {
+		return null;
 	}
 
 	@Override
-	public void setBoolean(String attribute, boolean value) {
+	public DaoValueItem buildDouble(final String attribute, final Double value) {
+		return null;
 	}
 
 	@Override
-	public void setBoolean(String attribute, Boolean value) {
+	public DaoValueItem buildInt(final String attribute, final int value) {
+		return null;
+	}
+
+	@Override
+	public DaoValueItem buildInt(final String attribute, final Integer value) {
+		return null;
+	}
+
+	@Override
+	public DaoValueItem buildString(final String attribute, final String value) {
+		return null;
 	}
 
 	@Override

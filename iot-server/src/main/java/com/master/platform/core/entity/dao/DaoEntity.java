@@ -2,19 +2,23 @@ package com.master.platform.core.entity.dao;
 
 public interface DaoEntity {
 
-	void setInt(String attribute, int value);
+	void addKey(DaoValueItem value);
 
-	void setInt(String attribute, Integer value);
+	void addValue(DaoValueItem value);
 
-	void setString(String attribute, String value);
+	DaoValueItem buildBoolean(String attribute, boolean value);
 
-	void setDouble(String attribute, double value);
+	DaoValueItem buildBoolean(String attribute, Boolean value);
 
-	void setDouble(String attribute, Double value);
+	DaoValueItem buildDouble(String attribute, double value);
 
-	void setBoolean(String attribute, boolean value);
+	DaoValueItem buildDouble(String attribute, Double value);
 
-	void setBoolean(String attribute, Boolean value);
+	DaoValueItem buildInt(String attribute, int value);
+
+	DaoValueItem buildInt(String attribute, Integer value);
+
+	DaoValueItem buildString(String attribute, String value);
 
 	boolean hasChanges();
 

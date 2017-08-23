@@ -10,21 +10,11 @@ public class DaoEntityValue implements DaoEntity {
 
 	protected enum DaoValueType {
 
-		STRING() {
+		BOOLEAN() {
 			@Override
-			public void setValue(PreparedStatement stmt, int position, Object value) throws SQLException {
+			public void setValue(final PreparedStatement stmt, final int position, final Object value) throws SQLException {
 				if (value != null) {
-					stmt.setString(position, (String) value);
-				} else {
-					stmt.setNull(position, Types.VARCHAR);
-				}
-			}
-		},
-		INT() {
-			@Override
-			public void setValue(PreparedStatement stmt, int position, Object value) throws SQLException {
-				if (value != null) {
-					stmt.setInt(position, ((Integer) value).intValue());
+					stmt.setInt(position, ((Boolean) value).booleanValue() ? 1 : 0);
 				} else {
 					stmt.setNull(position, Types.INTEGER);
 				}
@@ -32,7 +22,7 @@ public class DaoEntityValue implements DaoEntity {
 		},
 		DOUBLE() {
 			@Override
-			public void setValue(PreparedStatement stmt, int position, Object value) throws SQLException {
+			public void setValue(final PreparedStatement stmt, final int position, final Object value) throws SQLException {
 				if (value != null) {
 					stmt.setDouble(position, ((Double) value).doubleValue());
 				} else {
@@ -40,13 +30,23 @@ public class DaoEntityValue implements DaoEntity {
 				}
 			}
 		},
-		BOOLEAN() {
+		INT() {
 			@Override
-			public void setValue(PreparedStatement stmt, int position, Object value) throws SQLException {
+			public void setValue(final PreparedStatement stmt, final int position, final Object value) throws SQLException {
 				if (value != null) {
-					stmt.setInt(position, ((Boolean) value).booleanValue() ? 1 : 0);
+					stmt.setInt(position, ((Integer) value).intValue());
 				} else {
 					stmt.setNull(position, Types.INTEGER);
+				}
+			}
+		},
+		STRING() {
+			@Override
+			public void setValue(final PreparedStatement stmt, final int position, final Object value) throws SQLException {
+				if (value != null) {
+					stmt.setString(position, (String) value);
+				} else {
+					stmt.setNull(position, Types.VARCHAR);
 				}
 			}
 		};
@@ -58,44 +58,56 @@ public class DaoEntityValue implements DaoEntity {
 
 	}
 
-	private Map<String, DaoValueItem> values = new HashMap<>();
+	private final Map<String, DaoValueItem> key = new HashMap<>();
+
+	private final Map<String, DaoValueItem> values = new HashMap<>();
 
 	public DaoEntityValue() {
 	}
 
 	@Override
-	public void setInt(String attribute, int value) {
-		this.setInt(attribute, Integer.valueOf(value));
+	public void addKey(final DaoValueItem value) {
+		this.key.put(value.getAttribute(), value);
 	}
 
 	@Override
-	public void setInt(String attribute, Integer value) {
-		this.values.put(attribute, new DaoValueItem(attribute, value, DaoValueType.INT));
+	public void addValue(final DaoValueItem value) {
+		this.values.put(value.getAttribute(), value);
 	}
 
 	@Override
-	public void setString(String attribute, String value) {
-		this.values.put(attribute, new DaoValueItem(attribute, value, DaoValueType.STRING));
+	public DaoValueItem buildBoolean(final String attribute, final boolean value) {
+		return this.buildBoolean(attribute, Boolean.valueOf(value));
 	}
 
 	@Override
-	public void setDouble(String attribute, double value) {
-		this.setDouble(attribute, Double.valueOf(value));
+	public DaoValueItem buildBoolean(final String attribute, final Boolean value) {
+		return new DaoValueItem(attribute, value, DaoValueType.BOOLEAN);
 	}
 
 	@Override
-	public void setDouble(String attribute, Double value) {
-		this.values.put(attribute, new DaoValueItem(attribute, value, DaoValueType.DOUBLE));
+	public DaoValueItem buildDouble(final String attribute, final double value) {
+		return this.buildDouble(attribute, Double.valueOf(value));
 	}
 
 	@Override
-	public void setBoolean(String attribute, boolean value) {
-		this.setBoolean(attribute, Boolean.valueOf(value));
+	public DaoValueItem buildDouble(final String attribute, final Double value) {
+		return this.values.put(attribute, new DaoValueItem(attribute, value, DaoValueType.DOUBLE));
 	}
 
 	@Override
-	public void setBoolean(String attribute, Boolean value) {
-		this.values.put(attribute, new DaoValueItem(attribute, value, DaoValueType.BOOLEAN));
+	public DaoValueItem buildInt(final String attribute, final int value) {
+		return this.buildInt(attribute, Integer.valueOf(value));
+	}
+
+	@Override
+	public DaoValueItem buildInt(final String attribute, final Integer value) {
+		return new DaoValueItem(attribute, value, DaoValueType.INT);
+	}
+
+	@Override
+	public DaoValueItem buildString(final String attribute, final String value) {
+		return new DaoValueItem(attribute, value, DaoValueType.STRING);
 	}
 
 	@Override
