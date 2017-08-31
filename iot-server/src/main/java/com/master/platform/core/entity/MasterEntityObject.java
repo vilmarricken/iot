@@ -1,12 +1,12 @@
 package com.master.platform.core.entity;
 
-import com.master.platform.core.entity.dao.DaoEntity;
+import com.master.platform.core.entity.dao.DaoAttributeEntity;
 import com.master.platform.core.entity.dao.DaoEntityFake;
 import com.master.platform.core.entity.dao.DaoEntityValue;
 
 public class MasterEntityObject implements MasterEntity {
 
-	private DaoEntity dao = DaoEntityFake.INSTANCE;
+	private DaoAttributeEntity dao = DaoEntityFake.INSTANCE;
 
 	public MasterEntityObject() {
 	}

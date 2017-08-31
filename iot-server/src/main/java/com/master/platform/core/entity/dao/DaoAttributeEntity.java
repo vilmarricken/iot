@@ -1,6 +1,6 @@
 package com.master.platform.core.entity.dao;
 
-public interface DaoEntity {
+public interface DaoAttributeEntity {
 
 	void addKey(DaoValueItem value);
 

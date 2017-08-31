@@ -6,7 +6,7 @@ import java.sql.Types;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DaoEntityValue implements DaoEntity {
+public class DaoEntityValue implements DaoAttributeEntity {
 
 	protected enum DaoValueType {
 

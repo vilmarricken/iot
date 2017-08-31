@@ -1,8 +1,8 @@
 package com.master.platform.core.entity.dao;
 
-public class DaoEntityFake implements DaoEntity {
+public class DaoEntityFake implements DaoAttributeEntity {
 
-	public static final DaoEntity INSTANCE = new DaoEntityFake();
+	public static final DaoAttributeEntity INSTANCE = new DaoEntityFake();
 
 	public DaoEntityFake() {
 	}

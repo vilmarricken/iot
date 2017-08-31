@@ -27,13 +27,9 @@ public class IOTTransport {
 	}
 
 	byte[] transport(final String send) throws Exception {
-
 		final Socket socket = new Socket(this.address, this.port);
-
 		final InputStream in = socket.getInputStream();
-
 		final OutputStream out = socket.getOutputStream();
-
 		final ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 		try {
 			final byte[] b = send.getBytes();
@@ -56,7 +52,7 @@ public class IOTTransport {
 			this.onLine = true;
 			return ret;
 		} catch (final Exception e) {
-			this.onLine = false	;
+			this.onLine = false;
 			this.close();
 			throw e;
 		}
