@@ -1,0 +1,40 @@
+Comando byte(0-255)-Parâmetros
+
+Comando: 1 - Retorna informações do dispositivo
+Parâmetros:
+Retorno:
+ - byte - indicando a versão do firmware da placa
+ - byte - indicando o tipo da placa 
+   - 1 = ESP8266
+   - 2 = ESP8266 NODEMCU
+ - Sequência de 2 bytes para indicar o modo de cada porta configurada, 
+   - ESP8266 será retornado 2 bytes 
+   - ESP8266 NODEMCU será retornado 8 bytes
+
+Comando:2 - Configurar wi-fi
+Parâmetros
+ - Texto - SSID
+ - Texto - Senha
+Retorno:
+ - byte - Confirmação da configuração
+   - 1 = OK
+   - 2 = Falha
+   - 3 = SSID inválido
+   - 4 = Senha inválida
+
+Comando: 3 - Configurar ip
+Parâmetros
+ - Texto - IP
+ - Texto - Gateway
+Retorno:
+ - byte - Confirmação da configuração
+   - 1 = OK
+   - 2 = Falha
+   - 3 = IP inválido
+   - 4 = Gateway inválido
+
+Comando: 4 - Configurar portas
+Parâmetros
+ - bytes - Tipo de dispositivo conectado em cada porta para o ESP8266 são 2 bytes para o ESP8266 NODEMCU 8 bytes
+ - 
+ 
