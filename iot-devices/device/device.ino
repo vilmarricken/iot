@@ -9,10 +9,13 @@ WiFiServer server(1000);
 short connectionWasAlive = -1;
 short connectionWasRegistred = 0;
 
+int addr = 0;
+
 struct IOT {
-  char ssid[11];
-  char pass[11];
-  char id[4];
+  String ssid = "Mazinho-GVT";
+  String pass = "12345678";
+  String server = "192.168.25.20";
+  String id;
 };
 
 byte version = byte(1);
@@ -21,9 +24,9 @@ IOT iot;
 
 void setup()
 {
-  //Serial.begin(9600);
   Serial.begin(115200);
-  EEPROM.begin(sizeof(IOT));
+  Serial.println();
+  EEPROM.begin(128);
   readConfigurations();
 }
 
@@ -39,21 +42,21 @@ void loop()
 }
 
 void readConfigurations() {
-  if (EEPROM.length() == 0) {
-	Serial.println("EEPROM vazio");
-    iot = new IOT();
-	iot.ssid = "iotManager"
-	iot.pass = "iot987321"
+  if (1 == 0) {
+	  Serial.println("EEPROM vazio");
+    //iot = new IOT();
+	  //iot.ssid = "iotManager"
+	  //iot.pass = "iot987321"
   } else {
     Serial.print("Lendo EEPROM: ");
-	Serial.println(EEPROM.length());
-	EEPROM.get(0, iot);
-	Serial.print("SSID: ");
-	Serial.println(iot.ssid);
-	Serial.print("PASS: ");
-	Serial.println(iot.pass);
-	Serial.print("  ID: ");
-	Serial.println(iot.id);
+	  Serial.println(EEPROM.length());
+	  EEPROM.get(0, iot);
+	  Serial.print("SSID: ");
+	  Serial.println(iot.ssid);
+	  Serial.print("PASS: ");
+	  Serial.println(iot.pass);
+	  Serial.print("  ID: ");
+	  Serial.println(iot.id);
   }
 }
 
@@ -64,7 +67,7 @@ void writeConfigurations() {
 
 void clearConfigurations() {
   Serial.println("Limpando EEPROM");
-  for (int i = 0 ; i < EEPROM.length() ; i++) {
+  for (int i = 0 ; i < 128 ; i++) {
     EEPROM.write(i, 0);
   }
   readConfigurations();
@@ -85,7 +88,7 @@ bool connectWiFi() {
     return true; 
   }
   if( connectionWasAlive == -1 ) {
-    WiFiMulti.addAP("Mazinho-GVT", "12345678");
+    WiFiMulti.addAP(iot.ssid, iot.pass);
   }
   connectionWasAlive = 0;
   Serial.println("Wait for WiFi... ");
@@ -93,12 +96,13 @@ bool connectWiFi() {
   return false;
 }
 
-bool registryDevice(WiFiClient client) {
+bool registryDevice() {
   if( connectionWasRegistred != 1 ) {
     const uint16_t port = 800;
     const char *host = "iot-server"; // ip or dns
     Serial.print("connecting to ");
     Serial.println(host);
+    WiFiClient client = new WiFiClient();
     if (!client.connect(host, port)) {
         Serial.println("connection failed");
         Serial.println("wait 1 sec...");
@@ -112,3 +116,35 @@ bool registryDevice(WiFiClient client) {
     return true;
   }
 }
+
+void writeString( String text ) {
+  int t = text.length();
+  Serial.print("Length: ");
+  Serial.println(t);
+  EEPROM.write(addr++, t);
+  for( int i = 0; i < t; i++ ) {
+    EEPROM.write(addr++, text.charAt(i));
+  }
+}
+
+String readString() {
+  byte t;
+  String s;
+  t = EEPROM.read(addr++);
+  if( t != 0 && t != 255 ) {
+    Serial.print("Length: ");
+    Serial.println(t);
+    byte value;
+    for( int i = 0; i < t; i++ ) {
+      value = EEPROM.read(addr++);
+      boolean b = s.concat((char)value);
+      Serial.print("Add: ");
+      Serial.print((char)value);
+      Serial.print(" - ");
+      Serial.println(b);
+    }
+    return s;
+  }
+  return "";
+}
+
