@@ -38,31 +38,32 @@ void loop()
   if ( !registryDevice() ) {
 	  return;
   }
-  
 }
 
 void readConfigurations() {
-  if (1 == 0) {
-	  Serial.println("EEPROM vazio");
-    //iot = new IOT();
-	  //iot.ssid = "iotManager"
-	  //iot.pass = "iot987321"
-  } else {
-    Serial.print("Lendo EEPROM: ");
-	  Serial.println(EEPROM.length());
-	  EEPROM.get(0, iot);
-	  Serial.print("SSID: ");
-	  Serial.println(iot.ssid);
-	  Serial.print("PASS: ");
-	  Serial.println(iot.pass);
-	  Serial.print("  ID: ");
-	  Serial.println(iot.id);
-  }
+  addr = 0;
+  Serial.print("Lendo EEPROM: ");
+  iot.ssid = readString(iot.ssid);
+  iot.pass = readString(iot.pass);
+  iot.server = readString(iot.server);
+  iot.id = readString(iot.id);
+  Serial.print("  SSID: ");
+  Serial.println(iot.ssid);
+  Serial.print("  PASS: ");
+  Serial.println(iot.pass);
+  Serial.print("SERVER: ");
+  Serial.println(iot.server);
+  Serial.print("    ID: ");
+  Serial.println(iot.id);
 }
 
 void writeConfigurations() {
+  addr = 0;
   Serial.println("Gravando EEPROM");
-  EEPROM.put(0, iot);
+  writeString(iot.ssid);
+  writeString(iot.pass);
+  writeString(iot.server);
+  writeString(iot.id);
 }
 
 void clearConfigurations() {
@@ -127,7 +128,7 @@ void writeString( String text ) {
   }
 }
 
-String readString() {
+String readString(String defaultValue) {
   byte t;
   String s;
   t = EEPROM.read(addr++);
@@ -143,8 +144,12 @@ String readString() {
       Serial.print(" - ");
       Serial.println(b);
     }
+    Serial.print("Returning value: ");
+    Serial.println(s);
     return s;
   }
-  return "";
+  Serial.print("Returning default value: ");
+  Serial.println(defaultValue);
+  return defaultValue;
 }
 
