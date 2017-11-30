@@ -1,40 +1,40 @@
 package com.master.iot.entity;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
+import javax.persistence.Entity;
 
-public class HouseController {
+import com.master.platform.core.entity.MasterEntityObject;
 
-	private Integer id;
+@Entity
+public class HouseController extends MasterEntityObject {
+
 	private String name;
+
 	private int port;
 
-	@Id
-	@GeneratedValue(generator = "InvSeq")
-	@SequenceGenerator(name = "InvSeq", sequenceName = "INV_SEQ", allocationSize = 5)
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
+	private Boolean state;
 
 	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
+		return this.name;
 	}
 
 	public int getPort() {
-		return port;
+		return this.port;
 	}
 
-	public void setPort(int port) {
+	public Boolean getState() {
+		return this.state;
+	}
+
+	public void setName(final String name) {
+		this.name = name;
+	}
+
+	public void setPort(final int port) {
 		this.port = port;
+	}
+
+	public void setState(final Boolean state) {
+		this.state = state;
 	}
 
 }

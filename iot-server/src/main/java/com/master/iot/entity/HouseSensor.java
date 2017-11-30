@@ -1,40 +1,38 @@
 package com.master.iot.entity;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
+import javax.persistence.Entity;
 
+@Entity
 public class HouseSensor {
 
-	private Integer id;
 	private String name;
+
 	private int port;
 
-	@Id
-	@GeneratedValue(generator = "InvSeq")
-	@SequenceGenerator(name = "InvSeq", sequenceName = "INV_SEQ", allocationSize = 5)
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
+	private HouseSensorType type;
 
 	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
+		return this.name;
 	}
 
 	public int getPort() {
-		return port;
+		return this.port;
 	}
 
-	public void setPort(int port) {
+	public HouseSensorType getType() {
+		return this.type;
+	}
+
+	public void setName(final String name) {
+		this.name = name;
+	}
+
+	public void setPort(final int port) {
 		this.port = port;
+	}
+
+	public void setType(final HouseSensorType type) {
+		this.type = type;
 	}
 
 }

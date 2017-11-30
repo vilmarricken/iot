@@ -2,7 +2,7 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266WiFiMulti.h>
 
-ESP8266WiFiMulti WiFiMulti;
+ESP8266WiFiMulti wiFiMulti;
 
 WiFiServer server(1000);
 
@@ -75,7 +75,7 @@ void clearConfigurations() {
 }
 
 bool connectWiFi() {
-  while(WiFiMulti.run() == WL_CONNECTED) {
+  while(wiFiMulti.run() == WL_CONNECTED) {
     if( connectionWasAlive != 1 ) {
       connectionWasAlive = 1;
       Serial.print("IP Address: ");
@@ -89,7 +89,7 @@ bool connectWiFi() {
     return true; 
   }
   if( connectionWasAlive == -1 ) {
-    WiFiMulti.addAP(iot.ssid, iot.pass);
+    wiFiMulti.addAP("iot.ssid", "iot.pass");
   }
   connectionWasAlive = 0;
   Serial.println("Wait for WiFi... ");
@@ -103,17 +103,17 @@ bool registryDevice() {
     const char *host = "iot-server"; // ip or dns
     Serial.print("connecting to ");
     Serial.println(host);
-    WiFiClient client = new WiFiClient();
+    WiFiClient client;
     if (!client.connect(host, port)) {
         Serial.println("connection failed");
         Serial.println("wait 1 sec...");
         delay(1000);
         return false;
     }
-	connectionWasRegistred = 1;
+	  connectionWasRegistred = 1;
     Serial.println("connected");
-	delay(500);
-	client.close();
+	  delay(500);
+	  //client.close();
     return true;
   }
 }

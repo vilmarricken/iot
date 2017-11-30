@@ -1,32 +1,26 @@
 package com.master.platform.core.entity;
 
-import com.master.platform.core.entity.dao.DaoAttributeEntity;
-import com.master.platform.core.entity.dao.DaoEntityFake;
-import com.master.platform.core.entity.dao.DaoEntityValue;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 
+@MappedSuperclass
 public class MasterEntityObject implements MasterEntity {
 
-	private DaoAttributeEntity dao = DaoEntityFake.INSTANCE;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
 	public MasterEntityObject() {
 	}
 
-	void attach() {
-		if (this.dao.hasChanges()) {
-			throw new RuntimeException("Objeto com alterações: " + this.dao);
-		}
-		this.dao = new DaoEntityValue();
+	public Long getId() {
+		return this.id;
 	}
 
-	void detach() {
-		if (this.dao.hasChanges()) {
-			throw new RuntimeException("Objeto com alterações: " + this.dao);
-		}
-		this.dao = DaoEntityFake.INSTANCE;
-	}
-
-	boolean hasChanges() {
-		return this.dao.hasChanges();
+	public void setId(final Long id) {
+		this.id = id;
 	}
 
 }
