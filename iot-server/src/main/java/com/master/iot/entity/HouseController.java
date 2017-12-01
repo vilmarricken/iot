@@ -1,40 +1,34 @@
 package com.master.iot.entity;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 
 import com.master.platform.core.entity.MasterEntityObject;
 
 @Entity
 public class HouseController extends MasterEntityObject {
 
+	private List<HouseComponent> components;
 	private String name;
 
-	private int port;
-
-	private Boolean state;
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "controller")
+	public List<HouseComponent> getComponents() {
+		return this.components;
+	}
 
 	public String getName() {
 		return this.name;
 	}
 
-	public int getPort() {
-		return this.port;
-	}
-
-	public Boolean getState() {
-		return this.state;
+	public void setComponents(final List<HouseComponent> controllers) {
+		this.components = controllers;
 	}
 
 	public void setName(final String name) {
 		this.name = name;
-	}
-
-	public void setPort(final int port) {
-		this.port = port;
-	}
-
-	public void setState(final Boolean state) {
-		this.state = state;
 	}
 
 }

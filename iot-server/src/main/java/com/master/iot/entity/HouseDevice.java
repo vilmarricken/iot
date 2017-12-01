@@ -13,13 +13,13 @@ public class HouseDevice extends MasterEntityObject {
 
 	private String address;
 
-	private List<HouseController> controllers;
+	private List<HouseComponent> controllers;
 
 	private DeviceType deviceType;
 
-	private List<HouseSensor> sensors;
+	private String name;
 
-	private Boolean state;
+	private HouseDeviceState state;
 
 	private String uuid;
 
@@ -30,8 +30,8 @@ public class HouseDevice extends MasterEntityObject {
 		return this.address;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	public List<HouseController> getControllers() {
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "device")
+	public List<HouseComponent> getControllers() {
 		return this.controllers;
 	}
 
@@ -39,12 +39,11 @@ public class HouseDevice extends MasterEntityObject {
 		return this.deviceType;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	public List<HouseSensor> getSensors() {
-		return this.sensors;
+	public String getName() {
+		return this.name;
 	}
 
-	public Boolean getState() {
+	public HouseDeviceState getState() {
 		return this.state;
 	}
 
@@ -56,7 +55,7 @@ public class HouseDevice extends MasterEntityObject {
 		this.address = address;
 	}
 
-	public void setControllers(final List<HouseController> controllers) {
+	public void setControllers(final List<HouseComponent> controllers) {
 		this.controllers = controllers;
 	}
 
@@ -64,11 +63,11 @@ public class HouseDevice extends MasterEntityObject {
 		this.deviceType = deviceType;
 	}
 
-	public void setSensors(final List<HouseSensor> sensors) {
-		this.sensors = sensors;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public void setState(final Boolean state) {
+	public void setState(HouseDeviceState state) {
 		this.state = state;
 	}
 

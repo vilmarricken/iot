@@ -15,8 +15,9 @@ import javax.ws.rs.core.MediaType;
 import com.master.iot.IOTCompenent;
 import com.master.iot.IOTController;
 import com.master.iot.IOTManager;
-import com.master.iot.objects.Controller;
-import com.master.iot.objects.Type;
+import com.master.iot.controller.HouseControllerController;
+import com.master.iot.entity.HouseController;
+import com.master.iot.entity.HouseControllerType;
 
 @Path("house")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -24,26 +25,24 @@ import com.master.iot.objects.Type;
 public class HouseResource implements Serializable {
 
 	@GET
-	@Path("controllers")
+	@Path("controllers/{id}")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Collection<Controller> list() {
+	public Collection<HouseController> controllers(@PathParam("id") Long id) {
 		IOTManager instance = IOTManager.getInstance();
-		Collection<IOTController> controllers = instance.list();
-		Collection<Controller> regions = new ArrayList<>();
-		for (IOTController controller : controllers) {
-			regions.add(new Controller(controller.getId(), controller.getName(), false, Type.REGION));
+		IOTController controller = instance.get(id);
+		IOTCompenent[] compenents = controller.getComponents();
+		List<Controller> controllers = new ArrayList<>();
+		for (IOTCompenent iotCompenent : compenents) {
+			controllers.add(new Controller(String.valueOf(iotCompenent.getIndex()), iotCompenent.getName(), iotCompenent.isOn(), HouseControllerType.CONTROLLER));
 		}
-		return regions;
+		return controllers;
 	}
 
 	@GET
-	@Path("controllers/on/{id}/{component}")
+	@Path("controllers")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public void on(@PathParam("id") String id, @PathParam("component") String component) throws Exception {
-		System.out.println("On - " + id + " - " + component);
-		IOTManager instance = IOTManager.getInstance();
-		IOTController controller = instance.get(id);
-		controller.on(Integer.valueOf(component));
+	public Collection<HouseController> list() {
+		return new HouseControllerController().controllers();
 	}
 
 	@GET
@@ -57,36 +56,32 @@ public class HouseResource implements Serializable {
 	}
 
 	@GET
-	@Path("controllers/{id}")
+	@Path("controllers/on/{id}/{component}")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Collection<Controller> controllers(@PathParam("id") String id) {
+	public void on(@PathParam("id") String id, @PathParam("component") String component) throws Exception {
+		System.out.println("On - " + id + " - " + component);
 		IOTManager instance = IOTManager.getInstance();
 		IOTController controller = instance.get(id);
-		IOTCompenent[] compenents = controller.getComponents();
-		List<Controller> controllers = new ArrayList<>();
-		for (IOTCompenent iotCompenent : compenents) {
-			controllers.add(new Controller(String.valueOf(iotCompenent.getIndex()), iotCompenent.getName(), iotCompenent.isOn(), Type.CONTROLLER));
-		}
-		return controllers;
+		controller.on(Integer.valueOf(component));
 	}
 
 	/*
 	 * @GET public Collection<IOTController> list() { return
 	 * IOTManager.getInstance().list(); }
-	 * 
+	 *
 	 * @PUT public Product edit(@NotNull Product product) { return
 	 * service.edit(product); }
-	 * 
+	 *
 	 * @GET public List<Product> list(@QueryParam("search") String search) {
 	 * return service.list(search); }
-	 * 
+	 *
 	 * @GET
-	 * 
+	 *
 	 * @Path("{id}") public Product find(@NotNull @PathParam("id") Long id)
 	 * throws AppException { return service.find(id); }
-	 * 
+	 *
 	 * @DELETE
-	 * 
+	 *
 	 * @Path("{id}") public void delete(@NotNull @PathParam("id") Long id)
 	 * throws AppException { service.delete(id); }
 	 */
