@@ -1,97 +1,34 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="ISO-8859-1">
-<title>IoT Mansion</title>
+<title>IOT - Mansion Manager</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="css/bootstrap-3.3.7.min.css">
-<script src="js/jquery-3.2.1.min.js"></script>
-<script src="js/bootstrap-3.3.7.min.js"></script>
-<script src="js/master-core.js"></script>
-<script>
-var controllers = [];
-$(document).ready(function(){
-	listControllers();
-});
-
-function back(){
-	controllers.pop();
-	listControllers();
-}
-
-function region( id ){
-	controllers.push(id);
-	listControllers();
-}
-
-function controllerOff( id ) {
-	var action = "/iot/rest/house/controllers/off";
-	action += "/" + controllers[controllers.length - 1] + "/" + id; 
-	masterRequest({url: action, success: function(data, status){listControllers();}});
-}
-
-function controllerOn( id ) {
-	var action = "/iot/rest/house/controllers/on";
-	action += "/" + controllers[controllers.length - 1] + "/" + id; 
-	masterRequest({url: action, success: function(data, status){listControllers();}});
-}
-
-function listControllers(){
-	var action = "/iot/rest/house/controllers";
-	if( controllers.length > 0 ){
-		action += "/" + controllers[controllers.length - 1]; 
-	}
-	debugger;
-	masterRequest(
-		{
-			url: action, 
-			success: function(data, status){
-				$("#data").detach();
-				buildControllers(data);
-			}
-		}
-	);
-}
-
-function buildControllers(data){
-	var ret = "<div id=\"data\">";
-	if(data.length > 0){
-		for(i = 0; i < data.length; i++ ){
-			ret += "<p>";
-			if(data[i].type == "REGION"){
-				ret += buildRegion(data[i]);
-			} else if(data[i].type == "CONTROLLER"){
-				ret += buildController(data[i]);
-			} else {
-				ret += data[i].toString();
-			}
-			ret += "</p>";
-		}
-	}
-	ret += "</div>";
-	debugger;
-	$(ret).appendTo("#controllers");
-}
-
-function buildRegion( controller ) {
-	return "<button type=\"button\" class=\"btn btn-primary\" onClick=\"region('" + controller.id + "')\">" + controller.name + "</button>";
-}
-
-function buildController( controller ) {
-	if( controller.on ) {
-		return "<button type=\"button\" class=\"btn btn-success\" onClick=\"controllerOff('" + controller.id + "')\">" + controller.name + "</button>";
-	}
-	return "<button type=\"button\" class=\"btn btn-danger\" onClick=\"controllerOn('" + controller.id + "')\">" + controller.name + "</button>";
-}
-
-</script>
-</head>
+<link rel="stylesheet" href="css/font-awesome-4.7.0.min.css">
+<link rel="stylesheet" href="css/w3-4.css">
 <body>
-	<div id="container">
-		<div class="header clearfix">
-		</div>
-	</div>
-	<div id="controllers" class="row marketing">
-	</div>
+  <button class="w3-button w3-grey w3-round-large w3-center-align"><i class="fa fa-home glyphicon glyphicon-home w3-xxxlarge"></i><br/>Home</button>
+    <div class="w3-dropdown-hover">
+    <button class="w3-button w3-grey w3-center-align">
+      <i class="fa fa-home glyphicon glyphicon-home w3-xxxlarge"></i>
+      <br/>Home
+    </button>
+    <div class="w3-dropdown-content w3-bar-block w3-border">
+      <a href="#" class="w3-bar-item w3-button">Link 1</a>
+      <a href="#" class="w3-bar-item w3-button">Link 2</a>
+      <a href="#" class="w3-bar-item w3-button">Link 3</a>
+    </div>
+  </div>
+<div class="w3-container w3-indigo">
+</div>
+
+<img src="img_car.jpg" alt="Car" style="width:100%">
+
+<div class="w3-container">
+  <p>A car is a wheeled, self-powered motor vehicle used for transportation.</p>
+</div>
+
+<div class="w3-container w3-teal">
+  <p>My footer information</p>
+</div>
+
 </body>
-</html>
+</html> 
