@@ -1,11 +1,17 @@
 #include  < OneWire.h >
+
 OneWire ds(2);
+
+int ice = D0;
+
+float INVALID_VALUE = 1000;
+
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(115200);
 }
  
-void temperature(){
+float temperature(){
   byte i;
   byte present = 0;
   byte type_s;
@@ -18,7 +24,7 @@ void temperature(){
     /// Serial.println();
     ds.reset_search();
     delay(250);
-    return;
+    INVALID_VALUE;
   }
   if ( ds.search(addr)) {
     Serial.println("fallo");
@@ -29,7 +35,7 @@ void temperature(){
   }
   if (OneWire::crc8(addr, 7) != addr[7]) {
     Serial.println("CRC is not valid!");
-    return;
+    INVALID_VALUE;
   }
  
   // the first ROM byte indicates which chip
@@ -44,9 +50,9 @@ void temperature(){
       // Serial.println(" Chip = DS1822");
       type_s = 0;
       break;
-  default:
-    Serial.println("Device is not a DS18x20 family device.");
-    return;
+    default:
+      Serial.println("Device is not a DS18x20 family device.");
+      INVALID_VALUE;
   } 
  
   ds.reset();
@@ -85,11 +91,32 @@ void temperature(){
     Serial.println("isnan");
   } 
   Serial.print("Temperature: ");
-  Serial.print(celsius); 
+  Serial.println(celsius);
+  return celsius; 
 }
- 
+
+void onDevice(int port) {
+  Serial.print("ON ");
+  Serial.println(port);
+  digitalWrite(port, HIGH);
+}
+
+void offDevice(int port) {
+  Serial.print("OFF ");
+  Serial.println(port);
+  digitalWrite(port, LOW);
+}
+
 void loop() {
   // put your main code here, to run repeatedly:
-  temperature(); 
+  float temp = temperature(); 
+  if(temp == INVALID_VALUE) {
+    return
+  }
+  if(temp < 12.3f) {
+    offDevice(ice);
+  } else if(temp > 13.5f) {
+    onDevice(ice);
+  }
   delay(1000);
 }
