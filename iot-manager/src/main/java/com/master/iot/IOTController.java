@@ -2,6 +2,8 @@ package com.master.iot;
 
 import java.io.Serializable;
 
+import com.master.iot.transport.IOTTransport;
+
 public class IOTController implements Serializable {
 
 	public enum COMMAND {

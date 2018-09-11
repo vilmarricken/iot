@@ -1,10 +1,12 @@
-package com.master.iot;
+package com.master.iot.transport;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.util.Arrays;
+
+import com.master.iot.command.IOTCommand;
 
 public class IOTTransport {
 
@@ -26,31 +28,29 @@ public class IOTTransport {
 		return this.onLine;
 	}
 
-	byte[] transport(final String send) throws Exception {
+	void transport(final IOTCommand command) throws Exception {
 		final Socket socket = new Socket(this.address, this.port);
 		final InputStream in = socket.getInputStream();
 		final OutputStream out = socket.getOutputStream();
 		final ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+		final byte[] send = command.getCommand();
 		try {
-			final byte[] b = send.getBytes();
-			System.out.println(Arrays.toString(b));
-			out.write(b);
+			System.out.println(Arrays.toString(send));
+			out.write((byte) send.length);
+			out.write(send);
 			int t = 0;
-			do {
-				t = in.read();
-				System.out.println(t);
-				if (t != '\r') {
-					buffer.write(t);
-				}
-			} while (t != '\r');
-			final byte[] ret = buffer.toByteArray();
-			System.out.println(new String(ret));
+			t = in.read();
+			for (int i = 0; i < t; i++) {
+				buffer.write(t);
+			}
+			final byte[] response = buffer.toByteArray();
+			System.out.println(Arrays.toString(response));
 			buffer.reset();
 			socket.close();
 			in.close();
 			out.close();
 			this.onLine = true;
-			return ret;
+			command.setResponse(response);
 		} catch (final Exception e) {
 			this.onLine = false;
 			this.close();
