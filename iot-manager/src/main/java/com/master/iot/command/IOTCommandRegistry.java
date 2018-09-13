@@ -4,7 +4,8 @@ public class IOTCommandRegistry extends IOTCommandAbstract {
 
 	private byte type;
 
-	public IOTCommandRegistry(byte type) {
+	public IOTCommandRegistry(byte port, byte type) {
+		super(port);
 		this.type = type;
 	}
 

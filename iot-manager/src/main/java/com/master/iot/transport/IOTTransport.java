@@ -1,6 +1,7 @@
 package com.master.iot.transport;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
@@ -21,20 +22,23 @@ public class IOTTransport {
 		this.port = port;
 	}
 
-	void close() {
+	public void close() {
 	}
 
 	public boolean isOpen() {
 		return this.onLine;
 	}
 
-	void transport(final IOTCommand command) throws Exception {
-		final Socket socket = new Socket(this.address, this.port);
-		final InputStream in = socket.getInputStream();
-		final OutputStream out = socket.getOutputStream();
+	public IOTCommand transport(final IOTCommand command) throws Exception {
 		final ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 		final byte[] send = command.getCommand();
+		Socket socket = null;
+		InputStream in = null;
+		OutputStream out = null;
 		try {
+			socket = new Socket(this.address, this.port);
+			in = socket.getInputStream();
+			out = socket.getOutputStream();
 			System.out.println(Arrays.toString(send));
 			out.write((byte) send.length);
 			out.write(send);
@@ -46,15 +50,37 @@ public class IOTTransport {
 			final byte[] response = buffer.toByteArray();
 			System.out.println(Arrays.toString(response));
 			buffer.reset();
-			socket.close();
-			in.close();
-			out.close();
 			this.onLine = true;
+			command.setStatus(IOTCommand.COMMAND_OK);
 			command.setResponse(response);
+			return command;
 		} catch (final Exception e) {
+			command.setStatus(IOTCommand.COMMAND_ERROR);
 			this.onLine = false;
-			this.close();
 			throw e;
+		} finally {
+			this.close();
+			if (out != null) {
+				try {
+					out.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			if (in != null) {
+				try {
+					in.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			if (socket != null) {
+				try {
+					socket.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 
 	}

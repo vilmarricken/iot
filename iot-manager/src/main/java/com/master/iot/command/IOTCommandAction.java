@@ -4,7 +4,8 @@ public class IOTCommandAction extends IOTCommandAbstract {
 
 	private byte action;
 
-	public IOTCommandAction(byte action) {
+	public IOTCommandAction(byte port, byte action) {
+		super(port);
 		this.action = action;
 	}
 

@@ -2,13 +2,12 @@ package com.master.iot;
 
 import java.io.Serializable;
 
+import com.master.iot.command.IOTCommand;
+import com.master.iot.command.IOTCommandAction;
+import com.master.iot.command.IOTCommandCheck;
 import com.master.iot.transport.IOTTransport;
 
 public class IOTController implements Serializable {
-
-	public enum COMMAND {
-		INFO, OFF, ON, STATE
-	}
 
 	private static final long serialVersionUID = -1057493262219216697L;
 
@@ -25,19 +24,8 @@ public class IOTController implements Serializable {
 		this.name = id;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	private byte[] checkState() throws Exception {
-		return this.getTransport().transport("1\r");
-	}
-
-	private IOTTransport getTransport() throws Exception {
-		if(this.transport == null || !this.transport.isOpen()){
-			connect();
-		}
-		return this.transport;
+		return this.getTransport().transport(new IOTCommandCheck()).getCommand();
 	}
 
 	public void close() {
@@ -73,6 +61,13 @@ public class IOTController implements Serializable {
 		return this.name;
 	}
 
+	private IOTTransport getTransport() throws Exception {
+		if (this.transport == null || !this.transport.isOpen()) {
+			this.connect();
+		}
+		return this.transport;
+	}
+
 	@Override
 	public int hashCode() {
 		return this.id.hashCode();
@@ -83,13 +78,17 @@ public class IOTController implements Serializable {
 	}
 
 	public void off(final byte port) throws Exception {
-		this.getTransport().transport("3" + port + "\r");
+		this.getTransport().transport(new IOTCommandAction(port, IOTCommand.ACTION_OFF));
 		this.components[port].setOn(false);
 	}
 
-	public void on(final int port) throws Exception {
-		this.getTransport().transport("2" + port + "\r");
+	public void on(final byte port) throws Exception {
+		this.getTransport().transport(new IOTCommandAction(port, IOTCommand.ACTION_ON));
 		this.components[port].setOn(true);
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public void start() throws Exception {
@@ -112,7 +111,7 @@ public class IOTController implements Serializable {
 		for (int i = 0; i < state.length; i++) {
 			this.components[i] = new IOTCompenent("Component " + i, state[i] == 1, i);
 		}
-		
+
 	}
 
 }
