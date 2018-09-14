@@ -2,6 +2,8 @@ package com.master.iot.command;
 
 public interface IOTCommand {
 
+	static byte COMMAND_FAIL = -1;
+
 	static byte COMMAND_ERROR = 0;
 
 	static byte COMMAND_OK = 0;
@@ -11,6 +13,8 @@ public interface IOTCommand {
 	static byte COMMAND_REGISTRY = 2;
 
 	static byte COMMAND_UNREGISTRY = 3;
+
+	static byte COMMAND_ID = 3;
 
 	static byte ACTION_ON = 4;
 
@@ -28,7 +32,11 @@ public interface IOTCommand {
 
 	byte[] getCommand();
 
+	byte[] getResponse();
+
 	byte getStatus();
+
+	boolean isOK();
 
 	void setResponse(byte[] response);
 

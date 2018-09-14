@@ -29,7 +29,7 @@ public class IOTTransport {
 		return this.onLine;
 	}
 
-	public IOTCommand transport(final IOTCommand command) throws Exception {
+	public IOTCommand transport(final IOTCommand command) throws CommandException {
 		final ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 		final byte[] send = command.getCommand();
 		Socket socket = null;
@@ -44,20 +44,21 @@ public class IOTTransport {
 			out.write(send);
 			int t = 0;
 			t = in.read();
+			byte status = (byte) in.read();
 			for (int i = 0; i < t; i++) {
-				buffer.write(t);
+				buffer.write((byte) t);
 			}
 			final byte[] response = buffer.toByteArray();
 			System.out.println(Arrays.toString(response));
 			buffer.reset();
 			this.onLine = true;
-			command.setStatus(IOTCommand.COMMAND_OK);
+			command.setStatus(status == (byte) 1 ? IOTCommand.COMMAND_OK : IOTCommand.COMMAND_ERROR);
 			command.setResponse(response);
 			return command;
 		} catch (final Exception e) {
-			command.setStatus(IOTCommand.COMMAND_ERROR);
+			command.setStatus(IOTCommand.COMMAND_FAIL);
 			this.onLine = false;
-			throw e;
+			throw new CommandException(e);
 		} finally {
 			this.close();
 			if (out != null) {

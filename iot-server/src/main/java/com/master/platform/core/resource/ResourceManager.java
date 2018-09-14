@@ -11,7 +11,23 @@ public class ResourceManager {
 
 	private static final ResourceManager INSTANCE = new ResourceManager();
 
+	public static ResourceManager get() {
+		return ResourceManager.INSTANCE;
+	}
+
 	public ResourceManager() {
+	}
+
+	public void finish() {
+		Resource resource = ResourceManager.RESOURCES.get();
+		if (resource == null) {
+			Thread currentThread = Thread.currentThread();
+			ResourceManager.log.warn("Recource is not active in thread " + currentThread.getName() + "(" + currentThread.getId() + ")");
+		}
+		ResourceManager.RESOURCES.remove();
+		if (ResourceManager.log.isTraceEnabled()) {
+			ResourceManager.log.trace("Resource finished: " + resource);
+		}
 	}
 
 	public void start(Resource resource) {
@@ -23,24 +39,8 @@ public class ResourceManager {
 		resource.setResourceManager(this);
 		ResourceManager.RESOURCES.set(resource);
 		if (ResourceManager.log.isTraceEnabled()) {
-			log.trace("Resource started: " + resource);
+			ResourceManager.log.trace("Resource started: " + resource);
 		}
-	}
-
-	public void finish() {
-		Resource resource = ResourceManager.RESOURCES.get();
-		if (resource == null) {
-			Thread currentThread = Thread.currentThread();
-			ResourceManager.log.warn("Recource is not active in thread " + currentThread.getName() + "(" + currentThread.getId() + ")");
-		}
-		ResourceManager.RESOURCES.remove();
-		if (ResourceManager.log.isTraceEnabled()) {
-			log.trace("Resource finished: " + resource);
-		}
-	}
-
-	public static ResourceManager get() {
-		return ResourceManager.INSTANCE;
 	}
 
 }

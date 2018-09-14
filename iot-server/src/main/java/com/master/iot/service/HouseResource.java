@@ -23,7 +23,7 @@ import com.master.iot.entity.HouseControllerType;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class HouseResource implements Serializable {
-
+/*
 	@GET
 	@Path("controllers/{id}")
 	@Produces({ MediaType.APPLICATION_JSON })
@@ -31,13 +31,13 @@ public class HouseResource implements Serializable {
 		IOTManager instance = IOTManager.getInstance();
 		IOTController controller = instance.get(id);
 		IOTCompenent[] compenents = controller.getComponents();
-		List<Controller> controllers = new ArrayList<>();
+		List<IOTController> controllers = new ArrayList<>();
 		for (IOTCompenent iotCompenent : compenents) {
 			controllers.add(new Controller(String.valueOf(iotCompenent.getIndex()), iotCompenent.getName(), iotCompenent.isOn(), HouseControllerType.CONTROLLER));
 		}
 		return controllers;
 	}
-
+*/
 	@GET
 	@Path("controllers")
 	@Produces({ MediaType.APPLICATION_JSON })

@@ -12,15 +12,15 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.master.iot.transport.CommandException;
+
 public class IOTManager implements Runnable {
 
 	private static final IOTManager INSTANCE = new IOTManager();
 
-	private boolean running = false;
-
 	public static IOTManager getInstance() {
-		if (!INSTANCE.isRunning()) {
-			INSTANCE.start();
+		if (!IOTManager.INSTANCE.isRunning()) {
+			IOTManager.INSTANCE.start();
 		}
 		return IOTManager.INSTANCE;
 	}
@@ -29,14 +29,15 @@ public class IOTManager implements Runnable {
 		IOTManager.getInstance();
 	}
 
+	private boolean running = false;
+
 	private Map<String, IOTController> controllers = new HashMap<>();
 
 	private IOTManager() {
 		this.read();
 	}
 
-	public void changeControllerName(final String id, final String name)
-			throws Exception {
+	public void changeControllerName(final String id, final String name) throws Exception {
 		this.get(id).setName(name);
 	}
 
@@ -54,6 +55,10 @@ public class IOTManager implements Runnable {
 
 	private File getFile() {
 		return new File("iot.bin");
+	}
+
+	public boolean isRunning() {
+		return this.running;
 	}
 
 	public Collection<IOTController> list() {
@@ -78,17 +83,10 @@ public class IOTManager implements Runnable {
 				this.controllers = (Map<String, IOTController>) o.readObject();
 				o.close();
 				in.close();
-				startControllers();
+				this.startControllers();
 			} catch (final Exception e) {
 				e.printStackTrace();
 			}
-		}
-	}
-
-	private void startControllers() throws Exception {
-		Collection<IOTController> controllers = this.controllers.values();
-		for (IOTController controller : controllers) {
-			controller.start();
 		}
 	}
 
@@ -96,10 +94,7 @@ public class IOTManager implements Runnable {
 		this.controllers.remove(key);
 	}
 
-	public void start() {
-		new Thread(this).start();
-	}
-
+	@Override
 	public void run() {
 		ServerSocket sc = null;
 		try {
@@ -109,16 +104,25 @@ public class IOTManager implements Runnable {
 				try {
 					System.out.println("Aguardando");
 					final Socket socket = sc.accept();
-					final String key = this.getAddress(socket.getInetAddress()
-							.toString());
+					final String address = this.getAddress(socket.getInetAddress().toString());
 					socket.close();
-					IOTController controller = this.controllers.get(key);
+					IOTController controller = this.controllers.get(address);
 					if (controller == null) {
-						controller = new IOTController(key);
-						this.controllers.put(key, controller);
+						controller = new IOTController(address);
 					}
-					controller.start();
-					save();
+					final IOTController controllerThread = controller;
+					new Thread() {
+						@Override
+						public void run() {
+							try {
+								String id = controllerThread.id();
+								IOTManager.this.controllers.put(id, controllerThread);
+							} catch (CommandException e) {
+								e.printStackTrace();
+							}
+						};
+					}.start();
+					this.save();
 				} catch (final Exception e) {
 					e.printStackTrace();
 				}
@@ -150,8 +154,15 @@ public class IOTManager implements Runnable {
 		}
 	}
 
-	public boolean isRunning() {
-		return running;
+	public void start() {
+		new Thread(this).start();
+	}
+
+	private void startControllers() throws Exception {
+		Collection<IOTController> controllers = this.controllers.values();
+		for (IOTController controller : controllers) {
+			controller.start();
+		}
 	}
 
 }

@@ -5,6 +5,8 @@ import java.io.Serializable;
 import com.master.iot.command.IOTCommand;
 import com.master.iot.command.IOTCommandAction;
 import com.master.iot.command.IOTCommandCheck;
+import com.master.iot.command.IOTCommandID;
+import com.master.iot.transport.CommandException;
 import com.master.iot.transport.IOTTransport;
 
 public class IOTController implements Serializable {
@@ -37,7 +39,7 @@ public class IOTController implements Serializable {
 		}
 	}
 
-	private void connect() throws Exception {
+	private void connect() throws CommandException {
 		this.transport = new IOTTransport(this.id, 1001);
 	}
 
@@ -61,7 +63,7 @@ public class IOTController implements Serializable {
 		return this.name;
 	}
 
-	private IOTTransport getTransport() throws Exception {
+	private IOTTransport getTransport() throws CommandException {
 		if (this.transport == null || !this.transport.isOpen()) {
 			this.connect();
 		}
@@ -71,6 +73,12 @@ public class IOTController implements Serializable {
 	@Override
 	public int hashCode() {
 		return this.id.hashCode();
+	}
+
+	public String id() throws CommandException {
+		IOTCommand command = new IOTCommandID();
+		this.getTransport().transport(command);
+		return new String(command.getResponse());
 	}
 
 	public boolean isOpen() {

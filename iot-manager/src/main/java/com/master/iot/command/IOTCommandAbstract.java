@@ -17,8 +17,18 @@ public abstract class IOTCommandAbstract implements IOTCommand {
 	}
 
 	@Override
+	public byte[] getResponse() {
+		return this.response;
+	}
+
+	@Override
 	public byte getStatus() {
 		return this.status;
+	}
+
+	@Override
+	public boolean isOK() {
+		return this.status == IOTCommand.ACTION_ON;
 	}
 
 	@Override
