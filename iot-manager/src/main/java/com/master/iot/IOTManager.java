@@ -99,7 +99,7 @@ public class IOTManager implements Runnable {
 		ServerSocket sc = null;
 		try {
 			this.running = true;
-			sc = new ServerSocket(1000);
+			sc = new ServerSocket(2000);
 			while (true) {
 				try {
 					System.out.println("Aguardando");
