@@ -6,8 +6,6 @@ ESP8266WiFiMulti wiFiMulti;
 
 WiFiServer server(1000);
 
-short registred = 0;
-
 const char    *id = "Mazinho-GVT";
 const char    *ssid = "Mazinho-GVT";
 const char    *pass = "12345678";
@@ -19,7 +17,6 @@ void iotConnectWiFi() {
         return; 
     }
     //Serial.print("Wait for WiFi...");
-    registred = 0;
     while ( wiFiMulti.run() != WL_CONNECTED ) {
         //Serial.print(" .");
         wiFiMulti.addAP(ssid, pass);
@@ -32,23 +29,21 @@ void iotConnectWiFi() {
     //Serial.println(WiFi.gatewayIP());
     //Serial.print(" subnet: ");
     //Serial.println(WiFi.subnetMask());
+    iotRegistryDevice();
 }
 
 void iotRegistryDevice() {
-    if ( registred != 1 ) {
-        //Serial.print("connecting to ");
-        //Serial.println(host);
-        WiFiClient client;
-        while (!client.connect(host, port)) {
-            //Serial.println("connection failed");
-            //Serial.println("wait 1 sec...");
-            delay(1000);
-        }
-        registred = 1;
-        //Serial.println("connected");
-        delay(500);
-        byte len = (byte)(strlen(id));
-        client.write(len);
-        client.print(id);
+    //Serial.print("connecting to ");
+    //Serial.println(host);
+    WiFiClient client;
+    while (!client.connect(host, port)) {
+        //Serial.println("connection failed");
+        //Serial.println("wait 1 sec...");
+        delay(1000);
     }
+    //Serial.println("connected");
+    delay(500);
+    byte len = (byte)(strlen(id));
+    client.write(len);
+    client.print(id);
 }

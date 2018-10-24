@@ -7,7 +7,6 @@ void setup(){
 
 void loop(){
     iotConnectWiFi();
-    iotRegistryDevice();
     //millis();
     Serial.print("Loop - ");
     Serial.println(millis());
