@@ -8,43 +8,47 @@ WiFiServer server(1000);
 
 short registred = 0;
 
-char ssid[] = "Mazinho-GVT";
-char pass[] = "12345678";
-//String server = "192.168.25.20";
+const char    *id = "Mazinho-GVT";
+const char    *ssid = "Mazinho-GVT";
+const char    *pass = "12345678";
+const char    *host = "192.168.25.20"; // ip or dns
+const uint16_t port = 800;
 
-void connectWiFi() {
+void iotConnectWiFi() {
     if ( wiFiMulti.run() == WL_CONNECTED ) {
         return; 
     }
-    Serial.println("Wait for WiFi...");
+    //Serial.print("Wait for WiFi...");
     registred = 0;
     while ( wiFiMulti.run() != WL_CONNECTED ) {
+        //Serial.print(" .");
         wiFiMulti.addAP(ssid, pass);
         delay(500);
     }
-    Serial.print("IP Address: ");
-    Serial.print(WiFi.localIP());
-    Serial.print(" gateway: ");
-    Serial.print(WiFi.gatewayIP());
-    Serial.print(" subnet: ");
-    Serial.print(WiFi.subnetMask());
-    Serial.println("");
+    //Serial.println("");
+    //Serial.print("IP Address: ");
+    //Serial.println(WiFi.localIP());
+    //Serial.print(" gateway: ");
+    //Serial.println(WiFi.gatewayIP());
+    //Serial.print(" subnet: ");
+    //Serial.println(WiFi.subnetMask());
 }
 
-void registryDevice() {
-    while( registred != 1 ) {
-        const uint16_t port = 800;
-        const char *host = "iot-server"; // ip or dns
-        Serial.print("connecting to ");
-        Serial.println(host);
+void iotRegistryDevice() {
+    if ( registred != 1 ) {
+        //Serial.print("connecting to ");
+        //Serial.println(host);
         WiFiClient client;
-        if (!client.connect(host, port)) {
-            Serial.println("connection failed");
-            Serial.println("wait 1 sec...");
+        while (!client.connect(host, port)) {
+            //Serial.println("connection failed");
+            //Serial.println("wait 1 sec...");
             delay(1000);
         }
         registred = 1;
-        Serial.println("connected");
+        //Serial.println("connected");
         delay(500);
+        byte len = (byte)(strlen(id));
+        client.write(len);
+        client.print(id);
     }
 }
