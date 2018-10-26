@@ -5,4 +5,6 @@ void iotConnectWiFi();
 
 void iotRegistryDevice();
 
+void serverBegin();
+
 #endif
