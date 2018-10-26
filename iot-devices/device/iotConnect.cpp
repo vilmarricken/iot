@@ -27,13 +27,7 @@ void iotConnectWiFi() {
     }
     iotRegistryDevice();
     serverBegin();
-    //Serial.println("");
-    //Serial.print("IP Address: ");
-    //Serial.println(WiFi.localIP());
-    //Serial.print(" gateway: ");
-    //Serial.println(WiFi.gatewayIP());
-    //Serial.print(" subnet: ");
-    //Serial.println(WiFi.subnetMask());
+    //Serial.println(""); Serial.print("IP Address: " + WiFi.localIP()); Serial.print(" gateway: " + WiFi.gatewayIP()); Serial.print(" subnet: " + WiFi.subnetMask());
 }
 
 void serverBegin(){
@@ -52,22 +46,26 @@ void serverBegin(){
         while(!client.available()) {
             delay(10);
         }
-        int ss = client.read();
-        Serial.println("SS: " + ss);
-        int s = client.read();
-        Serial.println("S: " + s);
-        char t[s];
-        t[s] = (char) 0;
-        Serial.print("LENGTH: ");
-        Serial.println(sizeof(t));
-        for( int i =0; i < s; i++ ) {
-            t[i] = (char) client.read();
-        }
-        client.flush();
         client.stop();
-        Serial.println(t);
     }
     server.stop();
+}
+
+String* read( WiFiClient client ){
+    int arrays = client.read();
+    String strs[arrays];
+    for( int i = 0; i < arrays; i++ ){            
+        int strLen = client.read();
+        char str[strLen];
+        strs[i] = str;
+        Serial.print("LENGTH: ");
+        Serial.println(sizeof(strLen));
+        for( int j =0; j < strLen; j++ ) {
+            str[j] = (char) client.read();
+        }
+    }
+    client.flush();
+    return strs;
 }
 
 void iotRegistryDevice() {
