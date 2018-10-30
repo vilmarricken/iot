@@ -4,7 +4,7 @@
 
 ESP8266WiFiMulti wiFiMulti;
 
-boolean iotConnectWiFi(const char* ssid, const char* pass) {
+boolean iotConnectWiFi(char* ssid, char* pass) {
     if ( wiFiMulti.run() == WL_CONNECTED ) {
         return false; 
     }
