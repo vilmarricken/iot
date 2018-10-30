@@ -4,7 +4,7 @@ Comando byte(0-255)-Parâmetros
 Comando: 1 - Retorna informações do dispositivo
 Parâmetros:
 Retorno:
- - byte - indicando a versão do firmware da placa
+ - texto - indicando a versão do firmware da placa
  - byte - indicando o tipo da placa 
    - 1 = ESP8266
    - 2 = ESP8266 NODEMCU
