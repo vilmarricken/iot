@@ -1,6 +1,7 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266WiFiMulti.h>
 #include "iotServer.h"
+#include "iotDevices.h"
 
 const uint16_t port = 800;
 WiFiServer server(port);
