@@ -4,7 +4,8 @@
 
 ESP8266WiFiMulti wiFiMulti;
 
-WiFiServer server(1000);
+const uint16_t port = 800;
+WiFiServer server(port);
 
 short registred = 0;
 
@@ -12,7 +13,6 @@ const char    *id = "Mazinho-GVT";
 const char    *ssid = "Mazinho-GVT";
 const char    *pass = "12345678";
 const char    *host = "192.168.25.20"; // ip or dns
-const uint16_t port = 800;
 
 void iotConnectWiFi() {
     if ( wiFiMulti.run() == WL_CONNECTED ) {
@@ -38,34 +38,40 @@ void serverBegin(){
     while( server.status() == 1 ) {
         WiFiClient client = server.available();
         if ( !client ) {    
-            Serial.println("Aguardando");
+            Serial.println("Aguardando na porta 800");
             delay(1000);
             continue;  
         }
         Serial.println("Lendo");
-        while(!client.available()) {
-            delay(10);
+        delay(100);
+        while(client.available()) {
+            String command = read(client);
+            Serial.println("command: " + command);
+            int pos = 0;
+            int subPos = command.indexOf(";", pos);
+            while( subPos > 0 ) {
+                Serial.print("subPos: ");Serial.println(subPos);
+                Serial.println(command.substring(pos, subPos));
+                int pos = subPos + 1;
+                Serial.print("subPos: ");Serial.println(subPos);
+                Serial.print("pos: ");Serial.println(pos);
+                subPos = command.indexOf(";", pos);
+            }
         }
         client.stop();
     }
     server.stop();
 }
 
-String* read( WiFiClient client ){
-    int arrays = client.read();
-    String strs[arrays];
-    for( int i = 0; i < arrays; i++ ){            
-        int strLen = client.read();
-        char str[strLen];
-        strs[i] = str;
-        Serial.print("LENGTH: ");
-        Serial.println(sizeof(strLen));
-        for( int j =0; j < strLen; j++ ) {
-            str[j] = (char) client.read();
-        }
+String read( WiFiClient client ){
+    int strLen = client.read();
+    char str[strLen+1];
+    str[strLen] = 0;
+    for( int j =0; j < strLen; j++ ) {
+        str[j] = (char) client.read();
     }
     client.flush();
-    return strs;
+    return str;
 }
 
 void iotRegistryDevice() {
@@ -74,8 +80,7 @@ void iotRegistryDevice() {
         //Serial.println(host);
         WiFiClient client;
         while (!client.connect(host, port)) {
-            //Serial.println("connection failed");
-            //Serial.println("wait 1 sec...");
+            Serial.println("connection failed, waiting 1 sec...");
             delay(1000);
         }
         registred = 1;
