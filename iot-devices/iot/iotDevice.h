@@ -8,6 +8,8 @@ class Device {
         
     public:
         Device();
+        char* execute(char command);
+        void setPort(int _port);
 };
 
 #endif

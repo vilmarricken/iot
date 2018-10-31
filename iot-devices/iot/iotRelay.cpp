@@ -1,6 +1,4 @@
 #include "iotRelay.h"
 
-IRelay::IRealy(){
-
+DeviceRelay::DeviceRelay() {
 }
-
