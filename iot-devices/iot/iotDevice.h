@@ -10,6 +10,7 @@ class Device {
         Device();
         char* execute(char command);
         void setPort(int _port);
+        int getPort();
 };
 
 #endif

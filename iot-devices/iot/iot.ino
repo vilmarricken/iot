@@ -5,6 +5,7 @@ char* ssid = "Mazinho-GVT";
 char* pass = "12345678";
 
 char* serverHost = "192.168.25.20";
+IotServer* server = NULL;;
 
 char* id = "Regrador";
 
@@ -17,9 +18,12 @@ void setup(){
 
 void loop(){
     if(iotConnectWiFi(ssid, pass)) {
-        iotRegistryDevice(serverHost, id);
+        if( server == NULL ) {
+            server = new IotServer(serverHost);
+        }
+        server->iotRegistryDevice(id);
     }
-    serverRun(serverHost);
+    server->serverRun();
     Serial.print("Loop - ");
     Serial.println(millis());
     delay(5000);

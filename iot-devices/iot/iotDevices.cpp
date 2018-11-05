@@ -12,6 +12,7 @@ String Devices::run(char* command){
     if( p == -1 ){
         return "Invalid command: " + String(command);
     }
+    
     devices[3]=DeviceRelay();
     return  "";
 }

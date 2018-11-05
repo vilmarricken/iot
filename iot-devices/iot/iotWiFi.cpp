@@ -8,12 +8,14 @@ boolean iotConnectWiFi(char* ssid, char* pass) {
     if ( wiFiMulti.run() == WL_CONNECTED ) {
         return false; 
     }
-    //Serial.print("Wait for WiFi...");
+    Serial.print("Waiting for WiFi...");
     while ( wiFiMulti.run() != WL_CONNECTED ) {
-        //Serial.print(" .");
+        Serial.print(".");
         wiFiMulti.addAP(ssid, pass);
         delay(1000);
     }
+    Serial.println(".");
+    Serial.println("WiFi connected");
     return true;
     //Serial.println(""); Serial.print("IP Address: " + WiFi.localIP()); Serial.print(" gateway: " + WiFi.gatewayIP()); Serial.print(" subnet: " + WiFi.subnetMask());
 }
