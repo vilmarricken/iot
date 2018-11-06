@@ -12,7 +12,7 @@ IotServer::IotServer(char *hostServer){
     Serial.print("host: ");Serial.println( + host);
     Serial.print("serverRun: ");Serial.println(server->status());
     Serial.println("-------------------------");
-    devices = Devices();
+    devices = new Devices();
 }
 
 void IotServer::serverRun() {
@@ -26,11 +26,10 @@ void IotServer::serverRun() {
         Serial.println("serverRun->begin");
         server->begin();
     }
-    Serial.println("Server on");
+    Serial.println("Server listening on port 800");
     while( server->status() == 1 ) {
         WiFiClient client = server->available();
         if ( !client ) {    
-            Serial.println("Aguardando na porta 800");
             delay(1000);
             continue;  
         }
@@ -84,4 +83,3 @@ void IotServer::iotRegistryDevice(char* id) {
     Serial.println("client stop");
     Serial.print("-> ");Serial.println(host);
 }
-

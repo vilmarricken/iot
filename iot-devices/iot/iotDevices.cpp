@@ -6,11 +6,11 @@
 Devices::Devices(){
 }
 
-String Devices::run(char* command){
+char* Devices::run(char* command){
     String action = command;
     int p = action.indexOf(";");
     if( p == -1 ){
-        return "Invalid command: " + String(command);
+        //return "Invalid command: " + command;
     }
     
     devices[3]=DeviceRelay();

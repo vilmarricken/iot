@@ -12,7 +12,7 @@ class Devices {
 
     public:
         Devices();
-        String run(char* command);
+        char* run(char* command);
 
 };
 #endif

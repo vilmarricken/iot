@@ -8,7 +8,7 @@ class DeviceThermometer : public Device {
     
     public:
         DeviceThermometer();
-
+        char* execute(char* command);
 };
 
 #endif

@@ -8,7 +8,7 @@ class IotServer {
 
     private:
         WiFiServer *server;
-        Devices devices;
+        Devices *devices;
         char *host;
 
     public:

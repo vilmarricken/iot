@@ -8,7 +8,7 @@ class DeviceRelay : public Device {
     
     public:
         DeviceRelay();
-        char* execute(char command);
+        char* execute(char* command);
 
 };
 

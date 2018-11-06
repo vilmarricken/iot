@@ -4,7 +4,7 @@
 DeviceRelay::DeviceRelay() {
 }
 
-char* DeviceRelay::execute(char command) {
-    Serial.println("Relay comand: " + command);
-    return "";
+char* DeviceRelay::execute(char* command) {
+    Serial.print("Relay comand: ");
+    return Device::execute(command);
 }

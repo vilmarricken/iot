@@ -3,12 +3,12 @@
 
 class Device {
     
-    private:
+    protected:
         int port;
         
     public:
         Device();
-        char* execute(char command);
+        char* execute(char* command);
         void setPort(int _port);
         int getPort();
 };

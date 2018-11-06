@@ -3,9 +3,8 @@
 
 DeviceThermometer::DeviceThermometer() {
 }
-/*
-char* Device::execute(char command) {
-    Serial.println("Thermomether comand: " + command);
-    return "";
+
+char* DeviceThermometer::execute(char* command) {
+    Serial.print("Thermomether comand: ");
+    return Device::execute(command);
 }
-*/

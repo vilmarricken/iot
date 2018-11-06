@@ -4,8 +4,10 @@
 Device::Device() {
 }
 
-char* Device::execute(char command) {
-    Serial.println("Device comand: " + command);
+char* Device::execute(char* command) {
+    Serial.println(command);
+    Serial.print("On port: ");
+    Serial.println(port);
     return "";
 }
 
