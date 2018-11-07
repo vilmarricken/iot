@@ -40,12 +40,13 @@ void IotServer::serverRun() {
             Serial.println("command: " + command);
             int pos = 0;
             int subPos = command.indexOf(";", pos);
-            while( subPos > 0 ) {
-                Serial.println(command.substring(pos, subPos));
-                pos = subPos + 1;
-                subPos = command.indexOf(";", pos);
+            if( subPos > 0 ) {
+                String action = command.substring(pos, subPos);
+                if( action == "1" ) {
+                  char* action = command.substring(
+                  devices->registry();
+                }
             }
-            Serial.println(command.substring(pos));
         }
         client.stop();
     }

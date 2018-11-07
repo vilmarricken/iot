@@ -16,3 +16,13 @@ char* Devices::run(char* command){
     devices[3]=DeviceRelay();
     return  "";
 }
+
+char* Devices::registry(char* command){
+    int p = ((String)command).toInt();
+    return "";
+}
+
+char* Devices::unregistry(char* command){
+    
+}
+

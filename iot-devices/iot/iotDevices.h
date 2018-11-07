@@ -13,6 +13,8 @@ class Devices {
     public:
         Devices();
         char* run(char* command);
+        char* registry(char* command);
+        char* unregistry(char* command);
 
 };
 #endif
