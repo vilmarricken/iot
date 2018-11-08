@@ -8,13 +8,14 @@ class Devices {
 
     private:
         Device devices[8];
+        int ports[8];
         String* commands(String command);
 
     public:
         Devices();
-        char* run(char* command);
-        char* registry(char* command);
-        char* unregistry(char* command);
+        String run(String command);
+        String registry(String command);
+        String unregistry(String command);
 
 };
 #endif

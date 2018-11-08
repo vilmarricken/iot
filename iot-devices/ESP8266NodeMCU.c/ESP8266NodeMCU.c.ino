@@ -3,24 +3,22 @@
 
 ESP8266WiFiMulti WiFiMulti;
 
-int redPin = D1, greenPin = D2, bluePin = D3;
+String AP_NAME = "Mazinho-GVT";
+String AP_PASSWORD = "111111";
 
-int deviceState[] = {0, 0, 0, 0, 0, 0, 0, 0};
 int device[] = {D0, D1,  D2 , D3 ,D4 , D5, D6, D7};
 
 void setup() {
     Serial.begin(115200);
     delay(10);
-    WiFiMulti.addAP("Mazinho-GVT", "12345678");
-    Serial.println();
-    Serial.println();
+    WiFiMulti.addAP(AP_NAME, AP_PASSWORD);
     Serial.print("Wait for WiFi... ");
+    delay(100);
     connectWifi();
     delay(500);
 }
 
 void connectWifi() {
-    delay(10);
     while(WiFiMulti.run() != WL_CONNECTED) {
         delay(500);
     }

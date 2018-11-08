@@ -2,6 +2,7 @@
 #include <ESP8266WiFiMulti.h>
 #include "iotServer.h"
 #include "iotDevices.h"
+#include "stringUtil.h"
 
 
 IotServer::IotServer(char *hostServer){
@@ -22,7 +23,7 @@ void IotServer::serverRun() {
     Serial.println("serverRun");
     Serial.print("host: ");Serial.println(host);
     Serial.println("-------------------------");
-    if( server->status() == CLOSED ) {
+    if( server->status() != 1 ) {
         Serial.println("serverRun->begin");
         server->begin();
     }
@@ -38,17 +39,24 @@ void IotServer::serverRun() {
         while(client.available()) {
             String command = read(client);
             Serial.println("command: " + command);
-            int pos = 0;
-            int subPos = command.indexOf(";", pos);
-            if( subPos > 0 ) {
-                String action = command.substring(pos, subPos);
-                if( action == "1" ) {
-                  char* action = command.substring(
-                  devices->registry();
+            int count = 0;
+            String *commands = breakString(command, ";", &count);
+            Serial.println(count);
+            Serial.println(commands[0]);
+            if(count == 2) {
+                Serial.println(commands[1]);
+                if(commands[0] == "1") {
+                    write(devices->registry(commands[1]), &client);
+                } else {
+                    Serial.println("Server: Invalid command " + command);
+                    write("Server: Invalid command: " + command, &client);
                 }
+            } else {
+                Serial.println("Server: Invalid command " + command);
+                write("Server: Invalid message: " + command, &client);
             }
         }
-        client.stop();
+        //client.stop();
     }
     server->stop();
 }
@@ -60,27 +68,26 @@ String IotServer::read( WiFiClient client ){
     for( int j =0; j < strLen; j++ ) {
         str[j] = (char) client.read();
     }
-    client.flush();
     return str;
 }
 
+void IotServer::write(String text, WiFiClient *client){
+    byte len = (byte)(text.length());
+    client->write(len);
+    client->print(text);
+    client->flush();
+    delay(1000);
+    Serial.println("Resposta enviada");
+}
+
 void IotServer::iotRegistryDevice(char* id) {
-    Serial.println("-------------------------");
-    Serial.println("iotRegistryDevice");
-    Serial.print("host: ");Serial.println(host);
-    Serial.println("-------------------------");
     Serial.print("connecting to ");Serial.println(host);
     WiFiClient client;
     while (!client.connect(host, 800)) {
-        //Serial.println("connection failed, waiting 1 sec...");
         delay(1000);
     }
     Serial.print("connected in ");Serial.println(host);
     delay(500);
-    byte len = (byte)(strlen(id));
-    client.write(len);
-    client.print(id);
+    write(id, &client);
     client.stop();
-    Serial.println("client stop");
-    Serial.print("-> ");Serial.println(host);
 }

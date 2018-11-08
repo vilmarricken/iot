@@ -10,12 +10,13 @@ class IotServer {
         WiFiServer *server;
         Devices *devices;
         char *host;
+        String read(WiFiClient client);
+        void write(String text, WiFiClient *client);
 
     public:
         IotServer(char *hostServer);
         void serverRun();
         void iotRegistryDevice(char* id);
-        String read(WiFiClient client );
 
 };
 
