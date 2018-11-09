@@ -7,9 +7,10 @@
 class Devices {
 
     private:
-        Device devices[8];
+        Device *devices[8] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
         int ports[8];
-        String* commands(String command);
+        int getDigit(String command);
+        Device* createDevice(String command, int port);
 
     public:
         Devices();

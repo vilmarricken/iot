@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include "iotRelay.h"
 
-DeviceRelay::DeviceRelay() {
+DeviceRelay::DeviceRelay(int _port) :Device(_port) {
 }
 
 char* DeviceRelay::execute(char* command) {

@@ -7,7 +7,8 @@ class Device {
         int port;
         
     public:
-        Device();
+        //Device();
+        Device(int port);
         char* execute(char* command);
         void setPort(int _port);
         int getPort();

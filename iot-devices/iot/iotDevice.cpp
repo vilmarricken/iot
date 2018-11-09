@@ -1,7 +1,15 @@
 #include <Arduino.h>
 #include "iotDevice.h"
 
+/*
 Device::Device() {
+    Serial.println("Device: default constructor");
+}
+*/
+
+Device::Device(int _port) {
+    Serial.println("Device: int constructor");
+    port = _port;
 }
 
 char* Device::execute(char* command) {
@@ -11,10 +19,3 @@ char* Device::execute(char* command) {
     return "";
 }
 
-void Device::setPort(int _port){
-    port = _port;
-}
-
-int Device::getPort(){
-    return port;
-}

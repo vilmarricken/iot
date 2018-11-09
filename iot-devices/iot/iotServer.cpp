@@ -38,11 +38,8 @@ void IotServer::serverRun() {
         delay(100);
         while(client.available()) {
             String command = read(client);
-            Serial.println("command: " + command);
             int count = 0;
             String *commands = breakString(command, ";", &count);
-            Serial.println(count);
-            Serial.println(commands[0]);
             if(count == 2) {
                 Serial.println(commands[1]);
                 if(commands[0] == "1") {

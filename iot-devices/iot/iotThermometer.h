@@ -7,7 +7,7 @@ class DeviceThermometer : public Device {
     private:
     
     public:
-        DeviceThermometer();
+        DeviceThermometer(int _port);
         char* execute(char* command);
 };
 

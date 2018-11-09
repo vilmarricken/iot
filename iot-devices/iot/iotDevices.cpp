@@ -2,6 +2,7 @@
 #include "iotDevices.h"
 #include "iotDevice.h"
 #include "iotRelay.h"
+#include "stringUtil.h"
 
 Devices::Devices(){
     ports[0] = D0;
@@ -15,13 +16,7 @@ Devices::Devices(){
 }
 
 String Devices::run(String command){
-    String action = command;
-    int p = action.indexOf(";");
-    if( p == -1 ){
-        //return "Invalid command: " + command;
-    }
-    
-    devices[3]=DeviceRelay();
+    //devices[3]=DeviceRelay();
     return  "";
 }
 
@@ -29,12 +24,43 @@ String Devices::registry(String command){
     int count = 0;    
     String *values = breakString(command, ";", &count);
     if(count == 2) {
-        return "OK";
+        int index = getDigit(values[0]);
+        if( index != -1) {
+            if(devices[index] != NULL) {
+                Serial.print("Position ");Serial.print(index);Serial.println(" is NOT NULL");;
+                delete devices[index];
+            } else {
+                Serial.print("Position ");Serial.print(index);Serial.println(" is NULL");
+            }
+            devices[index] = createDevice(values[1], ports[index]);
+            if(devices[index] == NULL) {
+                return "Devices: Invalid device type: " + values[1];
+            }
+            return "OK";
+        }
     }
     return "Devices: Invalid command: " + command;
 }
 
 String Devices::unregistry(String command){
     
+}
+
+int Devices::getDigit(String command){
+    if(command.length() == 1) {
+        int c = command.charAt(0);
+        if(c >= '0' && c <= '9'){
+            return c - 48;
+        }
+    }
+    return -1;
+}
+
+Device* Devices::createDevice(String type, int port){
+    Serial.println("createDevice: " + type);
+    if(type == "1") {
+        return new DeviceRelay(port);
+    }
+    return NULL;
 }
 

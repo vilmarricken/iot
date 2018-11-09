@@ -5,9 +5,11 @@
 class DeviceRelay : public Device {
 
     private:
+        int port;
     
     public:
-        DeviceRelay();
+        DeviceRelay(int _port);
+        //DeviceRelay();
         char* execute(char* command);
 
 };
