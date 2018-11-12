@@ -1,8 +1,10 @@
 #include <Arduino.h>
 #include "iotDevice.h"
 
-Device::Device(int _port) {
+Device::Device(int _index, int _port, int mode) {
+    index = _index;
     port = _port;
+    pinMode(port, mode);
 }
 
 char* Device::execute(char* command) {

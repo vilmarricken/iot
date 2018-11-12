@@ -5,12 +5,11 @@ class Device {
     
     protected:
         int port;
+        int index;
         
     public:
-        Device(int port);
+        Device(int indice, int port, int mode);
         char* execute(char* command);
-        void setPort(int _port);
-        int getPort();
 };
 
 #endif

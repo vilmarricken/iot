@@ -10,7 +10,7 @@ class Devices {
         Device *devices[8] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
         int ports[8];
         int getDigit(String command);
-        Device* createDevice(String command, int port);
+        Device* createDevice(String command, int index);
 
     public:
         Devices();

@@ -56,10 +56,10 @@ int Devices::getDigit(String command){
     return -1;
 }
 
-Device* Devices::createDevice(String type, int port){
+Device* Devices::createDevice(String type, int index){
     Serial.println("createDevice: " + type);
     if(type == "1") {
-        return new DeviceRelay(port);
+        return new DeviceRelay(index, ports[index]);
     }
     return NULL;
 }
