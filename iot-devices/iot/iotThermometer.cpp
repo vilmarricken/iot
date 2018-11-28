@@ -3,24 +3,30 @@
 
 DeviceThermometer::DeviceThermometer(int _index, int _port) : Device(_index, _port, INPUT) {
     sensor = new OneWire(_port);
+    Serial.println("Instanciado DeviceThermometer");
 }
 
-char* DeviceThermometer::execute(char* command) {
-    Serial.print("Thermomether comand: ");
+String DeviceThermometer::execute(String command) {
+    Serial.println("Thermomether::execute command: " + command);
     byte i;
     byte present = 0;
     byte type_s;
     byte data[12];
     byte addr[8];
     float celsius, fahrenheit;
+    Serial.println("Thermomether::execute 1");
     if ( !sensor->search(addr)) {
       sensor->reset_search();
       delay(250);
+      Serial.println("ERROR:DeviceThermometer: No more addresses.");
       return "ERROR:DeviceThermometer: No more addresses.";
     }
+    Serial.println("Thermomether::execute 2");
     if (OneWire::crc8(addr, 7) != addr[7]) {
+        Serial.println("ERROR:DeviceThermometer: CRC is not valid!");
         return "ERROR:DeviceThermometer: CRC is not valid!";
     }
+    Serial.println("Thermomether::execute 3");
     switch (addr[0]) {
         case 0x10:
             type_s = 1;
@@ -32,8 +38,10 @@ char* DeviceThermometer::execute(char* command) {
             type_s = 0;
             break;
         default:
+            Serial.println("ERROR:DeviceThermometer: Device is not a DS18x20 family device!");
             return "ERROR:DeviceThermometer: Device is not a DS18x20 family device!";
     }
+    Serial.println("Thermomether::execute 4");
     sensor->reset();
     sensor->select(addr);
     sensor->write(0x44);
@@ -42,7 +50,7 @@ char* DeviceThermometer::execute(char* command) {
     sensor->select(addr);
     sensor->write(0xBE);
     for ( i = 0; i < 9; i++) {
-        data[i] = ds.read();
+        data[i] = sensor->read();
     }
     int16_t raw = (data[1] << 8) | data[0];
     if (type_s) {
@@ -57,5 +65,6 @@ char* DeviceThermometer::execute(char* command) {
         else if (cfg == 0x40) raw = raw & ~1;
     }
     celsius = (float)raw / 16.0;
-    return "OK:" + celsius;
+    String s = "OK:";
+    return s + celsius;
 }

@@ -10,7 +10,7 @@ class DeviceThermometer : public Device {
     
     public:
         DeviceThermometer(int _index, int _port);
-        char* execute(char* command);
+        String execute(String command);
 };
 
 #endif

@@ -34,6 +34,7 @@ void IotServer::serverRun() {
             delay(1000);
             continue;  
         }
+        Serial.println("-----------------------------------------");
         Serial.println("Lendo");
         delay(100);
         while(client.available()) {
@@ -44,6 +45,10 @@ void IotServer::serverRun() {
                 Serial.println(commands[1]);
                 if(commands[0] == "1") {
                     write(devices->registry(commands[1]), &client);
+                } else if(commands[0] == "2") {
+                    write(devices->unregistry(commands[1]), &client);
+                } else if(commands[0] == "3") {
+                    write(devices->execute(commands[1]), &client);
                 } else {
                     Serial.println("Server: Invalid command " + command);
                     write("Server: Invalid command: " + command, &client);

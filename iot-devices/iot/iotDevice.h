@@ -9,7 +9,7 @@ class Device {
         
     public:
         Device(int indice, int port, int mode);
-        char* execute(char* command);
+        virtual String execute(String command);
 };
 
 #endif

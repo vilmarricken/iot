@@ -2,14 +2,24 @@
 #include "iotDevice.h"
 
 Device::Device(int _index, int _port, int mode) {
+    Serial.print("Device::Device: ");
+    Serial.print(_index);
+    Serial.print(" - ");
+    Serial.print(_port);
+    Serial.print(" - ");
+    if( mode == OUTPUT ) {
+        Serial.println("OUTPUT");
+    } else {
+        Serial.println("INPUT");
+    }
     index = _index;
     port = _port;
     pinMode(port, mode);
 }
 
-char* Device::execute(char* command) {
-    Serial.println(command);
-    Serial.print("On port: ");
+String Device::execute(String command) {
+    Serial.println("Device::execute " + command);
+    Serial.print("Device::execute On port: ");
     Serial.println(port);
     return "";
 }

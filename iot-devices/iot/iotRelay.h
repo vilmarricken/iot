@@ -8,8 +8,7 @@ class DeviceRelay : public Device {
     
     public:
         DeviceRelay(int _index, int _port);
-        //DeviceRelay();
-        char* execute(char* command);
+        String execute(String command);
 
 };
 

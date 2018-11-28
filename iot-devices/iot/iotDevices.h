@@ -14,7 +14,7 @@ class Devices {
 
     public:
         Devices();
-        String run(String command);
+        String execute(String command);
         String registry(String command);
         String unregistry(String command);
 
