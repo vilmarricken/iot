@@ -42,11 +42,11 @@ String Devices::execute(String command){
     Serial.print(" - ");
     Serial.println(count);
     if(count == 1) {
-        devices[index]->execute("");
+        return devices[index]->execute("");
     } else {
-        devices[index]->execute(values[1]);
+        return devices[index]->execute(values[1]);
     }
-    return  "";
+    return  "ERROR: 0";
 }
 
 String Devices::registry(String command){

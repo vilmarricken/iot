@@ -65,6 +65,8 @@ String DeviceThermometer::execute(String command) {
         else if (cfg == 0x40) raw = raw & ~1;
     }
     celsius = (float)raw / 16.0;
-    String s = "OK:";
-    return s + celsius;
+    String s = "OK:" + String(celsius);
+    Serial.println(celsius);
+    Serial.println(s);
+    return s;
 }
