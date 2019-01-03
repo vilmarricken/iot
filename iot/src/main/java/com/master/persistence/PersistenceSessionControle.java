@@ -30,4 +30,8 @@ public class PersistenceSessionControle {
 		return this.session;
 	}
 
+	void close() {
+		this.session.close();
+	}
+
 }

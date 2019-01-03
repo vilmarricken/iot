@@ -21,7 +21,7 @@ public class Persistence {
 	}
 
 	public void close() {
-		this.manager.close(this.sessionController);
+		this.manager.closeSession(this.sessionController);
 	}
 
 }

@@ -63,12 +63,11 @@ public class PersistenceManager {
 		return PersistenceManager.INSTANCE;
 	}
 
-	public void closeSession(PersistenceSessionControle session) {
+	void closeSession(PersistenceSessionControle session) {
+		session.close();
+		if (!this.sessions.remove(session)) {
 
-	}
-
-	public void close(PersistenceSessionControle sessionController) {
-
+		}
 	}
 
 }
