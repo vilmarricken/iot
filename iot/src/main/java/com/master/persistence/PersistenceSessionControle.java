@@ -8,9 +8,12 @@ public class PersistenceSessionControle {
 
 	private final Session session;
 
+	private final Thread thread;
+
 	public PersistenceSessionControle(final Session session) {
 		this.session = session;
 		this.created = System.currentTimeMillis();
+		this.thread = Thread.currentThread();
 	}
 
 	@Override
@@ -21,6 +24,10 @@ public class PersistenceSessionControle {
 	@Override
 	public int hashCode() {
 		return this.session.hashCode();
+	}
+
+	Session getSession() {
+		return this.session;
 	}
 
 }
