@@ -1,5 +1,6 @@
 package com.master.iot.entity;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
@@ -11,75 +12,80 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="PLACA")
-public class Placa {
+@Table(name = "PLACA")
+public class Placa extends com.master.persistence.entity.Entity {
 
-	private UUID id;
-
-	private String nome;
+	private List<Componente> componentes;
 
 	private String descricao;
 
-	private Integer versao;
+	private UUID id;
 
 	private String ip;
-	
-	private List<Componente> componentes;
+
+	private String nome;
+
+	private Integer versao;
+
+	@OneToMany(mappedBy = "placa")
+	public List<Componente> getComponentes() {
+		return this.componentes;
+	}
+
+	@Column(name = "DESCRICAO")
+	public String getDescricao() {
+		return this.descricao;
+	}
 
 	@Id
 	@GeneratedValue
 	@Column(name = "ID")
 	public UUID getId() {
-		return id;
-	}
-
-	public void setId(UUID id) {
-		this.id = id;
-	}
-
-	@Column(name = "NOME")
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	@Column(name = "DESCRICAO")
-	public String getDescricao() {
-		return descricao;
-	}
-
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
-	}
-
-	@Column(name = "VERSAO")
-	public Integer getVersao() {
-		return versao;
-	}
-
-	public void setVersao(Integer versao) {
-		this.versao = versao;
+		return this.id;
 	}
 
 	@Column(name = "IP")
 	public String getIp() {
-		return ip;
+		return this.ip;
 	}
 
-	public void setIp(String ip) {
+	@Override
+	protected Serializable getKey() {
+		return this.id;
+	}
+
+	@Column(name = "NOME")
+	public String getNome() {
+		return this.nome;
+	}
+
+	@Column(name = "VERSAO")
+	public Integer getVersao() {
+		return this.versao;
+	}
+
+	public void setComponentes(final List<Componente> componentes) {
+		this.componentes = componentes;
+	}
+
+	public void setDescricao(final String descricao) {
+		this.descricao = descricao;
+	}
+
+	public void setId(final UUID id) {
+		this.id = id;
+	}
+
+	public void setIp(final String ip) {
 		this.ip = ip;
 	}
 
-	@OneToMany(mappedBy="placa")
-	public List<Componente> getComponentes() {
-		return componentes;
+	public void setNome(final String nome) {
+		this.nome = nome;
 	}
-	
-	public void setComponentes(List<Componente> componentes) {
-		this.componentes = componentes;
+
+	public void setVersao(final Integer versao) {
+		this.versao = versao;
 	}
-	
+
 }

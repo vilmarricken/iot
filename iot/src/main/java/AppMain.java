@@ -1,4 +1,3 @@
-
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,53 +9,59 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
 import com.master.iot.entity.Componente;
+import com.master.iot.entity.Historico;
+import com.master.iot.entity.Monitor;
 import com.master.iot.entity.Placa;
+import com.master.iot.entity.Temporizador;
 
 public class AppMain {
 
-	static Session sessionObj;
 	static SessionFactory sessionFactoryObj;
+	static Session sessionObj;
 
 	private static SessionFactory buildSessionFactory() {
-		// Creating Configuration Instance & Passing Hibernate Configuration File
-		Configuration configObj = new Configuration();
-		File f = new File("hibernate.cfg.xml");
+		// Creating Configuration Instance & Passing Hibernate Configuration
+		// File
+		final Configuration configObj = new Configuration();
+		final File f = new File("hibernate.cfg.xml");
 		System.out.println(f.getAbsolutePath() + " - " + f.exists());
 		configObj.configure(f);
 		configObj.addAnnotatedClass(Componente.class);
 		configObj.addAnnotatedClass(Placa.class);
-		configObj.addFile(new File("customer.hbm.xml"));
+		configObj.addAnnotatedClass(Historico.class);
+		configObj.addAnnotatedClass(Monitor.class);
+		configObj.addAnnotatedClass(Temporizador.class);
 
 		// Since Hibernate Version 4.x, ServiceRegistry Is Being Used
-		ServiceRegistry serviceRegistryObj = new StandardServiceRegistryBuilder().applySettings(configObj.getProperties()).build();
+		final ServiceRegistry serviceRegistryObj = new StandardServiceRegistryBuilder().applySettings(configObj.getProperties()).build();
 
 		// Creating Hibernate SessionFactory Instance
-		sessionFactoryObj = configObj.buildSessionFactory(serviceRegistryObj);
-		return sessionFactoryObj;
+		AppMain.sessionFactoryObj = configObj.buildSessionFactory(serviceRegistryObj);
+		return AppMain.sessionFactoryObj;
 	}
 
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		System.out.println(".......Hibernate Maven Example.......\n");
 		try {
-			sessionObj = buildSessionFactory().openSession();
-			sessionObj.beginTransaction();
+			AppMain.sessionObj = AppMain.buildSessionFactory().openSession();
+			AppMain.sessionObj.beginTransaction();
 
 			System.out.println("\n.......Records Saved Successfully To The Database.......\n");
-			Map<String, Object> customer = new HashMap<>();
+			final Map<String, Object> customer = new HashMap<>();
 			customer.put("name", "comprador");
 			customer.put("address", "casa");
-			sessionObj.save("Customer",customer);
+			AppMain.sessionObj.save("Customer", customer);
 			// Committing The Transactions To The Database
-			sessionObj.getTransaction().commit();
-		} catch (Exception sqlException) {
+			AppMain.sessionObj.getTransaction().commit();
+		} catch (final Exception sqlException) {
 			sqlException.printStackTrace();
-			if (null != sessionObj.getTransaction()) {
+			if (null != AppMain.sessionObj.getTransaction()) {
 				System.out.println("\n.......Transaction Is Being Rolled Back.......");
-				sessionObj.getTransaction().rollback();
+				AppMain.sessionObj.getTransaction().rollback();
 			}
 		} finally {
-			if (sessionObj != null) {
-				sessionObj.close();
+			if (AppMain.sessionObj != null) {
+				AppMain.sessionObj.close();
 			}
 		}
 	}

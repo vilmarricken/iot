@@ -1,5 +1,6 @@
 package com.master.iot.entity;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -12,64 +13,69 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "COMPONENTE")
-public class Componente {
+public class Componente extends com.master.persistence.entity.Entity {
 
 	private UUID id;
 
 	private String nome;
 
-	private ComponenteTipo tipo;
+	private Placa placa;
 
 	private Integer porta;
-	
-	private Placa placa;
+
+	private ComponenteTipo tipo;
 
 	@Id
 	@GeneratedValue
 	@Column(name = "ID")
 	public UUID getId() {
-		return id;
+		return this.id;
 	}
 
-	public void setId(UUID id) {
-		this.id = id;
+	@Override
+	protected Serializable getKey() {
+		return this.id;
 	}
 
 	@Column(name = "NOME")
 	public String getNome() {
-		return nome;
+		return this.nome;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	@Column(name = "TIPO")
-	public ComponenteTipo getTipo() {
-		return tipo;
-	}
-
-	public void setTipo(ComponenteTipo tipo) {
-		this.tipo = tipo;
+	@ManyToOne()
+	@JoinColumn(name = "IDPLACA")
+	public Placa getPlaca() {
+		return this.placa;
 	}
 
 	@Column(name = "PORTA")
 	public Integer getPorta() {
-		return porta;
+		return this.porta;
 	}
 
-	public void setPorta(Integer porta) {
+	@Column(name = "TIPO")
+	public ComponenteTipo getTipo() {
+		return this.tipo;
+	}
+
+	public void setId(final UUID id) {
+		this.id = id;
+	}
+
+	public void setNome(final String nome) {
+		this.nome = nome;
+	}
+
+	public void setPlaca(final Placa placa) {
+		this.placa = placa;
+	}
+
+	public void setPorta(final Integer porta) {
 		this.porta = porta;
 	}
 
-	@ManyToOne()
-	@JoinColumn(name="IDPLACA")
-	public Placa getPlaca() {
-		return placa;
+	public void setTipo(final ComponenteTipo tipo) {
+		this.tipo = tipo;
 	}
-	
-	public void setPlaca(Placa placa) {
-		this.placa = placa;
-	}
-	
+
 }
