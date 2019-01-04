@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-public class Monitor extends com.master.persistence.entity.Entity {
+public class Monitor extends com.master.core.persistence.entity.Entity {
 
 	private Float alvo;
 

@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-public class Temporizador extends com.master.persistence.entity.Entity {
+public class Temporizador extends com.master.core.persistence.entity.Entity {
 
 	private Componente componente;
 

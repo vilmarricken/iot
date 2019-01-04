@@ -13,7 +13,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "COMPONENTE")
-public class Componente extends com.master.persistence.entity.Entity {
+public class Componente extends com.master.core.persistence.entity.Entity {
 
 	private UUID id;
 

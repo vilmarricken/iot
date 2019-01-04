@@ -1,4 +1,4 @@
-package com.master.persistence;
+package com.master.core.persistence;
 
 import org.hibernate.Session;
 

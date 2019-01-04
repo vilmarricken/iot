@@ -1,4 +1,4 @@
-package com.master.persistence;
+package com.master.core.persistence;
 
 import java.io.File;
 import java.util.List;

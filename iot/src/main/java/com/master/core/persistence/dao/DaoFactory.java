@@ -1,10 +1,10 @@
-package com.master.persistence.dao;
+package com.master.core.persistence.dao;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import com.master.core.exception.MasterException;
-import com.master.persistence.entity.Entity;
+import com.master.core.persistence.entity.Entity;
 
 public class DaoFactory {
 

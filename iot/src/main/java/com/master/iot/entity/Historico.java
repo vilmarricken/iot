@@ -13,7 +13,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "HISTORICO")
-public class Historico extends com.master.persistence.entity.Entity {
+public class Historico extends com.master.core.persistence.entity.Entity {
 
 	private Componente componente;
 

@@ -13,7 +13,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "PLACA")
-public class Placa extends com.master.persistence.entity.Entity {
+public class Placa extends com.master.core.persistence.entity.Entity {
 
 	private List<Componente> componentes;
 

@@ -1,4 +1,4 @@
-package com.master.persistence.entity;
+package com.master.core.persistence.entity;
 
 import java.io.Serializable;
 
