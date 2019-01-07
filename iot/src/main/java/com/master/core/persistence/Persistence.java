@@ -1,5 +1,6 @@
 package com.master.core.persistence;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -69,6 +70,14 @@ public class Persistence {
 		this.transaction = this.session.beginTransaction();
 	}
 
+	public void persist(final Object object) {
+		this.session.persist(object);
+	}
+
+	public void persist(final String entityName, final Object object) {
+		this.session.persist(entityName, object);
+	}
+
 	public void rollback() {
 		if (this.transaction == null) {
 			Persistence.LOG.error("There is no an open transaction", new Exception());
@@ -76,6 +85,10 @@ public class Persistence {
 			this.transaction.rollback();
 			this.transaction = null;
 		}
+	}
+
+	public <T> Serializable save(final T t) {
+		return this.session.save(t);
 	}
 
 }
