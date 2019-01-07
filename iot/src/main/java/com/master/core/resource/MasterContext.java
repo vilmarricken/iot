@@ -2,8 +2,10 @@ package com.master.core.resource;
 
 public interface MasterContext {
 
-	void finishContext();;
+	void error();;
 
-	void startContext();
+	void finish();
+
+	void start();
 
 }

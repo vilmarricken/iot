@@ -3,6 +3,7 @@ package com.master.core.persistence;
 import java.io.File;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
@@ -20,9 +21,37 @@ public class PersistenceManager {
 
 	private static final Object LOCK = new Object();
 
+	private static final Logger LOG = Logger.getLogger(PersistenceManager.class);
+
+	private static final ThreadLocal<Persistence> PERSISTENCE = new ThreadLocal<>();
+
+	public static PersistenceManager getInstance() {
+		if (PersistenceManager.INSTANCE != null) {
+			return PersistenceManager.INSTANCE;
+		}
+		return PersistenceManager.newInstance();
+	}
+
+	public static final Persistence getPersistence() {
+		final PersistenceManager manager = PersistenceManager.getInstance();
+		Persistence persistence = PersistenceManager.PERSISTENCE.get();
+		if (persistence == null) {
+			persistence = manager.openSession();
+			PersistenceManager.PERSISTENCE.set(persistence);
+		}
+		return persistence;
+	}
+
+	private static PersistenceManager newInstance() {
+		synchronized (PersistenceManager.LOCK) {
+			PersistenceManager.INSTANCE = new PersistenceManager();
+		}
+		return PersistenceManager.INSTANCE;
+	}
+
 	private final SessionFactory factory;
 
-	private List<PersistenceSessionControle> sessions;
+	private List<PersistenceSessionController> sessions;
 
 	public PersistenceManager() {
 		final Configuration config = new Configuration();
@@ -38,36 +67,17 @@ public class PersistenceManager {
 		this.factory = config.buildSessionFactory(registry);
 	}
 
-	public static PersistenceManager getInstance() {
-		if (PersistenceManager.INSTANCE != null) {
-			return PersistenceManager.INSTANCE;
+	void closeSession(final PersistenceSessionController session) {
+		session.close();
+		if (!this.sessions.remove(session)) {
+			PersistenceManager.LOG.error("There is not session: " + session);
 		}
-		return PersistenceManager.newInstance();
-	}
-
-	public static final Persistence getPersistence() {
-		final PersistenceManager manager = PersistenceManager.getInstance();
-		return manager.openSession();
 	}
 
 	private Persistence openSession() {
-		final PersistenceSessionControle session = new PersistenceSessionControle(this.factory.openSession());
+		final PersistenceSessionController session = new PersistenceSessionController(this.factory.openSession());
 		this.sessions.add(session);
 		return new Persistence(this, session);
-	}
-
-	private static PersistenceManager newInstance() {
-		synchronized (PersistenceManager.LOCK) {
-			PersistenceManager.INSTANCE = new PersistenceManager();
-		}
-		return PersistenceManager.INSTANCE;
-	}
-
-	void closeSession(PersistenceSessionControle session) {
-		session.close();
-		if (!this.sessions.remove(session)) {
-
-		}
 	}
 
 }
