@@ -8,6 +8,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
+import com.master.core.exception.MasterException;
 import com.master.core.persistence.filter.Filter;
 import com.master.core.persistence.filter.FilterPage;
 import com.master.core.persistence.filter.Order;
@@ -61,6 +62,21 @@ public class Persistence {
 
 	public <T> List<T> list(final Class<T> clazz, Filter filter) {
 		return this.list(clazz, filter, null, null);
+	}
+
+	public <T> T get(final Class<T> clazz) throws MasterException {
+		return this.get(clazz, null);
+	}
+
+	public <T> T get(final Class<T> clazz, Filter filter) throws MasterException {
+		final List<T> result = this.list(clazz, filter, null, null);
+		if (result.size() > 1) {
+			throw new MasterException("Quantidade de registros, " + result.size() + ", não esperado para " + clazz.getSimpleName() + " : " + filter);
+		}
+		if (result.size() == 0) {
+			return null;
+		}
+		return result.get(0);
 	}
 
 	private void apllyValues(Query<?> query, Filter filter) {
