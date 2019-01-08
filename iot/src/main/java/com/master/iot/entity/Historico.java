@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "HISTORICO")
@@ -67,6 +68,7 @@ public class Historico extends com.master.core.persistence.entity.Entity {
 	}
 
 	@Override
+	@Transient
 	protected Serializable getKey() {
 		return this.id;
 	}

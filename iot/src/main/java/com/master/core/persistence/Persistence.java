@@ -3,13 +3,14 @@ package com.master.core.persistence;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
+
+import com.master.core.persistence.filter.Filter;
+import com.master.core.persistence.filter.FilterPage;
+import com.master.core.persistence.filter.Order;
 
 public class Persistence {
 
@@ -52,12 +53,43 @@ public class Persistence {
 		}
 	}
 
+	public <T> List<T> list(final Class<T> clazz, Filter filter, FilterPage page, Order order) {
+		final Query<T> query = this.session.createQuery(this.buildQuery(clazz, filter, page, order), clazz);
+		this.apllyValues(query, filter);
+		return query.getResultList();
+	}
+
+	public <T> List<T> list(final Class<T> clazz, Filter filter) {
+		return this.list(clazz, filter, null, null);
+	}
+
+	private void apllyValues(Query<?> query, Filter filter) {
+		if (filter != null) {
+			filter.apply(query);
+		}
+	}
+
+	private String buildQuery(Class<?> clazz, Filter filter, FilterPage page, Order order) {
+		final StringBuilder sb = new StringBuilder(256);
+		sb.append("from ").append(clazz.getSimpleName());
+		if (filter != null) {
+			sb.append(" where ");
+			filter.buildFilter(sb);
+		}
+		return sb.toString();
+	}
+
+	public <T> List<T> list(final Class<T> clazz, FilterPage page) {
+		final Query<T> query = this.session.createQuery("from " + clazz.getSimpleName(), clazz);
+		query.setFirstResult(page.getStart());
+		query.setFirstResult(page.getSize());
+		final List<T> list = query.getResultList();
+		return list;
+	}
+
 	public <T> List<T> list(final Class<T> clazz) {
-		final CriteriaBuilder builder = this.session.getCriteriaBuilder();
-		final CriteriaQuery<T> criteria = builder.createQuery(clazz);
-		final Root<T> root = criteria.from(clazz);
-		criteria.select(root);
-		final List<T> list = this.session.createQuery(criteria).getResultList();
+		final Query<T> query = this.session.createQuery("from " + clazz.getSimpleName(), clazz);
+		final List<T> list = query.getResultList();
 		return list;
 	}
 

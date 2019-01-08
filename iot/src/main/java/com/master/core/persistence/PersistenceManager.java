@@ -1,6 +1,7 @@
 package com.master.core.persistence;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -51,7 +52,7 @@ public class PersistenceManager {
 
 	private final SessionFactory factory;
 
-	private List<PersistenceSessionController> sessions;
+	private final List<PersistenceSessionController> sessions = new ArrayList<>();
 
 	public PersistenceManager() {
 		final Configuration config = new Configuration();
