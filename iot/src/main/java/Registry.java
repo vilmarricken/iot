@@ -1,17 +1,18 @@
 import java.io.File;
-import java.io.Serializable;
 
 import org.apache.log4j.xml.DOMConfigurator;
 
 import com.master.core.exception.MasterException;
 import com.master.core.persistence.PersistenceManager;
-import com.master.core.persistence.filter.FilterCompare;
-import com.master.core.persistence.filter.FilterOperation;
 import com.master.core.resource.MasterContext;
 import com.master.core.resource.MasterContextTransaction;
 import com.master.core.resource.MasterRunnable;
 import com.master.core.resource.MasterThread;
+import com.master.iot.entity.Componente;
+import com.master.iot.entity.ComponenteTipo;
 import com.master.iot.entity.Placa;
+import com.master.iot.entity.Temporizador;
+import com.master.iot.entity.TemporizadorTipo;
 
 public class Registry implements MasterRunnable {
 
@@ -23,30 +24,22 @@ public class Registry implements MasterRunnable {
 		new MasterThread(new Registry(), context).run();
 	}
 
-	@Override
-	public void run() throws MasterException {
-		final Placa placaRegrado = this.newPlacaRegrador();
-		final Placa p = this.mergePlaca(placaRegrado);
-		System.out.println(placaRegrado);
-		System.out.println(p);
+	private Componente newComponenteRegrador(final Placa placa) {
+		final Componente c = new Componente();
+		c.setNome("Válvula selenóide");
+		c.setPlaca(placa);
+		c.setPorta(4);
+		c.setTipo(ComponenteTipo.RELAY);
+		return c;
 	}
 
-	private Placa mergePlaca(Placa placa) throws MasterException {
-		final Placa placaSaved = PersistenceManager.getPersistence().get(Placa.class, new FilterCompare("nome", placa.getNome(), FilterOperation.EQ));
-		if (placaSaved == null) {
-			final Serializable p = PersistenceManager.getPersistence().save(placa);
-			System.out.println(p);
-			return placa;
-		} else {
-			final String ipSaved = placaSaved.getIp();
-			if (ipSaved == null || !ipSaved.equals(placa.getIp())) {
-				placaSaved.setIp(placa.getIp());
-				final Serializable p = PersistenceManager.getPersistence().save(placaSaved);
-				System.out.println(p);
-				return placaSaved;
-			}
-		}
-		return placaSaved;
+	private Placa newPlacaPiscina() throws MasterException {
+		final Placa placa = new Placa();
+		placa.setDescricao("Piscina");
+		placa.setIp("1.1.1.3");
+		placa.setNome("Piscina");
+		placa.setVersao(1);
+		return placa;
 	}
 
 	private Placa newPlacaRegrador() throws MasterException {
@@ -58,13 +51,30 @@ public class Registry implements MasterRunnable {
 		return placa;
 	}
 
-	private Placa newPlacaPiscina() throws MasterException {
-		final Placa placa = new Placa();
-		placa.setDescricao("Piscina");
-		placa.setIp("1.1.1.3");
-		placa.setNome("Piscina");
-		placa.setVersao(1);
-		return placa;
+	private Temporizador newTemporizadorRegrador(final Placa placa) {
+		final Temporizador t = new Temporizador();
+		t.setComponente(this.newComponenteRegrador(placa));
+		t.setDescricao("Regrador de plantas sobre o lavabo");
+		t.setDesligado(11 * 60 + 55);
+		t.setInicial(0);
+		t.setIniciar(0);
+		t.setLigado(5);
+		t.setNome("Regrador lavado");
+		t.setTipo(TemporizadorTipo.START_ON);
+		return t;
+	}
+
+	@Override
+	public void run() throws MasterException {
+		final Placa placaRegrador = this.newPlacaRegrador();
+		final Placa placaPiscina = this.newPlacaPiscina();
+		this.save(placaRegrador);
+		this.save(placaPiscina);
+		this.save(this.newTemporizadorRegrador(placaRegrador));
+	}
+
+	private void save(final Object object) throws MasterException {
+		PersistenceManager.getPersistence().save(object);
 	}
 
 }
