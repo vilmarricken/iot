@@ -1,11 +1,13 @@
 package com.master.core.resource;
 
+import com.master.core.exception.MasterException;
+
 public interface MasterContext {
 
-	void error();;
+	void error() throws MasterException;
 
-	void finish();
+	void finish() throws MasterException;
 
-	void start();
+	void start() throws MasterException;
 
 }

@@ -16,7 +16,7 @@ public class DaoFactory {
 
 	private final Map<Class<?>, Dao> daos = new HashMap<>();
 
-	private <D extends Dao, E extends Entity> D createDao(final Class<E> entity) throws MasterException {
+	private <D extends Dao> D createDao(final Class<?> entity) throws MasterException {
 		final String daoClassName = entity.getName() + "Dao";
 		try {
 			@SuppressWarnings("unchecked")

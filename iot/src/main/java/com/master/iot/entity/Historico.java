@@ -1,16 +1,10 @@
 package com.master.iot.entity;
 
-import java.io.Serializable;
-import java.util.UUID;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 @Entity
 @Table(name = "HISTORICO")
@@ -23,8 +17,6 @@ public class Historico extends com.master.core.persistence.entity.Entity {
 	private String erro;
 
 	private Long fim;
-
-	private UUID id;
 
 	private Long inicio;
 
@@ -55,22 +47,9 @@ public class Historico extends com.master.core.persistence.entity.Entity {
 		return this.fim;
 	}
 
-	@Id
-	@GeneratedValue
-	@Column(name = "ID")
-	public UUID getId() {
-		return this.id;
-	}
-
 	@Column(name = "INICIO")
 	public Long getInicio() {
 		return this.inicio;
-	}
-
-	@Override
-	@Transient
-	protected Serializable getKey() {
-		return this.id;
 	}
 
 	@ManyToOne()
@@ -104,10 +83,6 @@ public class Historico extends com.master.core.persistence.entity.Entity {
 
 	public void setFim(final Long fim) {
 		this.fim = fim;
-	}
-
-	public void setId(final UUID id) {
-		this.id = id;
 	}
 
 	public void setInicio(final Long inicio) {

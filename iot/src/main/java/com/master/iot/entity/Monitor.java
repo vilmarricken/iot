@@ -1,16 +1,10 @@
 package com.master.iot.entity;
 
-import java.io.Serializable;
-import java.util.UUID;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 @Entity
 @Table(name = "MONITOR")
@@ -21,8 +15,6 @@ public class Monitor extends com.master.core.persistence.entity.Entity {
 	private Componente controlador;
 
 	private String descricao;
-
-	private UUID id;
 
 	private Componente leitor;
 
@@ -46,19 +38,6 @@ public class Monitor extends com.master.core.persistence.entity.Entity {
 	@Column(name = "DESCRICAO")
 	public String getDescricao() {
 		return this.descricao;
-	}
-
-	@Id
-	@GeneratedValue
-	@Column(name = "ID")
-	public UUID getId() {
-		return this.id;
-	}
-
-	@Override
-	@Transient
-	protected Serializable getKey() {
-		return this.id;
 	}
 
 	@ManyToOne
@@ -92,10 +71,6 @@ public class Monitor extends com.master.core.persistence.entity.Entity {
 
 	public void setDescricao(final String descricao) {
 		this.descricao = descricao;
-	}
-
-	public void setId(final UUID id) {
-		this.id = id;
 	}
 
 	public void setLeitor(final Componente leitor) {

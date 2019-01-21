@@ -1,16 +1,10 @@
 package com.master.iot.entity;
 
-import java.io.Serializable;
-import java.util.UUID;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 @Entity
 @Table(name = "HISTORICO")
@@ -21,8 +15,6 @@ public class Temporizador extends com.master.core.persistence.entity.Entity {
 	private String descricao;
 
 	private Integer desligado;
-
-	private UUID id;
 
 	private Integer inicial;
 
@@ -50,13 +42,6 @@ public class Temporizador extends com.master.core.persistence.entity.Entity {
 		return this.desligado;
 	}
 
-	@Id
-	@GeneratedValue
-	@Column(name = "ID")
-	public UUID getId() {
-		return this.id;
-	}
-
 	@Column(name = "INICIAL")
 	public Integer getInicial() {
 		return this.inicial;
@@ -65,12 +50,6 @@ public class Temporizador extends com.master.core.persistence.entity.Entity {
 	@Column(name = "INICIAR")
 	public Integer getIniciar() {
 		return this.iniciar;
-	}
-
-	@Override
-	@Transient
-	protected Serializable getKey() {
-		return this.id;
 	}
 
 	@Column(name = "LIGADO")
@@ -98,10 +77,6 @@ public class Temporizador extends com.master.core.persistence.entity.Entity {
 
 	public void setDesligado(final Integer desligado) {
 		this.desligado = desligado;
-	}
-
-	public void setId(final UUID id) {
-		this.id = id;
 	}
 
 	public void setInicial(final Integer inicial) {

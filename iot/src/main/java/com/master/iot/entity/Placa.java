@@ -1,16 +1,11 @@
 package com.master.iot.entity;
 
-import java.io.Serializable;
 import java.util.List;
-import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 @Entity
 @Table(name = "PLACA")
@@ -19,8 +14,6 @@ public class Placa extends com.master.core.persistence.entity.Entity {
 	private List<Componente> componentes;
 
 	private String descricao;
-
-	private UUID id;
 
 	private String ip;
 
@@ -38,22 +31,9 @@ public class Placa extends com.master.core.persistence.entity.Entity {
 		return this.descricao;
 	}
 
-	@Id
-	@GeneratedValue
-	@Column(name = "ID")
-	public UUID getId() {
-		return this.id;
-	}
-
 	@Column(name = "IP")
 	public String getIp() {
 		return this.ip;
-	}
-
-	@Override
-	@Transient
-	protected Serializable getKey() {
-		return this.id;
 	}
 
 	@Column(name = "NOME")
@@ -72,10 +52,6 @@ public class Placa extends com.master.core.persistence.entity.Entity {
 
 	public void setDescricao(final String descricao) {
 		this.descricao = descricao;
-	}
-
-	public void setId(final UUID id) {
-		this.id = id;
 	}
 
 	public void setIp(final String ip) {

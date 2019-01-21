@@ -1,13 +1,11 @@
-import java.io.File;
-
-import org.apache.log4j.xml.DOMConfigurator;
-
 import com.master.core.exception.MasterException;
+import com.master.core.persistence.PersistenceException;
 import com.master.core.persistence.PersistenceManager;
 import com.master.core.resource.MasterContext;
 import com.master.core.resource.MasterContextTransaction;
 import com.master.core.resource.MasterRunnable;
 import com.master.core.resource.MasterThread;
+import com.master.core.util.LogUtil;
 import com.master.iot.entity.Componente;
 import com.master.iot.entity.ComponenteTipo;
 import com.master.iot.entity.Placa;
@@ -17,9 +15,7 @@ import com.master.iot.entity.TemporizadorTipo;
 public class Registry implements MasterRunnable {
 
 	public static void main(final String[] args) throws Exception {
-		final File f = new File("log4j.xml");
-		System.out.println(f.getAbsolutePath() + " - " + f.exists());
-		DOMConfigurator.configure(f.toURI().toURL());
+		LogUtil.config();
 		final MasterContext context = new MasterContextTransaction();
 		new MasterThread(new Registry(), context).run();
 	}
@@ -74,7 +70,11 @@ public class Registry implements MasterRunnable {
 	}
 
 	private void save(final Object object) throws MasterException {
-		PersistenceManager.getPersistence().save(object);
+		try {
+			PersistenceManager.getPersistence().save(object);
+		} catch (final PersistenceException e) {
+			throw new MasterException(e.getMessage(), e);
+		}
 	}
 
 }
