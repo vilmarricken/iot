@@ -11,8 +11,27 @@ public class ControladorTemporizador extends Controlador {
 		this.temporizador = temporizador;
 	}
 
+	private void ligar() {
+
+	}
+
 	@Override
 	public void run() {
+		new Thread(this.temporizador.getNome()) {
+			@Override
+			public void run() {
+				try {
+					ControladorTemporizador.this.setExecutando(true);
+					final Boolean iniciar = ControladorTemporizador.this.temporizador.getIniciar();
+					if (iniciar != null && iniciar.booleanValue()) {
+						ControladorTemporizador.this.ligar();
+					}
+				} finally {
+					ControladorTemporizador.this.setExecutando(false);
+				}
+			}
+
+		}.start();
 	}
 
 }

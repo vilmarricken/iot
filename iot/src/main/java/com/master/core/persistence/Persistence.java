@@ -1,11 +1,14 @@
 package com.master.core.persistence;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.jdbc.Work;
 import org.hibernate.query.Query;
 
 import com.master.core.persistence.entity.Entity;
@@ -72,6 +75,16 @@ public class Persistence {
 
 	public void delete(final Entity entity) throws PersistenceException {
 		this.session.delete(entity);
+	}
+
+	public void execute(final Update u) {
+		this.session.doWork(new Work() {
+			@Override
+			public void execute(final Connection connection) throws SQLException {
+
+			}
+		});
+		return null;
 	}
 
 	public <E> E find(final Class<E> clazz, final UUID id) throws PersistenceException {

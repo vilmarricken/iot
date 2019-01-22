@@ -18,7 +18,7 @@ public class Temporizador extends com.master.core.persistence.entity.Entity {
 
 	private Integer inicial;
 
-	private Integer iniciar;
+	private Boolean iniciar;
 
 	private Integer ligado;
 
@@ -48,7 +48,7 @@ public class Temporizador extends com.master.core.persistence.entity.Entity {
 	}
 
 	@Column(name = "INICIAR")
-	public Integer getIniciar() {
+	public Boolean getIniciar() {
 		return this.iniciar;
 	}
 
@@ -83,7 +83,7 @@ public class Temporizador extends com.master.core.persistence.entity.Entity {
 		this.inicial = inicial;
 	}
 
-	public void setIniciar(final Integer iniciar) {
+	public void setIniciar(final Boolean iniciar) {
 		this.iniciar = iniciar;
 	}
 

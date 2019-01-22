@@ -35,4 +35,5 @@ public class DaoDefault<E extends Entity> {
 		final Persistence persistence = PersistenceManager.getPersistence();
 		return persistence.get(this.clazz, filter);
 	}
+
 }

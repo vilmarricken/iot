@@ -10,7 +10,7 @@ import com.master.iot.entity.Componente;
 import com.master.iot.entity.ComponenteTipo;
 import com.master.iot.entity.Placa;
 import com.master.iot.entity.Temporizador;
-import com.master.iot.entity.TemporizadorTipo;
+import com.master.iot.entity.dao.TemporizadorTipo;
 
 public class Registry implements MasterRunnable {
 
