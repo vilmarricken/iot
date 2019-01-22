@@ -1,13 +1,10 @@
 package com.master.iot.controlador;
 
-public class Controlador extends Thread {
+public abstract class Controlador {
 
-	public Controlador() {
+	Controlador() {
 	}
 
-	@Override
-	public void run() {
-		super.run();
-	}
+	public abstract void run();
 
 }
