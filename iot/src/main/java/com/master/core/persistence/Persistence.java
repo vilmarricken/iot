@@ -77,14 +77,21 @@ public class Persistence {
 		this.session.delete(entity);
 	}
 
-	public void execute(final Update u) {
+	public void execute(final Update u) throws PersistenceException {
+		final PersistenceException[] ex = new PersistenceException[0];
 		this.session.doWork(new Work() {
 			@Override
 			public void execute(final Connection connection) throws SQLException {
-
+				try {
+					u.executeUpdate(connection);
+				} catch (final PersistenceException e) {
+					ex[0] = e;
+				}
 			}
 		});
-		return null;
+		if (ex[0] != null) {
+			throw ex[0];
+		}
 	}
 
 	public <E> E find(final Class<E> clazz, final UUID id) throws PersistenceException {

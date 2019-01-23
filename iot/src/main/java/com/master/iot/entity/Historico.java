@@ -12,8 +12,6 @@ public class Historico extends com.master.core.persistence.entity.Entity {
 
 	private Componente componente;
 
-	private Long criado;
-
 	private String erro;
 
 	private Long fim;
@@ -30,11 +28,6 @@ public class Historico extends com.master.core.persistence.entity.Entity {
 	@JoinColumn(name = "IDCOMPONENTE")
 	public Componente getComponente() {
 		return this.componente;
-	}
-
-	@Column(name = "CRIADO")
-	public Long getCriado() {
-		return this.criado;
 	}
 
 	@Column(name = "ERRO")
@@ -71,10 +64,6 @@ public class Historico extends com.master.core.persistence.entity.Entity {
 
 	public void setComponente(final Componente componente) {
 		this.componente = componente;
-	}
-
-	public void setCriado(final Long criado) {
-		this.criado = criado;
 	}
 
 	public void setErro(final String erro) {

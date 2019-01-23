@@ -4,6 +4,6 @@ import java.sql.Connection;
 
 public interface Update {
 
-	void executeUpdate(Connection connection);
+	void executeUpdate(Connection connection) throws PersistenceException;
 
 }
