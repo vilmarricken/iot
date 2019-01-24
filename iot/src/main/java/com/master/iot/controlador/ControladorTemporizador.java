@@ -4,6 +4,7 @@ import com.master.iot.entity.Historico;
 import com.master.iot.entity.Situacao;
 import com.master.iot.entity.Temporizador;
 import com.master.iot.entity.TemporizadorTipo;
+import com.master.iot.entity.dao.HistoricoInsertDao;
 import com.master.iot.entity.dao.HistoricoInsertDaoDefault;
 
 public class ControladorTemporizador extends Controlador {
@@ -16,8 +17,8 @@ public class ControladorTemporizador extends Controlador {
 	}
 
 	private void ligar(Historico historico) {
-		final HistoricoInsertDaoDefault dao = new HistoricoInsertDaoDefault(historico);
-		// dao.
+		final HistoricoInsertDao dao = new HistoricoInsertDaoDefault();
+		dao.insert(historico);
 	}
 
 	@Override
