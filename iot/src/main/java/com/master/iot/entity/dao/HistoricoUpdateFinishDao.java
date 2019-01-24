@@ -7,7 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
 
-import com.master.core.exception.MasterException;
+import com.master.core.persistence.PersistenceException;
 import com.master.core.persistence.Update;
 import com.master.core.persistence.dao.Dao;
 import com.master.iot.entity.Historico;
@@ -24,7 +24,7 @@ public class HistoricoUpdateFinishDao implements Update, Dao {
 	}
 
 	@Override
-	public void executeUpdate(final Connection connection) throws MasterException {
+	public void executeUpdate(final Connection connection) throws PersistenceException {
 		final String sql = "UPDATE historico SET situacao = ?, fim = ?, error = ? WHERE id = ?";
 		try {
 			final PreparedStatement stmt = connection.prepareStatement(sql);
@@ -41,7 +41,7 @@ public class HistoricoUpdateFinishDao implements Update, Dao {
 			stmt.setString(4, this.historico.getId().toString());
 			stmt.executeUpdate();
 		} catch (final SQLException e) {
-			throw new MasterException(e.getMessage(), e);
+			throw new PersistenceException(e.getMessage(), e);
 		}
 	}
 

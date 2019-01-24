@@ -24,6 +24,24 @@ public class Historico extends com.master.core.persistence.entity.Entity {
 
 	private Temporizador temporizador;
 
+	public Historico(Temporizador temporizador, Situacao situacao) {
+		this.temporizador = temporizador;
+		this.situacao = situacao;
+	}
+
+	public Historico(Monitor monitor, Situacao situacao) {
+		this.monitor = monitor;
+		this.situacao = situacao;
+	}
+
+	public Historico(Componente componente, Situacao situacao) {
+		this.componente = componente;
+		this.situacao = situacao;
+	}
+
+	public Historico() {
+	}
+
 	@ManyToOne()
 	@JoinColumn(name = "IDCOMPONENTE")
 	public Componente getComponente() {

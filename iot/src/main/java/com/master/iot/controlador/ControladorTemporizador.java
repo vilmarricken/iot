@@ -1,6 +1,10 @@
 package com.master.iot.controlador;
 
+import com.master.iot.entity.Historico;
+import com.master.iot.entity.Situacao;
 import com.master.iot.entity.Temporizador;
+import com.master.iot.entity.TemporizadorTipo;
+import com.master.iot.entity.dao.HistoricoInsertDaoDefault;
 
 public class ControladorTemporizador extends Controlador {
 
@@ -11,8 +15,9 @@ public class ControladorTemporizador extends Controlador {
 		this.temporizador = temporizador;
 	}
 
-	private void ligar() {
-
+	private void ligar(Historico historico) {
+		final HistoricoInsertDaoDefault dao = new HistoricoInsertDaoDefault(historico);
+		// dao.
 	}
 
 	@Override
@@ -22,9 +27,10 @@ public class ControladorTemporizador extends Controlador {
 			public void run() {
 				try {
 					ControladorTemporizador.this.setExecutando(true);
-					final Boolean iniciar = ControladorTemporizador.this.temporizador.getIniciar();
-					if (iniciar != null && iniciar.booleanValue()) {
-						ControladorTemporizador.this.ligar();
+					final boolean iniciar = TemporizadorTipo.START_ON.equals(ControladorTemporizador.this.temporizador.getTipo());
+					final Historico historico = new Historico(ControladorTemporizador.this.temporizador, Situacao.EXECUTANDO);
+					if (iniciar) {
+						ControladorTemporizador.this.ligar(historico);
 					}
 				} finally {
 					ControladorTemporizador.this.setExecutando(false);
