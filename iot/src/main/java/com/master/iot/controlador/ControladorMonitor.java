@@ -12,7 +12,8 @@ public class ControladorMonitor extends Controlador {
 	}
 
 	@Override
-	public void run() {
+	public void execute() {
+
 	}
 
 }

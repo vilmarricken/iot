@@ -9,10 +9,9 @@ import java.sql.Types;
 
 import com.master.core.persistence.PersistenceException;
 import com.master.core.persistence.Update;
-import com.master.core.persistence.dao.Dao;
 import com.master.iot.entity.Historico;
 
-public class HistoricoUpdateFinishDao implements Update, Dao {
+public class HistoricoUpdateFinishDao implements Update {
 
 	private final Exception exception;
 
