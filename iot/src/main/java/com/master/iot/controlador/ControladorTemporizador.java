@@ -1,8 +1,12 @@
 package com.master.iot.controlador;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 import org.apache.log4j.Logger;
 
 import com.master.core.exception.MasterException;
+import com.master.core.persistence.PersistenceException;
 import com.master.core.persistence.PersistenceManager;
 import com.master.iot.entity.Componente;
 import com.master.iot.entity.Historico;
@@ -23,7 +27,7 @@ public class ControladorTemporizador extends Controlador implements Runnable {
 	private final Temporizador temporizador;
 
 	public ControladorTemporizador(final Temporizador temporizador) {
-		super();
+		super("Temporizador:" + temporizador.getNome());
 		this.temporizador = temporizador;
 	}
 
@@ -32,29 +36,47 @@ public class ControladorTemporizador extends Controlador implements Runnable {
 		new Thread(this, this.temporizador.getNome()).start();
 	}
 
-	private long getTempoLigado() {
-		Integer ligado = ControladorTemporizador.this.temporizador.getLigado();
-		if (ligado == null) {
-			ligado = 60000;
-			ControladorTemporizador.log.warn("Tempo ligado é nulo, utilizando valor padrão de 1 minuto");
-		}
-		return ligado.longValue();
-	}
-
-	private void ligar() throws MasterException {
-		final long ligado = this.getTempoLigado();
+	private void ligar(long tempoLigado) throws MasterException {
 		final Historico historico = new Historico(ControladorTemporizador.this.temporizador, Situacao.EXECUTANDO);
-		PersistenceManager.getPersistence().execute(new HistoricoInsertDao(historico));
+		try {
+			PersistenceManager.getPersistence().execute(new HistoricoInsertDao(historico));
+		} catch (final PersistenceException e) {
+			throw new MasterException(e.getMessage(), e);
+		}
 		final Componente componente = this.temporizador.getComponente();
 		final Placa placa = componente.getPlaca();
 		try {
 			this.connection.ligar(placa.getIp(), componente.getPorta().toString());
 		} catch (final Exception e) {
 			final MasterException ex = new MasterException("Erro ao conectar na placa " + placa.getNome() + " - " + placa.getIp() + " na porta " + componente.getPorta(), e);
-			PersistenceManager.getPersistence().execute(new HistoricoUpdateFinishDao(historico, e));
+			try {
+				PersistenceManager.getPersistence().execute(new HistoricoUpdateFinishDao(historico, e));
+			} catch (final PersistenceException e1) {
+				ControladorTemporizador.log.error(e1.getMessage(), e1);
+			}
 			throw ex;
 		}
-		this.sleep(ligado);
+		this.sleep(tempoLigado);
+	}
+
+	public static void main(String[] args) {
+		final long t = (System.currentTimeMillis() % 3600000) / 1000;
+		System.out.println(t);
+		System.out.println((t % 60));
+		System.out.println(1000 * 60 * 30);
+	}
+
+	private static long calcularProximaExecucao(int inicial, long incremento) {
+		final GregorianCalendar gc = new GregorianCalendar();
+		gc.setTimeInMillis(System.currentTimeMillis());
+		if (inicial >= 0) {
+			gc.set(Calendar.MINUTE, inicial);
+		}
+		long proxima = gc.getTimeInMillis() + incremento;
+		while (proxima < System.currentTimeMillis()) {
+			proxima = gc.getTimeInMillis() + incremento;
+		}
+		return proxima;
 	}
 
 	@Override
@@ -62,8 +84,23 @@ public class ControladorTemporizador extends Controlador implements Runnable {
 		try {
 			ControladorTemporizador.this.setExecutando(true);
 			final boolean iniciar = TemporizadorTipo.START_ON.equals(ControladorTemporizador.this.temporizador.getTipo());
+			final int tempoLigado = this.getValue(this.temporizador.getLigado(), 60, "Ligado");
+			final int tempoDesligado = this.getValue(this.temporizador.getDesligado(), 1800, "Desligado");
+			final int inicial = this.getValue(this.temporizador.getInicial(), -1, "Inicial");
 			if (iniciar) {
-				this.ligar();
+				this.ligar(tempoLigado);
+			}
+			final long incremento = (tempoLigado + tempoDesligado) * 60_000;
+			long proximaExecucao = ControladorTemporizador.calcularProximaExecucao(inicial, incremento);
+			synchronized (this) {
+				while (this.isExecutando()) {
+					this.sleep(proximaExecucao - System.currentTimeMillis());
+					if (this.isExecutando() || proximaExecucao > System.currentTimeMillis()) {
+						continue;
+					}
+					this.ligar(tempoLigado);
+					proximaExecucao += incremento;
+				}
 			}
 		} catch (final Exception e) {
 			ControladorTemporizador.log.error(e.getMessage(), e);
