@@ -2,6 +2,11 @@ package com.master.iot.controlador;
 
 import org.apache.log4j.Logger;
 
+import com.master.core.exception.MasterException;
+import com.master.core.persistence.PersistenceException;
+import com.master.core.persistence.PersistenceManager;
+import com.master.core.persistence.Update;
+
 public abstract class Controlador {
 
 	private static final Logger log = Logger.getLogger(Controlador.class);
@@ -42,6 +47,14 @@ public abstract class Controlador {
 			return value.intValue();
 		}
 		return defaultValue;
+	}
+
+	void saveHistorico(Update historico) throws MasterException {
+		try {
+			PersistenceManager.getPersistence().execute(historico);
+		} catch (final PersistenceException e) {
+			throw new MasterException(e.getMessage(), e);
+		}
 	}
 
 }

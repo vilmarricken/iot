@@ -14,7 +14,7 @@ public class Controladroes {
 		return Controladroes.INSTANCE;
 	}
 
-	private final List<Controlador> controles = new ArrayList<Controlador>();
+	private final List<Controlador> controles = new ArrayList<>();
 
 	private Controladroes() {
 	}
@@ -22,13 +22,13 @@ public class Controladroes {
 	public void addMonitor(final Monitor monitor) {
 		final Controlador controlador = new ControladorMonitor(monitor);
 		this.controles.add(controlador);
-		controlador.run();
+		controlador.execute();
 	}
 
 	public void addTemporizador(final Temporizador temporizador) {
 		final Controlador controlador = new ControladorTemporizador(temporizador);
 		this.controles.add(controlador);
-		controlador.run();
+		controlador.execute();
 	}
 
 }

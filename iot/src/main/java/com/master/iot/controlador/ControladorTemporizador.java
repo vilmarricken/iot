@@ -6,8 +6,6 @@ import java.util.GregorianCalendar;
 import org.apache.log4j.Logger;
 
 import com.master.core.exception.MasterException;
-import com.master.core.persistence.PersistenceException;
-import com.master.core.persistence.PersistenceManager;
 import com.master.iot.entity.Componente;
 import com.master.iot.entity.Historico;
 import com.master.iot.entity.Placa;
@@ -38,22 +36,14 @@ public class ControladorTemporizador extends Controlador implements Runnable {
 
 	private void ligar(long tempoLigado) throws MasterException {
 		final Historico historico = new Historico(ControladorTemporizador.this.temporizador, Situacao.EXECUTANDO);
-		try {
-			PersistenceManager.getPersistence().execute(new HistoricoInsertDao(historico));
-		} catch (final PersistenceException e) {
-			throw new MasterException(e.getMessage(), e);
-		}
+		this.saveHistorico(new HistoricoInsertDao(historico));
 		final Componente componente = this.temporizador.getComponente();
 		final Placa placa = componente.getPlaca();
 		try {
 			this.connection.ligar(placa.getIp(), componente.getPorta().toString());
 		} catch (final Exception e) {
 			final MasterException ex = new MasterException("Erro ao conectar na placa " + placa.getNome() + " - " + placa.getIp() + " na porta " + componente.getPorta(), e);
-			try {
-				PersistenceManager.getPersistence().execute(new HistoricoUpdateFinishDao(historico, e));
-			} catch (final PersistenceException e1) {
-				ControladorTemporizador.log.error(e1.getMessage(), e1);
-			}
+			this.saveHistorico(new HistoricoUpdateFinishDao(historico, e));
 			throw ex;
 		}
 		this.sleep(tempoLigado);
@@ -72,7 +62,7 @@ public class ControladorTemporizador extends Controlador implements Runnable {
 		if (inicial >= 0) {
 			gc.set(Calendar.MINUTE, inicial);
 		}
-		long proxima = gc.getTimeInMillis() + incremento;
+		long proxima = gc.getTimeInMillis();
 		while (proxima < System.currentTimeMillis()) {
 			proxima = gc.getTimeInMillis() + incremento;
 		}

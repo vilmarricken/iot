@@ -7,7 +7,7 @@ public class ControladorMonitor extends Controlador {
 	private final Monitor monitor;
 
 	public ControladorMonitor(final Monitor monitor) {
-		super();
+		super("Monitor:" + monitor.getNome());
 		this.monitor = monitor;
 	}
 
