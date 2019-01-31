@@ -53,7 +53,6 @@ public class Registry implements MasterRunnable {
 		t.setDescricao("Regrador de plantas sobre o lavabo");
 		t.setDesligado(11 * 60 + 55);
 		t.setInicial(0);
-		t.setIniciar(0);
 		t.setLigado(5);
 		t.setNome("Regrador lavado");
 		t.setTipo(TemporizadorTipo.START_ON);

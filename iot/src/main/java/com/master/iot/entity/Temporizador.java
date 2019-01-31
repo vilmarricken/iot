@@ -18,8 +18,6 @@ public class Temporizador extends com.master.core.persistence.entity.Entity {
 
 	private Integer inicial;
 
-	private Integer iniciar;
-
 	private Integer ligado;
 
 	private String nome;
@@ -45,11 +43,6 @@ public class Temporizador extends com.master.core.persistence.entity.Entity {
 	@Column(name = "INICIAL")
 	public Integer getInicial() {
 		return this.inicial;
-	}
-
-	@Column(name = "INICIAR")
-	public Integer getIniciar() {
-		return this.iniciar;
 	}
 
 	@Column(name = "LIGADO")
@@ -83,10 +76,6 @@ public class Temporizador extends com.master.core.persistence.entity.Entity {
 		this.inicial = inicial;
 	}
 
-	public void setIniciar(final Integer iniciar) {
-		this.iniciar = iniciar;
-	}
-
 	public void setLigado(final Integer ligado) {
 		this.ligado = ligado;
 	}
@@ -99,4 +88,8 @@ public class Temporizador extends com.master.core.persistence.entity.Entity {
 		this.tipo = tipo;
 	}
 
+	@Override
+	public String toString() {
+		return "Nome: " + this.nome + ", Tipo: " + this.tipo;
+	}
 }

@@ -93,6 +93,9 @@ public class ControladorTemporizador extends Controlador implements Runnable {
 			final int tempoLigado = this.getValue(this.temporizador.getLigado(), 60, "Ligado");
 			final int tempoDesligado = this.getValue(this.temporizador.getDesligado(), 1800, "Desligado");
 			final int inicial = this.getValue(this.temporizador.getInicial(), -1, "Inicial");
+			if (ControladorTemporizador.log.isTraceEnabled()) {
+				ControladorTemporizador.log.trace("Executando temporizador: " + this.temporizador);
+			}
 			if (iniciar) {
 				this.ligar(tempoLigado);
 			}
