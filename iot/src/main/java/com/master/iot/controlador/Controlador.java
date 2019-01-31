@@ -3,9 +3,10 @@ package com.master.iot.controlador;
 import org.apache.log4j.Logger;
 
 import com.master.core.exception.MasterException;
-import com.master.core.persistence.PersistenceException;
-import com.master.core.persistence.PersistenceManager;
 import com.master.core.persistence.Update;
+import com.master.core.resource.MasterContextTransaction;
+import com.master.core.resource.MasterThread;
+import com.master.iot.action.ActionUpdate;
 
 public abstract class Controlador {
 
@@ -15,14 +16,27 @@ public abstract class Controlador {
 
 	String id;
 
-	Controlador(String id) {
+	Controlador(final String id) {
 		this.id = id;
 	}
 
 	public abstract void execute();
 
+	int getValue(Integer value, final int defaultValue, final String identifier) {
+		if (value == null) {
+			value = defaultValue;
+			Controlador.log.warn("Tempo " + identifier + " é nulo, utilizando valor padrão de " + defaultValue);
+			return value.intValue();
+		}
+		return defaultValue;
+	}
+
 	public boolean isExecutando() {
 		return this.executando;
+	}
+
+	void saveHistorico(final Update update) throws MasterException {
+		new MasterThread(new ActionUpdate(update), new MasterContextTransaction());
 	}
 
 	public synchronized void setExecutando(final boolean executando) {
@@ -37,23 +51,6 @@ public abstract class Controlador {
 			Thread.sleep(tempo);
 		} catch (final InterruptedException e) {
 			Controlador.log.error(e.getMessage(), e);
-		}
-	}
-
-	int getValue(Integer value, int defaultValue, String identifier) {
-		if (value == null) {
-			value = defaultValue;
-			Controlador.log.warn("Tempo " + identifier + " é nulo, utilizando valor padrão de " + defaultValue);
-			return value.intValue();
-		}
-		return defaultValue;
-	}
-
-	void saveHistorico(Update historico) throws MasterException {
-		try {
-			PersistenceManager.getPersistence().execute(historico);
-		} catch (final PersistenceException e) {
-			throw new MasterException(e.getMessage(), e);
 		}
 	}
 

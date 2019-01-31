@@ -70,6 +70,10 @@ public class IOTConnection {
 		}
 	}
 
+	public void desligar(final String address, final String port) throws IOTConnectionException {
+		this.command(IOTConnection.COMMAND_EXECUTE + ";" + port + ";" + IOTConnection.DEVICE_TURN_OFF, address);
+	}
+
 	public void ligar(final String address, final String port) throws IOTConnectionException {
 		this.command(IOTConnection.COMMAND_EXECUTE + ";" + port + ";" + IOTConnection.DEVICE_TURN_ON, address);
 	}
