@@ -10,10 +10,19 @@ import com.master.core.persistence.Update;
 import com.master.core.resource.MasterContextTransaction;
 import com.master.core.resource.MasterThread;
 import com.master.iot.action.ActionUpdate;
+import com.master.iot.entity.Componente;
+import com.master.iot.entity.Historico;
+import com.master.iot.entity.Placa;
+import com.master.iot.entity.Situacao;
+import com.master.iot.entity.dao.HistoricoInsertDao;
+import com.master.iot.entity.dao.HistoricoInsertExceptionDao;
+import com.master.iot.server.IOTConnection;
 
 public abstract class Controlador {
 
 	private static final Logger log = Logger.getLogger(Controlador.class);
+
+	private final IOTConnection connection = new IOTConnection();
 
 	private boolean executando;
 
@@ -21,6 +30,21 @@ public abstract class Controlador {
 
 	Controlador(final String id) {
 		this.id = id;
+	}
+
+	protected void desligar(final Componente componente, final Historico historico) throws MasterException {
+		final Placa placa = componente.getPlaca();
+		try {
+			if (Controlador.log.isTraceEnabled()) {
+				Controlador.log.trace("Desligando " + componente);
+			}
+			this.connection.desligar(placa.getIp(), componente.getPorta().toString());
+			this.saveHistorico(new HistoricoInsertDao(historico));
+		} catch (final Exception e) {
+			final MasterException ex = new MasterException("Erro ao conectar na placa " + placa.getNome() + " - " + placa.getIp() + " na porta " + componente.getPorta(), e);
+			this.saveHistorico(new HistoricoInsertExceptionDao(historico, e));
+			throw ex;
+		}
 	}
 
 	public abstract void execute();
@@ -36,6 +60,24 @@ public abstract class Controlador {
 
 	public boolean isExecutando() {
 		return this.executando;
+	}
+
+	protected void ligar(final Componente componente, final Historico historico) throws MasterException {
+		final Placa placa = componente.getPlaca();
+		if (Controlador.log.isTraceEnabled()) {
+			Controlador.log.trace("Ligando " + componente);
+		}
+		historico.setComponente(componente);
+		historico.setInicio(System.currentTimeMillis());
+		historico.setSituacao(Situacao.LIGADO);
+		try {
+			this.connection.ligar(placa.getIp(), componente.getPorta().toString());
+			this.saveHistorico(new HistoricoInsertDao(historico));
+		} catch (final Exception e) {
+			final MasterException ex = new MasterException("Erro ao conectar na placa " + placa.getNome() + " - " + placa.getIp() + " na porta " + componente.getPorta(), e);
+			this.saveHistorico(new HistoricoInsertExceptionDao(historico, e));
+			throw ex;
+		}
 	}
 
 	void saveHistorico(final Update update) throws MasterException {

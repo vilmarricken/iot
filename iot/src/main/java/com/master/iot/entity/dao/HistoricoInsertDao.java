@@ -15,7 +15,7 @@ import com.master.iot.entity.Temporizador;
 
 public class HistoricoInsertDao implements Update {
 
-	private final Historico historico;
+	final Historico historico;
 
 	public HistoricoInsertDao(final Historico historico) {
 		this.historico = historico;
@@ -23,7 +23,7 @@ public class HistoricoInsertDao implements Update {
 
 	@Override
 	public void executeUpdate(final Connection connection) throws PersistenceException {
-		final String sql = "INSERT INTO historico(id, idtemporizador, idmonitor, idcomponente, inicio, situacao) VALUES (?, ?, ?, ?, ?, ?)";
+		final String sql = "INSERT INTO historico(id, idtemporizador, idmonitor, idcomponente, inicio, situacao, error) VALUES (?, ?, ?, ?, ?, ?, ?)";
 		try {
 			final PreparedStatement stmt = connection.prepareStatement(sql);
 			this.historico.setId(UUID.randomUUID());
@@ -51,7 +51,10 @@ public class HistoricoInsertDao implements Update {
 			stmt.setLong(5, inicio);
 			this.historico.setSituacao(Situacao.EXECUTANDO);
 			stmt.setInt(6, Situacao.EXECUTANDO.ordinal());
-			stmt.executeUpdate();
+			final String error = this.historico.getErro();
+			if (error == null) {
+				stmt.executeUpdate();
+			}
 		} catch (final SQLException e) {
 			throw new PersistenceException(e.getMessage(), e);
 		}
