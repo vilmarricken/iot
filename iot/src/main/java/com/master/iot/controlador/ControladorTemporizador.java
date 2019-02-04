@@ -54,6 +54,9 @@ public class ControladorTemporizador extends Controlador implements Runnable {
 		final Componente componente = this.temporizador.getComponente();
 		final Placa placa = componente.getPlaca();
 		try {
+			if (ControladorTemporizador.log.isTraceEnabled()) {
+				ControladorTemporizador.log.trace("Desligando " + componente);
+			}
 			this.connection.desligar(placa.getIp(), componente.getPorta().toString());
 			this.saveHistorico(new HistoricoInsertDao(historico));
 		} catch (final Exception e) {
@@ -72,6 +75,9 @@ public class ControladorTemporizador extends Controlador implements Runnable {
 		final Historico historico = new Historico(ControladorTemporizador.this.temporizador, Situacao.EXECUTANDO);
 		final Componente componente = this.temporizador.getComponente();
 		final Placa placa = componente.getPlaca();
+		if (ControladorTemporizador.log.isTraceEnabled()) {
+			ControladorTemporizador.log.trace("Ligando " + componente);
+		}
 		try {
 			this.connection.ligar(placa.getIp(), componente.getPorta().toString());
 			this.saveHistorico(new HistoricoInsertDao(historico));

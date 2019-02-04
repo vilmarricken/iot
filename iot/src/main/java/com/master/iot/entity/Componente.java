@@ -55,4 +55,8 @@ public class Componente extends com.master.core.persistence.entity.Entity {
 		this.tipo = tipo;
 	}
 
+	@Override
+	public String toString() {
+		return "Componente: " + this.nome + ", tipo: " + this.tipo + ", placa: " + this.placa + ", porta: " + this.porta;
+	}
 }

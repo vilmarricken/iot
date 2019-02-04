@@ -66,4 +66,9 @@ public class Placa extends com.master.core.persistence.entity.Entity {
 		this.versao = versao;
 	}
 
+	@Override
+	public String toString() {
+		return "nome: " + this.nome + ", ip: " + this.ip;
+	}
+
 }

@@ -1,5 +1,8 @@
 package com.master.iot.controlador;
 
+import java.text.DateFormat;
+import java.util.Date;
+
 import org.apache.log4j.Logger;
 
 import com.master.core.exception.MasterException;
@@ -48,6 +51,9 @@ public abstract class Controlador {
 
 	protected void sleep(final long tempo) {
 		try {
+			if (Controlador.log.isTraceEnabled()) {
+				Controlador.log.trace("Aguardando " + tempo + " ms até " + DateFormat.getDateTimeInstance().format(new Date(System.currentTimeMillis() + tempo)));
+			}
 			Thread.sleep(tempo);
 		} catch (final InterruptedException e) {
 			Controlador.log.error(e.getMessage(), e);
