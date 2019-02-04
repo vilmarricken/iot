@@ -18,6 +18,8 @@ public class Historico extends com.master.core.persistence.entity.Entity {
 
 	private Long inicio;
 
+	private Float leitura;
+
 	private Monitor monitor;
 
 	private Situacao situacao;
@@ -58,6 +60,11 @@ public class Historico extends com.master.core.persistence.entity.Entity {
 	@Column(name = "INICIO")
 	public Long getInicio() {
 		return this.inicio;
+	}
+
+	@Column(name = "LEITURA")
+	public Float getLeitura() {
+		return this.leitura;
 	}
 
 	@ManyToOne()
@@ -103,6 +110,10 @@ public class Historico extends com.master.core.persistence.entity.Entity {
 
 	public void setTemporizador(final Temporizador temporizador) {
 		this.temporizador = temporizador;
+	}
+
+	public void setLeitura(Float leitura) {
+		this.leitura = leitura;
 	}
 
 }

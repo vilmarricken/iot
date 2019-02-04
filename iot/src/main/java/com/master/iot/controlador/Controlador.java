@@ -62,6 +62,26 @@ public abstract class Controlador {
 		return this.executando;
 	}
 
+	protected float leitura(final Componente componente, final Historico historico) throws MasterException {
+		final Placa placa = componente.getPlaca();
+		if (Controlador.log.isTraceEnabled()) {
+			Controlador.log.trace("Ligando " + componente);
+		}
+		historico.setComponente(componente);
+		historico.setInicio(System.currentTimeMillis());
+		historico.setSituacao(Situacao.LEITURA);
+		try {
+			final float leitura = this.connection.leitura(placa.getIp(), componente.getPorta().toString());
+			historico.setLeitura(leitura);
+			this.saveHistorico(new HistoricoInsertDao(historico));
+			return leitura;
+		} catch (final Exception e) {
+			final MasterException ex = new MasterException("Erro ao conectar na placa " + placa.getNome() + " - " + placa.getIp() + " na porta " + componente.getPorta(), e);
+			this.saveHistorico(new HistoricoInsertExceptionDao(historico, e));
+			throw ex;
+		}
+	}
+
 	protected void ligar(final Componente componente, final Historico historico) throws MasterException {
 		final Placa placa = componente.getPlaca();
 		if (Controlador.log.isTraceEnabled()) {

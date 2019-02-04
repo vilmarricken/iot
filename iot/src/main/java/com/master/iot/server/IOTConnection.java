@@ -78,4 +78,8 @@ public class IOTConnection {
 		this.command(IOTConnection.COMMAND_EXECUTE + ";" + port + ";" + IOTConnection.DEVICE_TURN_ON, address);
 	}
 
+	public float leitura(String address, String port) throws IOTConnectionException {
+		return Float.valueOf(this.command(IOTConnection.COMMAND_EXECUTE + ";" + port, address));
+	}
+
 }

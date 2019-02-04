@@ -3,8 +3,9 @@ package com.master.iot.controlador;
 import org.apache.log4j.Logger;
 
 import com.master.iot.entity.Componente;
+import com.master.iot.entity.Historico;
 import com.master.iot.entity.Monitor;
-import com.master.iot.entity.TemporizadorTipo;
+import com.master.iot.entity.MonitorTipo;
 
 public class ControladorMonitor extends Controlador implements Runnable {
 
@@ -32,28 +33,18 @@ public class ControladorMonitor extends Controlador implements Runnable {
 		try {
 			this.setExecutando(true);
 			final float alvo = this.monitor.getAlvo();
-			final float leitura = this.leitura(this.monitor.getLeitor());
-			final boolean iniciar = TemporizadorTipo.START_ON.equals(this.temporizador.getTipo());
-			final int tempoLigado = this.getValue(this.temporizador.getLigado(), 60, "Ligado");
-			final int tempoDesligado = this.getValue(this.temporizador.getDesligado(), 1800, "Desligado");
-			final int inicial = this.getValue(this.temporizador.getInicial(), -1, "Inicial");
-			if (ControladorMonitor.log.isTraceEnabled()) {
-				ControladorMonitor.log.trace("Executando temporizador: " + this.temporizador);
-			}
-			if (iniciar) {
-				this.ligar(tempoLigado);
-			}
-			final long incremento = (tempoLigado + tempoDesligado) * 60_000;
-			long proximaExecucao = ControladorMonitor.calcularProximaExecucao(inicial, incremento);
-			synchronized (this) {
-				while (this.isExecutando()) {
-					this.sleep(proximaExecucao - System.currentTimeMillis());
-					if (this.isExecutando() || proximaExecucao > System.currentTimeMillis()) {
-						continue;
-					}
-					this.ligar(tempoLigado);
-					proximaExecucao += incremento;
+			final float limite = this.monitor.getLimite();
+			final MonitorTipo tipo = this.monitor.getTipo();
+			final Componente componente = this.monitor.getControlador();
+			while (this.isExecutando()) {
+				final float leitura = this.leitura(this.monitor.getLeitor());
+				if (tipo.ligar(alvo, limite, leitura)) {
+					this.ligar(componente, new Historico(componente));
 				}
+				if (tipo.desligar(alvo, limite, leitura)) {
+					this.desligar(componente, new Historico(componente));
+				}
+				this.sleep(30000);
 			}
 		} catch (final Exception e) {
 			ControladorMonitor.log.error(e.getMessage(), e);
