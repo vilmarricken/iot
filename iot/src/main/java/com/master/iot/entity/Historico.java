@@ -14,8 +14,6 @@ public class Historico extends com.master.core.persistence.entity.Entity {
 
 	private String erro;
 
-	private Long fim;
-
 	private Long inicio;
 
 	private Float leitura;
@@ -52,11 +50,6 @@ public class Historico extends com.master.core.persistence.entity.Entity {
 		return this.erro;
 	}
 
-	@Column(name = "FIM")
-	public Long getFim() {
-		return this.fim;
-	}
-
 	@Column(name = "INICIO")
 	public Long getInicio() {
 		return this.inicio;
@@ -90,10 +83,6 @@ public class Historico extends com.master.core.persistence.entity.Entity {
 
 	public void setErro(final String erro) {
 		this.erro = erro;
-	}
-
-	public void setFim(final Long fim) {
-		this.fim = fim;
 	}
 
 	public void setInicio(final Long inicio) {

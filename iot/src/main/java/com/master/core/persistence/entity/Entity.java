@@ -3,11 +3,11 @@ package com.master.core.persistence.entity;
 import java.util.UUID;
 
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 
-@Embeddable
+@MappedSuperclass
 public abstract class Entity {
 
 	private UUID id;

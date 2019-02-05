@@ -21,32 +21,32 @@ public class Iot implements MasterRunnable {
 
 	private static Iot iot;
 
-	private Map<String, ControladorMonitor> monitores = new HashMap<>();
+	private final Map<String, ControladorMonitor> monitores = new HashMap<>();
 
-	private Map<String, ControladorTemporizador> temporizadores = new HashMap<>();
+	private final Map<String, ControladorTemporizador> temporizadores = new HashMap<>();
 
 	Iot() throws MasterException {
-		new MasterThread(new Iot(), new MasterContextRead()).run();
+		new MasterThread(this, new MasterContextRead()).run();
 	}
 
 	@Override
 	public void run() throws MasterException {
 		try {
-			DaoEntity<Monitor> daoMonitor = new MonitorDao();
-			List<Monitor> monitors = daoMonitor.all();
+			final DaoEntity<Monitor> daoMonitor = new MonitorDao();
+			final List<Monitor> monitors = daoMonitor.all();
 			if (monitors != null) {
-				for (Monitor monitor : monitors) {
+				for (final Monitor monitor : monitors) {
 					this.add(new ControladorMonitor(monitor));
 				}
 			}
-			DaoEntity<Temporizador> daoTemporizador = new TemporizadorDao();
-			List<Temporizador> temporiadores = daoTemporizador.all();
+			final DaoEntity<Temporizador> daoTemporizador = new TemporizadorDao();
+			final List<Temporizador> temporiadores = daoTemporizador.all();
 			if (temporiadores != null) {
-				for (Temporizador temporizador : temporiadores) {
+				for (final Temporizador temporizador : temporiadores) {
 					this.add(new ControladorTemporizador(temporizador));
 				}
 			}
-		} catch (PersistenceException e) {
+		} catch (final PersistenceException e) {
 			throw new MasterException(e);
 		}
 	}
@@ -60,14 +60,14 @@ public class Iot implements MasterRunnable {
 	}
 
 	public static void main(String[] args) throws MasterException {
-		getIot();
+		Iot.getIot();
 	}
 
 	public static Iot getIot() throws MasterException {
-		if (iot == null) {
-			iot = new Iot();
+		if (Iot.iot == null) {
+			Iot.iot = new Iot();
 		}
-		return iot;
+		return Iot.iot;
 	}
 
 }

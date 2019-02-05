@@ -25,10 +25,13 @@ public class MasterThread {
 		} catch (final Throwable e) {
 			try {
 				MasterThread.this.context.error();
+				MasterThread.LOGGER.error(e.getMessage(), e);
+				if (e instanceof MasterException) {
+					throw (MasterException) e;
+				}
+				throw new MasterException(e);
 			} catch (final Throwable e1) {
 				MasterThread.LOGGER.error(e1.getMessage(), e1);
-			} finally {
-				MasterThread.LOGGER.error(e.getMessage(), e);
 			}
 		}
 	}

@@ -27,10 +27,10 @@ public class PersistenceManager {
 	private static final ThreadLocal<Persistence> PERSISTENCE = new ThreadLocal<>();
 
 	public static PersistenceManager getInstance() {
-		if (PersistenceManager.INSTANCE != null) {
-			return PersistenceManager.INSTANCE;
+		if (PersistenceManager.INSTANCE == null) {
+			PersistenceManager.INSTANCE = PersistenceManager.newInstance();
 		}
-		return PersistenceManager.newInstance();
+		return PersistenceManager.INSTANCE;
 	}
 
 	public static final Persistence getPersistence() {
