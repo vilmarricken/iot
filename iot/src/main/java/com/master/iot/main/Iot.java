@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import com.master.core.exception.MasterException;
 import com.master.core.persistence.PersistenceException;
 import com.master.core.persistence.dao.DaoEntity;
@@ -21,9 +23,13 @@ public class Iot implements MasterRunnable {
 
 	private static Iot iot;
 
-	private final Map<String, ControladorMonitor> monitores = new HashMap<>();
+	private final IotServer server = new IotServer();
 
-	private final Map<String, ControladorTemporizador> temporizadores = new HashMap<>();
+	private final Map<String, ControladorMonitor> monitors = new HashMap<>();
+
+	private final Map<String, ControladorTemporizador> timers = new HashMap<>();
+
+	private static final Logger log = Logger.getLogger(Iot.class);
 
 	Iot() throws MasterException {
 		new MasterThread(this, new MasterContextRead()).run();
@@ -49,14 +55,24 @@ public class Iot implements MasterRunnable {
 		} catch (final PersistenceException e) {
 			throw new MasterException(e);
 		}
+		this.startServer();
+	}
+
+	private void startServer() {
+		new Thread() {
+			@Override
+			public void run() {
+				Iot.this.server.listen();
+			}
+		}.start();
 	}
 
 	private void add(ControladorTemporizador controladorTemporizador) {
-		this.temporizadores.put(controladorTemporizador.getNome(), controladorTemporizador);
+		this.timers.put(controladorTemporizador.getNome(), controladorTemporizador);
 	}
 
 	private void add(ControladorMonitor controladorMonitor) {
-		this.monitores.put(controladorMonitor.getNome(), controladorMonitor);
+		this.monitors.put(controladorMonitor.getNome(), controladorMonitor);
 	}
 
 	public static void main(String[] args) throws MasterException {
