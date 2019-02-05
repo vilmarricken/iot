@@ -18,6 +18,10 @@ public class ControladorMonitor extends Controlador implements Runnable {
 		this.monitor = monitor;
 	}
 
+	public String getNome() {
+		return this.monitor.getNome();
+	}
+	
 	@Override
 	public void execute() {
 		new Thread(this, this.monitor.getNome()).start();

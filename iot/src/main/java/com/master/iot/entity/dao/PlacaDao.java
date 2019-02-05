@@ -5,8 +5,8 @@ import com.master.iot.entity.Placa;
 
 public class PlacaDao extends DaoDefault<Placa> {
 
-	public PlacaDao(final Class<Placa> clazz) {
-		super(clazz);
+	public PlacaDao() {
+		super(Placa.class);
 	}
 
 }

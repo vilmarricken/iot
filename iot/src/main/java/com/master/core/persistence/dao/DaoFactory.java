@@ -16,7 +16,14 @@ public class DaoFactory {
 
 	private final Map<Class<?>, Dao> daos = new HashMap<>();
 
-	private <D extends Dao> D createDao(final Class<?> entity) throws MasterException {
+	private final Map<Class<? extends DaoEntity<? extends Entity>>, DaoEntity<? extends Entity>> daoEntities = new HashMap<>();
+
+	private final <D extends DaoEntity<? extends Entity>, E extends Entity> D createDao(Class<D> clazz, Class<E> entity) {
+		
+		return null;
+	}
+
+	private <D extends Dao> D createDao(final Class<D> entity) throws MasterException {
 		final String daoClassName = entity.getName() + "Dao";
 		try {
 			@SuppressWarnings("unchecked")
@@ -32,12 +39,23 @@ public class DaoFactory {
 		}
 	}
 
-	public final <D extends Dao, E extends Entity> D getDao(final Class<E> entity) throws MasterException {
+	public final <D extends DaoEntity<? extends Entity>, E extends Entity> D getDao(Class<D> clazz, final Class<E> entity) throws MasterException {
 		@SuppressWarnings("unchecked")
-		D d = (D) this.daos.get(entity);
+		D d = (D) daoEntities.get(clazz);
 		if (d == null) {
-			d = this.createDao(entity);
-			this.daos.put(entity, d);
+			d = this.createDao(clazz, entity);
+			this.daoEntities.put(clazz, d);
+		}
+		return d;
+	}
+
+
+	public final <D extends Dao> D getDao(Class<D> clazz) throws MasterException {
+		@SuppressWarnings("unchecked")
+		D d = (D) this.daos.get(clazz);
+		if (d == null) {
+			d = this.createDao(clazz);
+			this.daos.put(clazz, d);
 		}
 		return d;
 	}

@@ -1,5 +1,6 @@
 package com.master.core.persistence.dao;
 
+import java.util.List;
 import java.util.UUID;
 
 import com.master.core.persistence.Persistence;
@@ -8,11 +9,11 @@ import com.master.core.persistence.PersistenceManager;
 import com.master.core.persistence.entity.Entity;
 import com.master.core.persistence.filter.Filter;
 
-public class DaoDefault<E extends Entity> {
+public class DaoDefault<E extends Entity> implements DaoEntity<E> {
 
 	private final Class<E> clazz;
 
-	public DaoDefault(final Class<E> clazz) {
+	protected DaoDefault(final Class<E> clazz) {
 		this.clazz = clazz;
 	}
 
@@ -34,6 +35,11 @@ public class DaoDefault<E extends Entity> {
 	public E unique(final Filter filter) throws PersistenceException {
 		final Persistence persistence = PersistenceManager.getPersistence();
 		return persistence.get(this.clazz, filter);
+	}
+	
+	public List<E> all() throws PersistenceException {
+		final Persistence persistence = PersistenceManager.getPersistence();
+		return persistence.list(clazz);
 	}
 
 }

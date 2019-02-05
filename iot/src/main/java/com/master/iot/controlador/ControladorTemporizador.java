@@ -16,6 +16,10 @@ public class ControladorTemporizador extends Controlador implements Runnable {
 
 	private static final Logger log = Logger.getLogger(ControladorTemporizador.class);
 
+	public String getNome() {
+		return this.temporizador.getNome();
+	}
+
 	private static long calcularProximaExecucao(final int inicial, final long incremento) {
 		final GregorianCalendar gc = new GregorianCalendar();
 		gc.setTimeInMillis(System.currentTimeMillis());
