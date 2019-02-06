@@ -8,11 +8,11 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
-import com.master.iot.entity.Componente;
-import com.master.iot.entity.Historico;
+import com.master.iot.entity.Component;
+import com.master.iot.entity.History;
 import com.master.iot.entity.Monitor;
-import com.master.iot.entity.Placa;
-import com.master.iot.entity.Temporizador;
+import com.master.iot.entity.Board;
+import com.master.iot.entity.Timer;
 
 public class AppMain {
 
@@ -26,11 +26,11 @@ public class AppMain {
 		final File f = new File("hibernate.cfg.xml");
 		System.out.println(f.getAbsolutePath() + " - " + f.exists());
 		configObj.configure(f);
-		configObj.addAnnotatedClass(Componente.class);
-		configObj.addAnnotatedClass(Placa.class);
-		configObj.addAnnotatedClass(Historico.class);
+		configObj.addAnnotatedClass(Component.class);
+		configObj.addAnnotatedClass(Board.class);
+		configObj.addAnnotatedClass(History.class);
 		configObj.addAnnotatedClass(Monitor.class);
-		configObj.addAnnotatedClass(Temporizador.class);
+		configObj.addAnnotatedClass(Timer.class);
 
 		// Since Hibernate Version 4.x, ServiceRegistry Is Being Used
 		final ServiceRegistry serviceRegistryObj = new StandardServiceRegistryBuilder().applySettings(configObj.getProperties()).build();

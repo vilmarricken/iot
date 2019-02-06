@@ -10,11 +10,11 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
-import com.master.iot.entity.Componente;
-import com.master.iot.entity.Historico;
+import com.master.iot.entity.Component;
+import com.master.iot.entity.History;
 import com.master.iot.entity.Monitor;
-import com.master.iot.entity.Placa;
-import com.master.iot.entity.Temporizador;
+import com.master.iot.entity.Board;
+import com.master.iot.entity.Timer;
 
 public class PersistenceManager {
 
@@ -59,11 +59,11 @@ public class PersistenceManager {
 		final File f = new File("hibernate.cfg.xml");
 		System.out.println(f.getAbsolutePath() + " - " + f.exists());
 		config.configure(f);
-		config.addAnnotatedClass(Componente.class);
-		config.addAnnotatedClass(Placa.class);
-		config.addAnnotatedClass(Historico.class);
+		config.addAnnotatedClass(Component.class);
+		config.addAnnotatedClass(Board.class);
+		config.addAnnotatedClass(History.class);
 		config.addAnnotatedClass(Monitor.class);
-		config.addAnnotatedClass(Temporizador.class);
+		config.addAnnotatedClass(Timer.class);
 		final ServiceRegistry registry = new StandardServiceRegistryBuilder().applySettings(config.getProperties()).build();
 		this.factory = config.buildSessionFactory(registry);
 	}

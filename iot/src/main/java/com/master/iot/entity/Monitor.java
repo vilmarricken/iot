@@ -10,83 +10,83 @@ import javax.persistence.Table;
 @Table(name = "MONITOR")
 public class Monitor extends com.master.core.persistence.entity.Entity {
 
-	private Float alvo;
+	private Float target;
 
-	private Componente controlador;
+	private Component controller;
 
-	private String descricao;
+	private String description;
 
-	private Componente leitor;
+	private Component reader;
 
-	private Float limite;
+	private Float limit;
 
-	private String nome;
+	private String name;
 
-	private MonitorTipo tipo;
+	private MonitorType type;
 
-	@Column(name = "ALVO")
-	public Float getAlvo() {
-		return this.alvo;
+	@Column(name = "TARGET")
+	public Float getTarget() {
+		return this.target;
 	}
 
 	@ManyToOne
-	@JoinColumn(name = "IDCONTROLADOR")
-	public Componente getControlador() {
-		return this.controlador;
+	@JoinColumn(name = "IDCONTROLLER")
+	public Component getController() {
+		return this.controller;
 	}
 
-	@Column(name = "DESCRICAO")
-	public String getDescricao() {
-		return this.descricao;
+	@Column(name = "DESCRIPTION")
+	public String getDescription() {
+		return this.description;
 	}
 
 	@ManyToOne
-	@JoinColumn(name = "IDLEITOR")
-	public Componente getLeitor() {
-		return this.leitor;
+	@JoinColumn(name = "IDREADER")
+	public Component getReader() {
+		return this.reader;
 	}
 
-	@Column(name = "LIMITE")
-	public Float getLimite() {
-		return this.limite;
+	@Column(name = "LIMIT")
+	public Float getLimit() {
+		return this.limit;
 	}
 
-	@Column(name = "NOME")
-	public String getNome() {
-		return this.nome;
+	@Column(name = "NAME")
+	public String getName() {
+		return this.name;
 	}
 
-	@Column(name = "TIPO")
-	public MonitorTipo getTipo() {
-		return this.tipo;
+	@Column(name = "TYPE")
+	public MonitorType getType() {
+		return this.type;
 	}
 
-	public void setAlvo(final Float alvo) {
-		this.alvo = alvo;
+	public void setTarget(Float target) {
+		this.target = target;
 	}
 
-	public void setControlador(final Componente controlador) {
-		this.controlador = controlador;
+	public void setController(Component controller) {
+		this.controller = controller;
 	}
 
-	public void setDescricao(final String descricao) {
-		this.descricao = descricao;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
-	public void setLeitor(final Componente leitor) {
-		this.leitor = leitor;
+	public void setReader(Component reader) {
+		this.reader = reader;
 	}
 
-	public void setLimite(final Float limite) {
-		this.limite = limite;
+	public void setLimit(Float limit) {
+		this.limit = limit;
 	}
 
-	public void setNome(final String nome) {
-		this.nome = nome;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public void setTipo(final MonitorTipo tipo) {
-		this.tipo = tipo;
+	public void setType(MonitorType type) {
+		this.type = type;
 	}
 
 }

@@ -1,10 +1,10 @@
-package com.master.iot.controlador;
+package com.master.iot.controller;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.master.iot.entity.Monitor;
-import com.master.iot.entity.Temporizador;
+import com.master.iot.entity.Timer;
 
 public class Controladroes {
 
@@ -14,19 +14,19 @@ public class Controladroes {
 		return Controladroes.INSTANCE;
 	}
 
-	private final List<Controlador> controles = new ArrayList<>();
+	private final List<Controller> controles = new ArrayList<>();
 
 	private Controladroes() {
 	}
 
 	public void addMonitor(final Monitor monitor) {
-		final Controlador controlador = new ControladorMonitor(monitor);
+		final Controller controlador = new ControllerMonitor(monitor);
 		this.controles.add(controlador);
 		controlador.execute();
 	}
 
-	public void addTemporizador(final Temporizador temporizador) {
-		final Controlador controlador = new ControladorTemporizador(temporizador);
+	public void addTemporizador(final Timer temporizador) {
+		final Controller controlador = new ControladorTemporizador(temporizador);
 		this.controles.add(controlador);
 		controlador.execute();
 	}

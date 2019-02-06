@@ -12,12 +12,13 @@ import com.master.core.persistence.dao.DaoEntity;
 import com.master.core.resource.MasterContextRead;
 import com.master.core.resource.MasterRunnable;
 import com.master.core.resource.MasterThread;
-import com.master.iot.controlador.ControladorMonitor;
-import com.master.iot.controlador.ControladorTemporizador;
+import com.master.core.util.LogUtil;
+import com.master.iot.controller.ControllerMonitor;
+import com.master.iot.controller.ControladorTemporizador;
 import com.master.iot.entity.Monitor;
-import com.master.iot.entity.Temporizador;
+import com.master.iot.entity.Timer;
 import com.master.iot.entity.dao.MonitorDao;
-import com.master.iot.entity.dao.TemporizadorDao;
+import com.master.iot.entity.dao.TimerDao;
 
 public class Iot implements MasterRunnable {
 
@@ -25,7 +26,7 @@ public class Iot implements MasterRunnable {
 
 	private final IotServer server = new IotServer();
 
-	private final Map<String, ControladorMonitor> monitors = new HashMap<>();
+	private final Map<String, ControllerMonitor> monitors = new HashMap<>();
 
 	private final Map<String, ControladorTemporizador> timers = new HashMap<>();
 
@@ -42,13 +43,13 @@ public class Iot implements MasterRunnable {
 			final List<Monitor> monitors = daoMonitor.all();
 			if (monitors != null) {
 				for (final Monitor monitor : monitors) {
-					this.add(new ControladorMonitor(monitor));
+					this.add(new ControllerMonitor(monitor));
 				}
 			}
-			final DaoEntity<Temporizador> daoTemporizador = new TemporizadorDao();
-			final List<Temporizador> temporiadores = daoTemporizador.all();
+			final DaoEntity<Timer> daoTemporizador = new TimerDao();
+			final List<Timer> temporiadores = daoTemporizador.all();
 			if (temporiadores != null) {
-				for (final Temporizador temporizador : temporiadores) {
+				for (final Timer temporizador : temporiadores) {
 					this.add(new ControladorTemporizador(temporizador));
 				}
 			}
@@ -71,11 +72,12 @@ public class Iot implements MasterRunnable {
 		this.timers.put(controladorTemporizador.getNome(), controladorTemporizador);
 	}
 
-	private void add(ControladorMonitor controladorMonitor) {
-		this.monitors.put(controladorMonitor.getNome(), controladorMonitor);
+	private void add(ControllerMonitor controladorMonitor) {
+		this.monitors.put(controladorMonitor.getName(), controladorMonitor);
 	}
 
 	public static void main(String[] args) throws MasterException {
+		LogUtil.config();
 		Iot.getIot();
 	}
 

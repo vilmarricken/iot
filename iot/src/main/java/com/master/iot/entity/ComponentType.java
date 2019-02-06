@@ -1,6 +1,6 @@
 package com.master.iot.entity;
 
-public enum ComponenteTipo {
+public enum ComponentType {
 
 	RELAY
 

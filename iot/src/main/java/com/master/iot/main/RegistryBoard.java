@@ -8,8 +8,8 @@ import com.master.core.persistence.filter.Filter;
 import com.master.core.persistence.filter.FilterCompare;
 import com.master.core.persistence.filter.FilterOperation;
 import com.master.core.resource.MasterRunnable;
-import com.master.iot.entity.Placa;
-import com.master.iot.entity.dao.PlacaDao;
+import com.master.iot.entity.Board;
+import com.master.iot.entity.dao.BoardDao;
 
 public class RegistryBoard implements MasterRunnable {
 
@@ -25,10 +25,10 @@ public class RegistryBoard implements MasterRunnable {
 
 	@Override
 	public void run() throws MasterException {
-		final PlacaDao placaDao = new PlacaDao();
+		final BoardDao placaDao = new BoardDao();
 		final Filter filter = new FilterCompare("name", this.identifier, FilterOperation.EQ);
 		try {
-			final Placa placa = placaDao.unique(filter);
+			final Board placa = placaDao.unique(filter);
 			if (placa != null) {
 				final String ip = placa.getIp();
 				if (ip.equals(this.address)) {

@@ -5,22 +5,22 @@ import java.io.StringWriter;
 import java.sql.Connection;
 
 import com.master.core.persistence.PersistenceException;
-import com.master.iot.entity.Historico;
-import com.master.iot.entity.Situacao;
+import com.master.iot.entity.History;
+import com.master.iot.entity.Status;
 
-public class HistoricoInsertExceptionDao extends HistoricoInsertDao {
+public class HistoryInsertExceptionDao extends HistoryInsertDao {
 
 	private final Exception exception;
 
-	public HistoricoInsertExceptionDao(final Historico historico, final Exception exception) {
+	public HistoryInsertExceptionDao(final History historico, final Exception exception) {
 		super(historico);
 		this.exception = exception;
 	}
 
 	@Override
 	public void executeUpdate(final Connection connection) throws PersistenceException {
-		this.historico.setErro(this.printErro(this.exception));
-		this.historico.setSituacao(Situacao.ERRO);
+		this.history.setError(this.printErro(this.exception));
+		this.history.setStatus(Status.ERROR);
 		super.executeUpdate(connection);
 	}
 

@@ -74,11 +74,11 @@ public class IOTConnection {
 		this.command(IOTConnection.COMMAND_EXECUTE + ";" + port + ";" + IOTConnection.DEVICE_TURN_OFF, address);
 	}
 
-	public void ligar(final String address, final String port) throws IOTConnectionException {
+	public void on(final String address, final String port) throws IOTConnectionException {
 		this.command(IOTConnection.COMMAND_EXECUTE + ";" + port + ";" + IOTConnection.DEVICE_TURN_ON, address);
 	}
 
-	public float leitura(String address, String port) throws IOTConnectionException {
+	public float read(String address, String port) throws IOTConnectionException {
 		return Float.valueOf(this.command(IOTConnection.COMMAND_EXECUTE + ";" + port, address));
 	}
 
