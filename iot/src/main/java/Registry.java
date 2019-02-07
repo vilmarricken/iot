@@ -6,11 +6,10 @@ import com.master.core.resource.MasterContextTransaction;
 import com.master.core.resource.MasterRunnable;
 import com.master.core.resource.MasterThread;
 import com.master.core.util.LogUtil;
+import com.master.iot.entity.Board;
 import com.master.iot.entity.Component;
 import com.master.iot.entity.ComponentType;
-import com.master.iot.entity.Board;
 import com.master.iot.entity.Timer;
-import com.master.iot.entity.TimerType;
 
 public class Registry implements MasterRunnable {
 
@@ -20,12 +19,12 @@ public class Registry implements MasterRunnable {
 		new MasterThread(new Registry(), context).run();
 	}
 
-	private Component newComponenteRegrador(final Board placa) {
+	private Component newComponentRegrador(final Board board) {
 		final Component c = new Component();
 		c.setName("Válvula selenóide");
-		c.setPlaca(placa);
-		c.setPorta(4);
-		c.setTipo(ComponentType.RELAY);
+		c.setBoard(board);
+		c.setDoor(4);
+		c.setType(ComponentType.RELAY);
 		return c;
 	}
 
@@ -49,13 +48,11 @@ public class Registry implements MasterRunnable {
 
 	private Timer newTemporizadorRegrador(final Board placa) {
 		final Timer t = new Timer();
-		t.setComponent(this.newComponenteRegrador(placa));
+		t.setComponent(this.newComponentRegrador(placa));
 		t.setDescription("Regrador de plantas sobre o lavabo");
 		t.setOff(11 * 60 + 55);
-		t.setOn(0);
-		t.setLigado(5);
+		t.setOn(5);
 		t.setName("Regrador lavado");
-		t.setTipo(TimerType.START_ON);
 		return t;
 	}
 

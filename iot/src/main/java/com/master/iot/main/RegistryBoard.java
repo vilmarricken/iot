@@ -28,18 +28,22 @@ public class RegistryBoard implements MasterRunnable {
 		final BoardDao placaDao = new BoardDao();
 		final Filter filter = new FilterCompare("name", this.identifier, FilterOperation.EQ);
 		try {
-			final Board placa = placaDao.unique(filter);
-			if (placa != null) {
-				final String ip = placa.getIp();
+			Board board = placaDao.unique(filter);
+			if (board != null) {
+				final String ip = board.getIp();
 				if (ip.equals(this.address)) {
 					return;
 				}
-				placa.setIp(this.address);
+				board.setIp(this.address);
+			} else {
+				board = new Board();
+				board.setIp(this.address);
+				board.setName(this.identifier);
 			}
 			if (RegistryBoard.log.isDebugEnabled()) {
-				RegistryBoard.log.debug("Saving placa: " + placa);
+				RegistryBoard.log.debug("Saving placa: " + board);
 			}
-			placaDao.save(placa);
+			placaDao.save(board);
 		} catch (final PersistenceException e) {
 			RegistryBoard.log.error(e.getMessage(), e);
 		}

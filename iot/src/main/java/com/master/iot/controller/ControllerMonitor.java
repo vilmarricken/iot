@@ -37,7 +37,7 @@ public class ControllerMonitor extends Controller implements Runnable {
 		try {
 			this.setRunning(true);
 			final float target = this.monitor.getTarget();
-			final float limit = this.monitor.getLimit();
+			final float limit = this.monitor.getDelay();
 			final MonitorType type = this.monitor.getType();
 			final Component component = this.monitor.getController();
 			while (this.isRunning()) {
