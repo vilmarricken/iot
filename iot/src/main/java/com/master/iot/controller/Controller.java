@@ -32,16 +32,16 @@ public abstract class Controller {
 		this.id = id;
 	}
 
-	protected void desligar(final Component component, final History history) throws MasterException {
+	protected void turnOff(final Component component, final History history) throws MasterException {
 		final Board board = component.getBoard();
 		try {
 			if (Controller.log.isTraceEnabled()) {
 				Controller.log.trace("Turning off " + component);
 			}
-			this.connection.desligar(board.getIp(), component.getBoard().toString());
+			this.connection.turnOff(board.getIp(), component.getPort().toString());
 			this.saveHistory(new HistoryInsertDao(history));
 		} catch (final Exception e) {
-			final MasterException ex = new MasterException("Error on connect to board " + board.getName() + " - " + board.getIp() + " in door " + component.getDoor(), e);
+			final MasterException ex = new MasterException("Error on connect to board " + board.getName() + " - " + board.getIp() + " in door " + component.getPort(), e);
 			this.saveHistory(new HistoryInsertExceptionDao(history, e));
 			throw ex;
 		}
@@ -71,18 +71,18 @@ public abstract class Controller {
 		history.setRun(System.currentTimeMillis());
 		history.setStatus(Status.RUNNING);
 		try {
-			final float read = this.connection.read(board.getIp(), component.getDoor().toString());
+			final float read = this.connection.read(board.getIp(), component.getPort().toString());
 			history.setRead(read);
 			this.saveHistory(new HistoryInsertDao(history));
 			return read;
 		} catch (final Exception e) {
-			final MasterException ex = new MasterException("Erro ao conectar na placa " + board.getName() + " - " + board.getIp() + " na porta " + component.getDoor(), e);
+			final MasterException ex = new MasterException("Erro ao conectar na placa " + board.getName() + " - " + board.getIp() + " na porta " + component.getPort(), e);
 			this.saveHistory(new HistoryInsertExceptionDao(history, e));
 			throw ex;
 		}
 	}
 
-	protected void on(final Component component, final History history) throws MasterException {
+	protected void turnOn(final Component component, final History history) throws MasterException {
 		final Board board = component.getBoard();
 		if (Controller.log.isTraceEnabled()) {
 			Controller.log.trace("Turning on " + component);
@@ -91,10 +91,10 @@ public abstract class Controller {
 		history.setRun(System.currentTimeMillis());
 		history.setStatus(Status.ON);
 		try {
-			this.connection.on(board.getIp(), component.getDoor().toString());
+			this.connection.turnOn(board.getIp(), component.getPort().toString());
 			this.saveHistory(new HistoryInsertDao(history));
 		} catch (final Exception e) {
-			final MasterException ex = new MasterException("Erro ao conectar na placa " + board.getName() + " - " + board.getIp() + " na porta " + component.getDoor(), e);
+			final MasterException ex = new MasterException("Erro ao conectar na placa " + board.getName() + " - " + board.getIp() + " na porta " + component.getPort(), e);
 			this.saveHistory(new HistoryInsertExceptionDao(history, e));
 			throw ex;
 		}
@@ -119,6 +119,36 @@ public abstract class Controller {
 			Thread.sleep(tempo);
 		} catch (final InterruptedException e) {
 			Controller.log.error(e.getMessage(), e);
+		}
+	}
+
+	void regisryComponent(Component component, History history) throws MasterException {
+		final Board board = component.getBoard();
+		history.setComponent(component);
+		history.setRun(System.currentTimeMillis());
+		history.setStatus(Status.REGISTRY);
+		try {
+			this.connection.registry(board.getIp(), component.getPort().toString(), component.getType().getType());
+			this.saveHistory(new HistoryInsertDao(history));
+		} catch (final Exception e) {
+			final MasterException ex = new MasterException("Erro ao conectar na placa " + board.getName() + " - " + board.getIp() + " na porta " + component.getPort(), e);
+			this.saveHistory(new HistoryInsertExceptionDao(history, e));
+			throw ex;
+		}
+	}
+
+	void unregisryComponent(Component component, History history) throws MasterException {
+		final Board board = component.getBoard();
+		history.setComponent(component);
+		history.setRun(System.currentTimeMillis());
+		history.setStatus(Status.UNREGISTRY);
+		try {
+			this.connection.unregistry(board.getIp(), component.getPort().toString(), component.getType().getType());
+			this.saveHistory(new HistoryInsertDao(history));
+		} catch (final Exception e) {
+			final MasterException ex = new MasterException("Erro ao conectar na placa " + board.getName() + " - " + board.getIp() + " na porta " + component.getPort(), e);
+			this.saveHistory(new HistoryInsertExceptionDao(history, e));
+			throw ex;
 		}
 	}
 

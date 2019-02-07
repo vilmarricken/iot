@@ -31,8 +31,9 @@ public class History extends com.master.core.persistence.entity.Entity {
 		this.component = component;
 	}
 
-	public History(final Monitor monitor) {
+	public History(final Monitor monitor, Component component) {
 		this.monitor = monitor;
+		this.component = component;
 	}
 
 	public History(final Timer timer) {

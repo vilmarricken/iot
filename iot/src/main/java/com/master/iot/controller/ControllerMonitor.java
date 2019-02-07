@@ -27,26 +27,23 @@ public class ControllerMonitor extends Controller implements Runnable {
 		new Thread(this, this.monitor.getName()).start();
 	}
 
-	private float leitura(final Component leitor) {
-
-		return 0;
-	}
-
 	@Override
 	public void run() {
 		try {
+			this.regisryComponent(this.monitor.getController(), new History(this.monitor, this.monitor.getController()));
+			this.regisryComponent(this.monitor.getReader(), new History(this.monitor, this.monitor.getReader()));
 			this.setRunning(true);
 			final float target = this.monitor.getTarget();
-			final float limit = this.monitor.getLimit();
+			final float limit = this.monitor.getDelay();
 			final MonitorType type = this.monitor.getType();
 			final Component component = this.monitor.getController();
 			while (this.isRunning()) {
-				final float read = this.leitura(this.monitor.getReader());
-				if (type.on(target, limit, read)) {
-					this.on(component, new History(component));
+				final float read = this.read(this.monitor.getReader(), new History(this.monitor, this.monitor.getReader()));
+				if (type.isTurnOn(target, limit, read)) {
+					this.turnOn(component, new History(component));
 				}
-				if (type.off(target, limit, read)) {
-					this.desligar(component, new History(component));
+				if (type.isTurnOff(target, limit, read)) {
+					this.turnOff(component, new History(component));
 				}
 				this.sleep(30000);
 			}

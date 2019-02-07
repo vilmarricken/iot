@@ -18,7 +18,7 @@ public class Monitor extends com.master.core.persistence.entity.Entity {
 
 	private Component reader;
 
-	private Float limit;
+	private Float delay;
 
 	private String name;
 
@@ -46,9 +46,9 @@ public class Monitor extends com.master.core.persistence.entity.Entity {
 		return this.reader;
 	}
 
-	@Column(name = "LIMIT")
-	public Float getLimit() {
-		return this.limit;
+	@Column(name = "DELAY")
+	public Float getDelay() {
+		return this.delay;
 	}
 
 	@Column(name = "NAME")
@@ -77,8 +77,8 @@ public class Monitor extends com.master.core.persistence.entity.Entity {
 		this.reader = reader;
 	}
 
-	public void setLimit(Float limit) {
-		this.limit = limit;
+	public void setDelay(Float delay) {
+		this.delay = delay;
 	}
 
 	public void setName(String name) {

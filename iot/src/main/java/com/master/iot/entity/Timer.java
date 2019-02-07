@@ -33,12 +33,12 @@ public class Timer extends com.master.core.persistence.entity.Entity {
 		return this.description;
 	}
 
-	@Column(name = "OFF")
+	@Column(name = "OFFTIMER")
 	public Integer getOff() {
 		return this.off;
 	}
 
-	@Column(name = "ON")
+	@Column(name = "ONTIMER")
 	public Integer getOn() {
 		return this.on;
 	}

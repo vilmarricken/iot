@@ -41,7 +41,7 @@ public class Board extends com.master.core.persistence.entity.Entity {
 		return this.name;
 	}
 
-	@Column(name = "VERSAO")
+	@Column(name = "VERSION")
 	public Integer getVersion() {
 		return this.version;
 	}

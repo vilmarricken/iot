@@ -51,19 +51,19 @@ public class ControladorTemporizador extends Controller implements Runnable {
 		new Thread(this, this.timer.getName()).start();
 	}
 
-	private void ligar(final long tempoLigado) throws MasterException {
+	private void turnOn(final long tempoLigado) throws MasterException {
 		final Component componente = this.timer.getComponent();
 		try {
-			this.on(componente, new History(this.timer));
+			this.turnOn(componente, new History(this.timer));
 			this.sleep(tempoLigado);
-			this.desligar(componente, new History(ControladorTemporizador.this.timer));
+			this.turnOff(componente, new History(ControladorTemporizador.this.timer));
 		} catch (final MasterException e) {
 			this.saveHistory(new HistoryInsertExceptionDao(new History(this.timer), e));
-			this.desligar(componente, new History(ControladorTemporizador.this.timer));
+			this.turnOff(componente, new History(ControladorTemporizador.this.timer));
 			throw e;
 		} catch (final Exception e) {
 			this.saveHistory(new HistoryInsertExceptionDao(new History(this.timer), e));
-			this.desligar(componente, new History(ControladorTemporizador.this.timer));
+			this.turnOff(componente, new History(ControladorTemporizador.this.timer));
 			throw new MasterException(e);
 		}
 	}
@@ -71,14 +71,15 @@ public class ControladorTemporizador extends Controller implements Runnable {
 	@Override
 	public void run() {
 		try {
+			this.regisryComponent(this.timer.getComponent(), new History(this.timer));
 			this.setRunning(true);
 			final int timerOn = this.getValue(this.timer.getOn(), 60, "On");
 			final int timerOff = this.getValue(this.timer.getOff(), 1800, "Off");
-			Integer start = this.timer.getStart();
+			final Integer start = this.timer.getStart();
 			if (ControladorTemporizador.log.isTraceEnabled()) {
 				ControladorTemporizador.log.trace("Executando temporizador: " + this.timer);
 			}
-			this.ligar(timerOn);
+			this.turnOn(timerOn);
 			final long incremento = (timerOn + timerOff) * 60_000;
 			long proximaExecucao = ControladorTemporizador.calcularProximaExecucao(start, incremento);
 			synchronized (this) {
@@ -87,7 +88,7 @@ public class ControladorTemporizador extends Controller implements Runnable {
 					if (this.isRunning() || proximaExecucao > System.currentTimeMillis()) {
 						continue;
 					}
-					this.ligar(timerOn);
+					this.turnOn(timerOn);
 					proximaExecucao += incremento;
 				}
 			}

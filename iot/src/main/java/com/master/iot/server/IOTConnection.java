@@ -70,16 +70,28 @@ public class IOTConnection {
 		}
 	}
 
-	public void desligar(final String address, final String port) throws IOTConnectionException {
+	public void unregistry(final String address, final String port, String device) throws IOTConnectionException {
+		this.command(IOTConnection.COMMAND_UNREGISTRY + ";" + port + ";" + device, address);
+	}
+
+	public void registry(final String address, final String port, String device) throws IOTConnectionException {
+		this.command(IOTConnection.COMMAND_REGISTRY + ";" + port + ";" + device, address);
+	}
+
+	public void turnOff(final String address, final String port) throws IOTConnectionException {
 		this.command(IOTConnection.COMMAND_EXECUTE + ";" + port + ";" + IOTConnection.DEVICE_TURN_OFF, address);
 	}
 
-	public void on(final String address, final String port) throws IOTConnectionException {
+	public void turnOn(final String address, final String port) throws IOTConnectionException {
 		this.command(IOTConnection.COMMAND_EXECUTE + ";" + port + ";" + IOTConnection.DEVICE_TURN_ON, address);
 	}
 
 	public float read(String address, String port) throws IOTConnectionException {
-		return Float.valueOf(this.command(IOTConnection.COMMAND_EXECUTE + ";" + port, address));
+		final String value = this.command(IOTConnection.COMMAND_EXECUTE + ";" + port, address);
+		if (IOTConnection.log.isDebugEnabled()) {
+			IOTConnection.log.debug("Returning value: " + value);
+		}
+		return Float.valueOf(value);
 	}
 
 }

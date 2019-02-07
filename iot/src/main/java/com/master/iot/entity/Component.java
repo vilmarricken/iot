@@ -14,7 +14,7 @@ public class Component extends com.master.core.persistence.entity.Entity {
 
 	private Board board;
 
-	private Integer door;
+	private Integer port;
 
 	private ComponentType type;
 
@@ -29,9 +29,9 @@ public class Component extends com.master.core.persistence.entity.Entity {
 		return this.board;
 	}
 
-	@Column(name = "DOOR")
-	public Integer getDoor() {
-		return this.door;
+	@Column(name = "PORT")
+	public Integer getPort() {
+		return this.port;
 	}
 
 	@Column(name = "TYPE")
@@ -47,8 +47,8 @@ public class Component extends com.master.core.persistence.entity.Entity {
 		this.board = board;
 	}
 
-	public void setDoor(Integer door) {
-		this.door = door;
+	public void setPort(Integer door) {
+		this.port = door;
 	}
 
 	public void setType(ComponentType type) {
@@ -57,7 +57,7 @@ public class Component extends com.master.core.persistence.entity.Entity {
 
 	@Override
 	public String toString() {
-		return "Component: {name:" + this.name + ", type: " + this.type + ", board: " + this.board + ", door: " + this.door + "}";
+		return "Component: {name:" + this.name + ", type: " + this.type + ", board: " + this.board + ", door: " + this.port + "}";
 	}
 
 }
