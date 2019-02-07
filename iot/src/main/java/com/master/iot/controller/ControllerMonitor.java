@@ -40,10 +40,10 @@ public class ControllerMonitor extends Controller implements Runnable {
 			while (this.isRunning()) {
 				final float read = this.read(this.monitor.getReader(), new History(this.monitor, this.monitor.getReader()));
 				if (type.isTurnOn(target, limit, read)) {
-					this.turnOn(component, new History(component));
+					this.turnOn(component, new History(this.monitor, component));
 				}
 				if (type.isTurnOff(target, limit, read)) {
-					this.turnOff(component, new History(component));
+					this.turnOff(component, new History(this.monitor, component));
 				}
 				this.sleep(30000);
 			}
