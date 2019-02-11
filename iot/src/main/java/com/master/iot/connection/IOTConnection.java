@@ -59,7 +59,7 @@ public class IOTConnection {
 				IOTConnection.log.error("Response error: " + response);
 				if (response.length() > 6) {
 					response = response.substring(6);
-					throw new IOTConnectionException(response.split(":")[0]);
+					throw new IOTConnectionException(response.split(":"));
 				}
 			}
 			throw new IOTConnectionException(response);
