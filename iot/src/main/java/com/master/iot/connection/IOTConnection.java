@@ -1,4 +1,4 @@
-package com.master.iot.server;
+package com.master.iot.connection;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -98,7 +98,7 @@ public class IOTConnection {
 		if (IOTConnection.log.isDebugEnabled()) {
 			IOTConnection.log.debug("Returning value: " + value);
 		}
-		return Float.valueOf(value);
+		return Float.valueOf(value.substring(3));
 	}
 
 }

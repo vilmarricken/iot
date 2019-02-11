@@ -17,10 +17,13 @@ String DeviceThermometer::execute(String command) {
     float celsius, fahrenheit;
     Serial.println("Thermomether::execute 1");
     if ( !sensor->search(addr)) {
-      sensor->reset_search();
-      delay(250);
-      Serial.println("ERROR:DeviceThermometer: No more addresses.");
-      return IOT_ERROR_TERMOMETHER_NO_MORE_ADDRESS;
+        sensor->reset_search();
+		delay(250);
+        if ( !sensor->search(addr)) {
+            sensor->reset_search();
+            Serial.println("ERROR:DeviceThermometer: No more addresses.");
+            return IOT_ERROR_TERMOMETHER_NO_MORE_ADDRESS;
+		}
     }
     Serial.println("Thermomether::execute 2");
     if (OneWire::crc8(addr, 7) != addr[7]) {

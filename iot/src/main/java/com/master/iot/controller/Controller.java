@@ -10,13 +10,13 @@ import com.master.core.persistence.Update;
 import com.master.core.resource.MasterContextTransaction;
 import com.master.core.resource.MasterThread;
 import com.master.iot.action.ActionUpdate;
+import com.master.iot.connection.IOTConnection;
 import com.master.iot.entity.Board;
 import com.master.iot.entity.Component;
 import com.master.iot.entity.History;
 import com.master.iot.entity.Status;
 import com.master.iot.entity.dao.HistoryInsertDao;
 import com.master.iot.entity.dao.HistoryInsertExceptionDao;
-import com.master.iot.server.IOTConnection;
 
 public abstract class Controller {
 

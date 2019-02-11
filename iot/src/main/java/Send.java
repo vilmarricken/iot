@@ -4,7 +4,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 
 import com.master.core.util.LogUtil;
-import com.master.iot.server.IOTConnection;
+import com.master.iot.connection.IOTConnection;
 
 public class Send {
 
