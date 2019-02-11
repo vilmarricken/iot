@@ -1,4 +1,4 @@
-package com.master.iot.main;
+package com.master.iot.server;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,7 +17,7 @@ public class IotServer {
 	public IotServer() {
 	}
 
-	protected void listen() {
+	public void listen() {
 		ServerSocket sc = null;
 		try {
 			sc = new ServerSocket(800);

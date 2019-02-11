@@ -1,0 +1,9 @@
+const String IOT_ERROR_INVALID_INDEX_DEVICE                 = "ERROR:1";
+const String IOT_ERROR_INVALID_COMMAND_LENGTH               = "ERROR:2";
+const String IOT_ERROR_INVALID_DEVICE_TYPE                  = "ERROR:3";
+const String IOT_ERROR_INVALID_COMMAND                      = "ERROR:4";
+const String IOT_ERROR_INVALID_READ_COMMAND                 = "ERROR:5";
+const String IOT_ERROR_INVALID_READ_COMMAND_LENGTH          = "ERROR:6";
+const String IOT_ERROR_TERMOMETHER_NO_MORE_ADDRESS          = "ERROR:7";
+const String IOT_ERROR_TERMOMETHER_INVALID_CRC              = "ERROR:8";
+const String IOT_ERROR_TERMOMETHER_INVALID_FAMILY_DEVICE    = "ERROR:9";

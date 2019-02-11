@@ -4,6 +4,7 @@
 #include "iotRelay.h"
 #include "iotThermometer.h"
 #include "stringUtil.h"
+#include "error.h"
 
 Devices::Devices(){
     ports[0] = D0;
@@ -41,12 +42,15 @@ String Devices::execute(String command){
     Serial.print(index);
     Serial.print(" - ");
     Serial.println(count);
+    if( devices[index] == NULL ){
+        return IOT_ERROR_INVALID_INDEX_DEVICE;
+    }
     if(count == 1) {
         return devices[index]->execute("");
     } else {
         return devices[index]->execute(values[1]);
     }
-    return  "ERROR: 0";
+    return IOT_ERROR_INVALID_COMMAND_LENGTH;
 }
 
 String Devices::registry(String command){
@@ -63,12 +67,12 @@ String Devices::registry(String command){
             }
             devices[index] = createDevice(values[1], index);
             if(devices[index] == NULL) {
-                return "Devices: Invalid device type: " + values[1];
+                return IOT_ERROR_INVALID_DEVICE_TYPE + ":" + values[1];
             }
             return "OK";
         }
     }
-    return "Devices: Invalid command: " + command;
+    return IOT_ERROR_INVALID_COMMAND + ":" + command;
 }
 
 String Devices::unregistry(String command){
@@ -99,4 +103,3 @@ Device* Devices::createDevice(String type, int index){
     }
     return NULL;
 }
-

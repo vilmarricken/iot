@@ -1,4 +1,4 @@
-package com.master.iot.main;
+package com.master.iot.server;
 
 import org.apache.log4j.Logger;
 
@@ -30,11 +30,14 @@ public class RegistryBoard implements MasterRunnable {
 		try {
 			Board board = placaDao.unique(filter);
 			if (board != null) {
+				final RegistryComponent rc = new RegistryComponent();
 				final String ip = board.getIp();
-				if (ip.equals(this.address)) {
-					return;
+				if (!ip.equals(this.address)) {
+					board.setIp(this.address);
 				}
-				board.setIp(this.address);
+				if (board.getComponents() != null) {
+					rc.registryComponents(board.getComponents());
+				}
 			} else {
 				board = new Board();
 				board.setIp(this.address);

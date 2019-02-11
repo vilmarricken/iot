@@ -3,7 +3,7 @@
 #include "iotServer.h"
 #include "iotDevices.h"
 #include "stringUtil.h"
-
+#include "error.h"
 
 IotServer::IotServer(char *hostServer){
     host = hostServer;
@@ -51,11 +51,11 @@ void IotServer::serverRun() {
                     write(devices->execute(commands[1]), &client);
                 } else {
                     Serial.println("Server: Invalid command " + command);
-                    write("Server: Invalid command: " + command, &client);
+                    write(IOT_ERROR_INVALID_READ_COMMAND_LENGTH + ":" + command, &client);
                 }
             } else {
                 Serial.println("Server: Invalid command " + command);
-                write("Server: Invalid message: " + command, &client);
+                write(IOT_ERROR_INVALID_READ_COMMAND + ":" + command, &client);
             }
         }
         //client.stop();

@@ -14,11 +14,12 @@ import com.master.core.resource.MasterRunnable;
 import com.master.core.resource.MasterThread;
 import com.master.core.util.LogUtil;
 import com.master.iot.controller.ControllerMonitor;
-import com.master.iot.controller.ControladorTemporizador;
+import com.master.iot.controller.ControllerTimer;
 import com.master.iot.entity.Monitor;
 import com.master.iot.entity.Timer;
 import com.master.iot.entity.dao.MonitorDao;
 import com.master.iot.entity.dao.TimerDao;
+import com.master.iot.server.IotServer;
 
 public class Iot implements MasterRunnable {
 
@@ -28,7 +29,7 @@ public class Iot implements MasterRunnable {
 
 	private final Map<String, ControllerMonitor> monitors = new HashMap<>();
 
-	private final Map<String, ControladorTemporizador> timers = new HashMap<>();
+	private final Map<String, ControllerTimer> timers = new HashMap<>();
 
 	private static final Logger log = Logger.getLogger(Iot.class);
 
@@ -40,17 +41,23 @@ public class Iot implements MasterRunnable {
 	public void run() throws MasterException {
 		try {
 			final DaoEntity<Monitor> daoMonitor = new MonitorDao();
+			if (log.isDebugEnabled()) {
+				log.debug("Initializing monitors");
+			}
 			final List<Monitor> monitors = daoMonitor.all();
 			if (monitors != null) {
 				for (final Monitor monitor : monitors) {
 					this.add(new ControllerMonitor(monitor));
 				}
 			}
-			final DaoEntity<Timer> daoTemporizador = new TimerDao();
-			final List<Timer> temporiadores = daoTemporizador.all();
-			if (temporiadores != null) {
-				for (final Timer temporizador : temporiadores) {
-					this.add(new ControladorTemporizador(temporizador));
+			if (log.isDebugEnabled()) {
+				log.debug("Initializing timers");
+			}
+			final DaoEntity<Timer> daoTimers = new TimerDao();
+			final List<Timer> timers = daoTimers.all();
+			if (timers != null) {
+				for (final Timer timer : timers) {
+					this.add(new ControllerTimer(timer));
 				}
 			}
 		} catch (final PersistenceException e) {
@@ -68,7 +75,7 @@ public class Iot implements MasterRunnable {
 		}.start();
 	}
 
-	private void add(ControladorTemporizador controladorTemporizador) {
+	private void add(ControllerTimer controladorTemporizador) {
 		this.timers.put(controladorTemporizador.getNome(), controladorTemporizador);
 	}
 

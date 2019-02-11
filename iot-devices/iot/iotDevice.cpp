@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include "iotDevice.h"
+#include "error.h"
 
 Device::Device(int _index, int _port, int mode) {
     Serial.print("Device::Device: ");
@@ -21,6 +22,5 @@ String Device::execute(String command) {
     Serial.println("Device::execute " + command);
     Serial.print("Device::execute On port: ");
     Serial.println(port);
-    return "";
+    return "OK";
 }
-

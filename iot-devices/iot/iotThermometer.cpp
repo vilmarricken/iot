@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include "iotThermometer.h"
+#include "error.h"
 
 DeviceThermometer::DeviceThermometer(int _index, int _port) : Device(_index, _port, INPUT) {
     sensor = new OneWire(_port);
@@ -19,12 +20,12 @@ String DeviceThermometer::execute(String command) {
       sensor->reset_search();
       delay(250);
       Serial.println("ERROR:DeviceThermometer: No more addresses.");
-      return "ERROR:DeviceThermometer: No more addresses.";
+      return IOT_ERROR_TERMOMETHER_NO_MORE_ADDRESS;
     }
     Serial.println("Thermomether::execute 2");
     if (OneWire::crc8(addr, 7) != addr[7]) {
         Serial.println("ERROR:DeviceThermometer: CRC is not valid!");
-        return "ERROR:DeviceThermometer: CRC is not valid!";
+        return IOT_ERROR_TERMOMETHER_INVALID_CRC;
     }
     Serial.println("Thermomether::execute 3");
     switch (addr[0]) {
@@ -39,7 +40,7 @@ String DeviceThermometer::execute(String command) {
             break;
         default:
             Serial.println("ERROR:DeviceThermometer: Device is not a DS18x20 family device!");
-            return "ERROR:DeviceThermometer: Device is not a DS18x20 family device!";
+            return IOT_ERROR_TERMOMETHER_INVALID_FAMILY_DEVICE;
     }
     Serial.println("Thermomether::execute 4");
     sensor->reset();

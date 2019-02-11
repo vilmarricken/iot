@@ -1,16 +1,17 @@
 #include "iotWiFi.h"
 #include "iotServer.h"
 
-char* ssid = "Mazinho-GVT";
-char* pass = "12345678";
+char* ssid = "Mazinho-Home";
+char* pass = "mazinho123";
 
-char* serverHost = "192.168.25.20";
-IotServer* server = NULL;;
+char* serverHost = "192.168.25.15";
+IotServer* server = NULL;
 
 char* id = "Regrador";
 
 void setup(){
     Serial.begin(115200);
+    delay(100);
     Serial.println("");
     Serial.println("");
     Serial.println("Set up");

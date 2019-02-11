@@ -7,6 +7,10 @@ DeviceRelay::DeviceRelay(int _index, int _port) :Device(_index, _port, OUTPUT) {
 
 String DeviceRelay::execute(String command) {
     Serial.println("DeviceRelay::execute command: " + command);
-    digitalWrite(port, HIGH);
+    if( command.equals("1") ) {
+        digitalWrite(port, HIGH);
+    } else {
+        digitalWrite(port, LOW);
+    }
     return Device::execute(command);
 }

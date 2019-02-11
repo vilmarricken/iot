@@ -31,6 +31,9 @@ public class IOTConnection {
 		try {
 			s = new Socket(address, IOTConnection.PORT);
 			out = s.getOutputStream();
+			if (IOTConnection.log.isDebugEnabled()) {
+				IOTConnection.log.debug("Command:" + command);
+			}
 			System.out.println((byte) command.length());
 			out.write((byte) command.length());
 			out.write(command.getBytes());
@@ -42,7 +45,11 @@ public class IOTConnection {
 				final char c = (char) in.read();
 				bout.write(c);
 			}
-			return (new String(bout.toByteArray()));
+			final String response = new String(bout.toByteArray());
+			if (IOTConnection.log.isDebugEnabled()) {
+				IOTConnection.log.debug("Response: " + response);
+			}
+			return response;
 		} catch (final Exception e) {
 			throw new IOTConnectionException(e.getMessage(), e);
 		} finally {

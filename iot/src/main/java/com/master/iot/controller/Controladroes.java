@@ -26,7 +26,7 @@ public class Controladroes {
 	}
 
 	public void addTemporizador(final Timer temporizador) {
-		final Controller controlador = new ControladorTemporizador(temporizador);
+		final Controller controlador = new ControllerTimer(temporizador);
 		this.controles.add(controlador);
 		controlador.execute();
 	}

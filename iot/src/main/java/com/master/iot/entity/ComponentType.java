@@ -2,7 +2,7 @@ package com.master.iot.entity;
 
 public enum ComponentType {
 
-	RELAY("1"), THERMOMETER("3");
+	RELAY("1"), RELAY_SOLID("2"), THERMOMETER("3");
 
 	private String type;
 

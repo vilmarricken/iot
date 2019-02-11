@@ -3,6 +3,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
+import com.master.core.util.LogUtil;
+import com.master.iot.server.IOTConnection;
+
 public class Send {
 
 	private static final String COMMAND_EXECUTE = "3";
@@ -40,9 +43,16 @@ public class Send {
 	public static void main(final String[] args) throws Exception {
 		// Registra termometro na porta 2;
 		// Thread.sleep(30000);
-		//Send.command(Send.COMMAND_REGISTRY + ";4;" + Send.DEVICE_THERMOMETER);
-		Send.command(Send.COMMAND_EXECUTE + ";4");
+		// Send.command(Send.COMMAND_REGISTRY + ";4;" + Send.DEVICE_THERMOMETER);
+		// Send.command(Send.COMMAND_EXECUTE + ";4");
 		// Send.command(Send.COMMAND_REGISTRY + ";3;" + Send.DEVICE_RELAY);
 		// Send.command(Send.COMMAND_EXECUTE + ";3;1");
+		LogUtil.config();
+		final IOTConnection conn = new IOTConnection();
+		// Thread.sleep(2000);
+		// conn.turnOn("192.168.25.9", "2");
+		// Thread.sleep(2000);
+		// conn.turnOff("192.168.25.9", "2");
+		System.out.println(conn.read("192.168.25.9", "4"));
 	}
 }

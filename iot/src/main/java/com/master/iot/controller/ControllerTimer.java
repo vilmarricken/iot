@@ -11,9 +11,9 @@ import com.master.iot.entity.History;
 import com.master.iot.entity.Timer;
 import com.master.iot.entity.dao.HistoryInsertExceptionDao;
 
-public class ControladorTemporizador extends Controller implements Runnable {
+public class ControllerTimer extends Controller implements Runnable {
 
-	private static final Logger log = Logger.getLogger(ControladorTemporizador.class);
+	private static final Logger log = Logger.getLogger(ControllerTimer.class);
 
 	public String getNome() {
 		return this.timer.getName();
@@ -41,7 +41,7 @@ public class ControladorTemporizador extends Controller implements Runnable {
 
 	private final Timer timer;
 
-	public ControladorTemporizador(final Timer temporizador) {
+	public ControllerTimer(final Timer temporizador) {
 		super("Temporizador:" + temporizador.getName());
 		this.timer = temporizador;
 	}
@@ -56,14 +56,14 @@ public class ControladorTemporizador extends Controller implements Runnable {
 		try {
 			this.turnOn(componente, new History(this.timer));
 			this.sleep(tempoLigado);
-			this.turnOff(componente, new History(ControladorTemporizador.this.timer));
+			this.turnOff(componente, new History(ControllerTimer.this.timer));
 		} catch (final MasterException e) {
 			this.saveHistory(new HistoryInsertExceptionDao(new History(this.timer), e));
-			this.turnOff(componente, new History(ControladorTemporizador.this.timer));
+			this.turnOff(componente, new History(ControllerTimer.this.timer));
 			throw e;
 		} catch (final Exception e) {
 			this.saveHistory(new HistoryInsertExceptionDao(new History(this.timer), e));
-			this.turnOff(componente, new History(ControladorTemporizador.this.timer));
+			this.turnOff(componente, new History(ControllerTimer.this.timer));
 			throw new MasterException(e);
 		}
 	}
@@ -76,12 +76,12 @@ public class ControladorTemporizador extends Controller implements Runnable {
 			final int timerOn = this.getValue(this.timer.getOn(), 60, "On");
 			final int timerOff = this.getValue(this.timer.getOff(), 1800, "Off");
 			final Integer start = this.timer.getStart();
-			if (ControladorTemporizador.log.isTraceEnabled()) {
-				ControladorTemporizador.log.trace("Executando temporizador: " + this.timer);
+			if (ControllerTimer.log.isTraceEnabled()) {
+				ControllerTimer.log.trace("Executando temporizador: " + this.timer);
 			}
 			this.turnOn(timerOn);
 			final long incremento = (timerOn + timerOff) * 60_000;
-			long proximaExecucao = ControladorTemporizador.calcularProximaExecucao(start, incremento);
+			long proximaExecucao = ControllerTimer.calcularProximaExecucao(start, incremento);
 			synchronized (this) {
 				while (this.isRunning()) {
 					this.sleep(proximaExecucao - System.currentTimeMillis());
@@ -93,7 +93,7 @@ public class ControladorTemporizador extends Controller implements Runnable {
 				}
 			}
 		} catch (final Exception e) {
-			ControladorTemporizador.log.error(e.getMessage(), e);
+			ControllerTimer.log.error(e.getMessage(), e);
 		} finally {
 			this.setRunning(false);
 		}
