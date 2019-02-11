@@ -45,11 +45,24 @@ public class IOTConnection {
 				final char c = (char) in.read();
 				bout.write(c);
 			}
-			final String response = new String(bout.toByteArray());
+			String response = new String(bout.toByteArray());
 			if (IOTConnection.log.isDebugEnabled()) {
 				IOTConnection.log.debug("Response: " + response);
 			}
-			return response;
+			if (response.startsWith("OK")) {
+				if (response.length() > 2) {
+					return response.substring(3);
+				}
+				return "";
+			}
+			if (response.startsWith("ERROR")) {
+				IOTConnection.log.error("Response error: " + response);
+				if (response.length() > 6) {
+					response = response.substring(6);
+					throw new IOTConnectionException(response.split(":")[0]);
+				}
+			}
+			throw new IOTConnectionException(response);
 		} catch (final Exception e) {
 			throw new IOTConnectionException(e.getMessage(), e);
 		} finally {
@@ -98,7 +111,7 @@ public class IOTConnection {
 		if (IOTConnection.log.isDebugEnabled()) {
 			IOTConnection.log.debug("Returning value: " + value);
 		}
-		return Float.valueOf(value.substring(3));
+		return Float.valueOf(value);
 	}
 
 }

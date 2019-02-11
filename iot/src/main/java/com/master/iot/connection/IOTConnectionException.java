@@ -16,6 +16,8 @@ public class IOTConnectionException extends MasterException {
 	private static final String IOT_ERROR_TERMOMETHER_INVALID_CRC = "ERROR:8";
 	private static final String IOT_ERROR_TERMOMETHER_INVALID_FAMILY_DEVICE = "ERROR:9";
 
+	private String code;
+
 	public IOTConnectionException() {
 	}
 
@@ -35,9 +37,18 @@ public class IOTConnectionException extends MasterException {
 		super(cause);
 	}
 
+	public IOTConnectionException(String[] error) {
+		super(error.length > 1 ? error[1] : "Client error");
+		this.code = error[0];
+	}
+
 	public static IOTConnectionException buildError(String error) {
 		final IOTConnectionException execption = null;
 		return execption;
+	}
+
+	public String getCode() {
+		return this.code;
 	}
 
 }
