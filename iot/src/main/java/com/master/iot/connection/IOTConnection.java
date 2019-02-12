@@ -24,7 +24,7 @@ public class IOTConnection {
 
 	private static final int PORT = 800;
 
-	private String command(final String command, final String address) throws IOTConnectionException {
+	private String command(final String command, final String address, int tries) throws IOTConnectionException {
 		Socket s = null;
 		InputStream in = null;
 		OutputStream out = null;
@@ -57,6 +57,9 @@ public class IOTConnection {
 			}
 			if (response.startsWith("ERROR")) {
 				IOTConnection.log.error("Response error: " + response);
+				if (response.startsWith(IOTConnectionException.IOT_ERROR_INVALID_COMMAND)) {
+					return this.command(command, address, tries + 1);
+				}
 				if (response.length() > 6) {
 					response = response.substring(6);
 					throw new IOTConnectionException(response.split(":"));
@@ -91,23 +94,23 @@ public class IOTConnection {
 	}
 
 	public void unregistry(final String address, final String port, String device) throws IOTConnectionException {
-		this.command(IOTConnection.COMMAND_UNREGISTRY + ";" + port + ";" + device, address);
+		this.command(IOTConnection.COMMAND_UNREGISTRY + ";" + port + ";" + device, address, 0);
 	}
 
 	public void registry(final String address, final String port, String device) throws IOTConnectionException {
-		this.command(IOTConnection.COMMAND_REGISTRY + ";" + port + ";" + device, address);
+		this.command(IOTConnection.COMMAND_REGISTRY + ";" + port + ";" + device, address, 0);
 	}
 
 	public void turnOff(final String address, final String port) throws IOTConnectionException {
-		this.command(IOTConnection.COMMAND_EXECUTE + ";" + port + ";" + IOTConnection.DEVICE_TURN_OFF, address);
+		this.command(IOTConnection.COMMAND_EXECUTE + ";" + port + ";" + IOTConnection.DEVICE_TURN_OFF, address, 0);
 	}
 
 	public void turnOn(final String address, final String port) throws IOTConnectionException {
-		this.command(IOTConnection.COMMAND_EXECUTE + ";" + port + ";" + IOTConnection.DEVICE_TURN_ON, address);
+		this.command(IOTConnection.COMMAND_EXECUTE + ";" + port + ";" + IOTConnection.DEVICE_TURN_ON, address, 0);
 	}
 
 	public float read(String address, String port) throws IOTConnectionException {
-		final String value = this.command(IOTConnection.COMMAND_EXECUTE + ";" + port, address);
+		final String value = this.command(IOTConnection.COMMAND_EXECUTE + ";" + port, address, 0);
 		if (IOTConnection.log.isDebugEnabled()) {
 			IOTConnection.log.debug("Returning value: " + value);
 		}

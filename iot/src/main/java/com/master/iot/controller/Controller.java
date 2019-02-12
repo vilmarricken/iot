@@ -100,7 +100,7 @@ public abstract class Controller {
 	}
 
 	void saveHistory(final Update update) throws MasterException {
-		new MasterThread(new ActionUpdate(update), new MasterContextTransaction());
+		new MasterThread(new ActionUpdate(update), new MasterContextTransaction()).start("Save History");
 	}
 
 	public synchronized void setRunning(final boolean executando) {

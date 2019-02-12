@@ -9,7 +9,7 @@ public class IOTConnectionException extends MasterException {
 	private static final String IOT_ERROR_INVALID_INDEX_DEVICE = "ERROR:1";
 	private static final String IOT_ERROR_INVALID_COMMAND_LENGTH = "ERROR:2";
 	private static final String IOT_ERROR_INVALID_DEVICE_TYPE = "ERROR:3";
-	private static final String IOT_ERROR_INVALID_COMMAND = "ERROR:4";
+	public static final String IOT_ERROR_INVALID_COMMAND = "ERROR:4";
 	private static final String IOT_ERROR_INVALID_READ_COMMAND = "ERROR:5";
 	private static final String IOT_ERROR_INVALID_READ_COMMAND_LENGTH = "ERROR:6";
 	private static final String IOT_ERROR_TERMOMETHER_NO_MORE_ADDRESS = "ERROR:7";
