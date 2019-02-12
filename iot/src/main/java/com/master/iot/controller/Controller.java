@@ -53,9 +53,8 @@ public abstract class Controller {
 		if (value == null) {
 			value = defaultValue;
 			Controller.log.warn("Timer " + identifier + " is null, using default value " + defaultValue);
-			return value.intValue();
 		}
-		return defaultValue;
+		return value.intValue();
 	}
 
 	public boolean isRunning() {

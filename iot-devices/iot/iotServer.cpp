@@ -37,7 +37,7 @@ void IotServer::serverRun() {
         Serial.println("-----------------------------------------");
         Serial.println("Lendo");
         delay(100);
-        while(client.available()) {
+        //while(client.available()) {
             String command = read(client);
             int count = 0;
             String *commands = breakString(command, ";", &count);
@@ -57,19 +57,30 @@ void IotServer::serverRun() {
                 Serial.println("Server: Invalid command " + command);
                 write(IOT_ERROR_INVALID_READ_COMMAND + ":" + command, &client);
             }
-        }
-        //client.stop();
+        //}
+        client.stop();
     }
     server->stop();
 }
 
 String IotServer::read( WiFiClient client ){
     int strLen = client.read();
+    Serial.print("strLen: ");
+    Serial.println(strLen);
     char str[strLen+1];
     str[strLen] = 0;
     for( int j =0; j < strLen; j++ ) {
-        str[j] = (char) client.read();
+        int i = client.read();
+        Serial.print(i);
+        Serial.print(" ");
+        char c = (char) i;
+        Serial.print(c);
+        Serial.print(" ");
+        str[j] = c;
     }
+    Serial.println("");
+    Serial.print("str: ");
+    Serial.println(str);
     return str;
 }
 

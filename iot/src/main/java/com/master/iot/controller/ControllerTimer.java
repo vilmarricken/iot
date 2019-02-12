@@ -1,6 +1,8 @@
 package com.master.iot.controller;
 
+import java.text.DateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 import org.apache.log4j.Logger;
@@ -15,19 +17,22 @@ public class ControllerTimer extends Controller implements Runnable {
 
 	private static final Logger log = Logger.getLogger(ControllerTimer.class);
 
-	public String getNome() {
+	public String getName() {
 		return this.timer.getName();
 	}
 
 	private static long calcularProximaExecucao(final int inicial, final long incremento) {
 		final GregorianCalendar gc = new GregorianCalendar();
 		gc.setTimeInMillis(System.currentTimeMillis());
+		gc.set(Calendar.MILLISECOND, 0);
+		gc.set(Calendar.SECOND, 0);
 		if (inicial >= 0) {
 			gc.set(Calendar.MINUTE, inicial);
 		}
 		long proxima = gc.getTimeInMillis();
 		while (proxima < System.currentTimeMillis()) {
-			proxima = gc.getTimeInMillis() + incremento;
+			gc.add(Calendar.MILLISECOND, (int) incremento);
+			proxima = gc.getTimeInMillis();
 		}
 		return proxima;
 	}
@@ -51,11 +56,11 @@ public class ControllerTimer extends Controller implements Runnable {
 		new Thread(this, this.timer.getName()).start();
 	}
 
-	private void turnOn(final long tempoLigado) throws MasterException {
+	private void turnOn(final long minutesOn) throws MasterException {
 		final Component componente = this.timer.getComponent();
 		try {
 			this.turnOn(componente, new History(this.timer));
-			this.sleep(tempoLigado);
+			this.sleep(minutesOn * 60000);
 			this.turnOff(componente, new History(ControllerTimer.this.timer));
 		} catch (final MasterException e) {
 			this.saveHistory(new HistoryInsertExceptionDao(new History(this.timer), e));
@@ -80,13 +85,18 @@ public class ControllerTimer extends Controller implements Runnable {
 				ControllerTimer.log.trace("Executando temporizador: " + this.timer);
 			}
 			this.turnOn(timerOn);
-			final long incremento = (timerOn + timerOff) * 60_000;
+			final long incremento = (timerOn + timerOff) * 60000;
 			long proximaExecucao = ControllerTimer.calcularProximaExecucao(start, incremento);
 			synchronized (this) {
 				while (this.isRunning()) {
+					if (ControllerTimer.log.isTraceEnabled()) {
+						ControllerTimer.log.trace("ProximaExecucao: " + proximaExecucao);
+						ControllerTimer.log.trace("ProximaExecucao: " + DateFormat.getDateTimeInstance().format(new Date(proximaExecucao)));
+						ControllerTimer.log.trace("ProximaExecucao: " + (proximaExecucao - System.currentTimeMillis()));
+					}
 					this.sleep(proximaExecucao - System.currentTimeMillis());
-					if (this.isRunning() || proximaExecucao > System.currentTimeMillis()) {
-						continue;
+					if (!this.isRunning()) {
+						break;
 					}
 					this.turnOn(timerOn);
 					proximaExecucao += incremento;

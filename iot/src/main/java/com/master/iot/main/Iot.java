@@ -41,8 +41,8 @@ public class Iot implements MasterRunnable {
 	public void run() throws MasterException {
 		try {
 			final DaoEntity<Monitor> daoMonitor = new MonitorDao();
-			if (log.isDebugEnabled()) {
-				log.debug("Initializing monitors");
+			if (Iot.log.isDebugEnabled()) {
+				Iot.log.debug("Initializing monitors");
 			}
 			final List<Monitor> monitors = daoMonitor.all();
 			if (monitors != null) {
@@ -50,8 +50,8 @@ public class Iot implements MasterRunnable {
 					this.add(new ControllerMonitor(monitor));
 				}
 			}
-			if (log.isDebugEnabled()) {
-				log.debug("Initializing timers");
+			if (Iot.log.isDebugEnabled()) {
+				Iot.log.debug("Initializing timers");
 			}
 			final DaoEntity<Timer> daoTimers = new TimerDao();
 			final List<Timer> timers = daoTimers.all();
@@ -75,12 +75,14 @@ public class Iot implements MasterRunnable {
 		}.start();
 	}
 
-	private void add(ControllerTimer controladorTemporizador) {
-		this.timers.put(controladorTemporizador.getNome(), controladorTemporizador);
+	private void add(ControllerTimer timer) {
+		this.timers.put(timer.getName(), timer);
+		new Thread(timer, timer.getName()).start();
 	}
 
-	private void add(ControllerMonitor controladorMonitor) {
-		this.monitors.put(controladorMonitor.getName(), controladorMonitor);
+	private void add(ControllerMonitor monitor) {
+		this.monitors.put(monitor.getName(), monitor);
+		new Thread(monitor, monitor.getName()).start();
 	}
 
 	public static void main(String[] args) throws MasterException {
