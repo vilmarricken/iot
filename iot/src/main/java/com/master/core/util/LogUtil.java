@@ -1,7 +1,6 @@
 package com.master.core.util;
 
-import java.io.File;
-import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.xml.parsers.FactoryConfigurationError;
 
@@ -13,12 +12,10 @@ public abstract class LogUtil {
 
 	public static final void config() {
 		if (!LogUtil.configured) {
-			final File f = new File("log4j.xml");
-			System.out.println(f.getAbsolutePath() + " - " + f.exists());
+			final URL resource = LogUtil.class.getResource("/log4j.xml");
+			System.out.println(resource);
 			try {
-				DOMConfigurator.configure(f.toURI().toURL());
-			} catch (final MalformedURLException e) {
-				e.printStackTrace();
+				DOMConfigurator.configure(resource);
 			} catch (final FactoryConfigurationError e) {
 				e.printStackTrace();
 			}

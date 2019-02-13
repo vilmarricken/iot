@@ -78,7 +78,7 @@ public class Persistence {
 	}
 
 	public void execute(final Update u) throws PersistenceException {
-		final PersistenceException[] ex = new PersistenceException[0];
+		final PersistenceException[] ex = new PersistenceException[1];
 		this.session.doWork(new Work() {
 			@Override
 			public void execute(final Connection connection) throws SQLException {

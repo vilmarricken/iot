@@ -39,10 +39,12 @@ public abstract class Controller {
 				Controller.log.trace("Turning off " + component);
 			}
 			this.connection.turnOff(board.getIp(), component.getPort().toString());
-			this.saveHistory(new HistoryInsertDao(history));
+			history.setStatus(Status.OFF);
+			history.setComponent(component);
+			this.saveHistory(new HistoryInsertDao(history), "Turn off");
 		} catch (final Exception e) {
 			final MasterException ex = new MasterException("Error on connect to board " + board.getName() + " - " + board.getIp() + " in door " + component.getPort(), e);
-			this.saveHistory(new HistoryInsertExceptionDao(history, e));
+			this.saveHistory(new HistoryInsertExceptionDao(history, e), "Turn off error");
 			throw ex;
 		}
 	}
@@ -72,11 +74,11 @@ public abstract class Controller {
 		try {
 			final float read = this.connection.read(board.getIp(), component.getPort().toString());
 			history.setRead(read);
-			this.saveHistory(new HistoryInsertDao(history));
+			this.saveHistory(new HistoryInsertDao(history), "Read");
 			return read;
 		} catch (final Exception e) {
 			final MasterException ex = new MasterException("Erro ao conectar na placa " + board.getName() + " - " + board.getIp() + " na porta " + component.getPort(), e);
-			this.saveHistory(new HistoryInsertExceptionDao(history, e));
+			this.saveHistory(new HistoryInsertExceptionDao(history, e), "Read error");
 			throw ex;
 		}
 	}
@@ -91,16 +93,16 @@ public abstract class Controller {
 		history.setStatus(Status.ON);
 		try {
 			this.connection.turnOn(board.getIp(), component.getPort().toString());
-			this.saveHistory(new HistoryInsertDao(history));
+			this.saveHistory(new HistoryInsertDao(history), "Turn on");
 		} catch (final Exception e) {
 			final MasterException ex = new MasterException("Erro ao conectar na placa " + board.getName() + " - " + board.getIp() + " na porta " + component.getPort(), e);
-			this.saveHistory(new HistoryInsertExceptionDao(history, e));
+			this.saveHistory(new HistoryInsertExceptionDao(history, e), "Turn on error");
 			throw ex;
 		}
 	}
 
-	void saveHistory(final Update update) throws MasterException {
-		new MasterThread(new ActionUpdate(update), new MasterContextTransaction()).start("Save History");
+	void saveHistory(final Update update, String nome) throws MasterException {
+		new MasterThread(new ActionUpdate(update), new MasterContextTransaction()).start("Save History - " + nome);
 	}
 
 	public synchronized void setRunning(final boolean executando) {
@@ -128,25 +130,25 @@ public abstract class Controller {
 		history.setStatus(Status.REGISTRY);
 		try {
 			this.connection.registry(board.getIp(), component.getPort().toString(), component.getType().getType());
-			this.saveHistory(new HistoryInsertDao(history));
+			this.saveHistory(new HistoryInsertDao(history), "Registry component");
 		} catch (final Exception e) {
 			final MasterException ex = new MasterException("Erro ao conectar na placa " + board.getName() + " - " + board.getIp() + " na porta " + component.getPort(), e);
-			this.saveHistory(new HistoryInsertExceptionDao(history, e));
+			this.saveHistory(new HistoryInsertExceptionDao(history, e), "Registry component error");
 			throw ex;
 		}
 	}
 
-	void unregisryComponent(Component component, History history) throws MasterException {
+	void unregisrtyComponent(Component component, History history) throws MasterException {
 		final Board board = component.getBoard();
 		history.setComponent(component);
 		history.setRun(System.currentTimeMillis());
 		history.setStatus(Status.UNREGISTRY);
 		try {
 			this.connection.unregistry(board.getIp(), component.getPort().toString(), component.getType().getType());
-			this.saveHistory(new HistoryInsertDao(history));
+			this.saveHistory(new HistoryInsertDao(history), "Unregistry component");
 		} catch (final Exception e) {
 			final MasterException ex = new MasterException("Erro ao conectar na placa " + board.getName() + " - " + board.getIp() + " na porta " + component.getPort(), e);
-			this.saveHistory(new HistoryInsertExceptionDao(history, e));
+			this.saveHistory(new HistoryInsertExceptionDao(history, e), "Unregistry component error");
 			throw ex;
 		}
 	}

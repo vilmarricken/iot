@@ -43,7 +43,7 @@ public class MasterThread {
 				try {
 					MasterThread.this.run();
 				} catch (final MasterException e) {
-					MasterThread.LOGGER.error(e.getMessage(), e);
+					MasterThread.LOGGER.error("Thread name: " + name, e);
 				}
 			}
 		}.start();

@@ -11,7 +11,6 @@ import com.master.core.exception.MasterException;
 import com.master.iot.entity.Component;
 import com.master.iot.entity.History;
 import com.master.iot.entity.Timer;
-import com.master.iot.entity.dao.HistoryInsertExceptionDao;
 
 public class ControllerTimer extends Controller implements Runnable {
 
@@ -58,19 +57,9 @@ public class ControllerTimer extends Controller implements Runnable {
 
 	private void turnOn(final long minutesOn) throws MasterException {
 		final Component componente = this.timer.getComponent();
-		try {
-			this.turnOn(componente, new History(this.timer));
-			this.sleep(minutesOn * 60000);
-			this.turnOff(componente, new History(ControllerTimer.this.timer));
-		} catch (final MasterException e) {
-			this.saveHistory(new HistoryInsertExceptionDao(new History(this.timer), e));
-			this.turnOff(componente, new History(ControllerTimer.this.timer));
-			throw e;
-		} catch (final Exception e) {
-			this.saveHistory(new HistoryInsertExceptionDao(new History(this.timer), e));
-			this.turnOff(componente, new History(ControllerTimer.this.timer));
-			throw new MasterException(e);
-		}
+		this.turnOn(componente, new History(this.timer));
+		this.sleep(minutesOn * 60000);
+		this.turnOff(componente, new History(ControllerTimer.this.timer));
 	}
 
 	@Override

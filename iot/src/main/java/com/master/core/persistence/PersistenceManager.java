@@ -1,6 +1,6 @@
 package com.master.core.persistence;
 
-import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,10 +10,10 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
+import com.master.iot.entity.Board;
 import com.master.iot.entity.Component;
 import com.master.iot.entity.History;
 import com.master.iot.entity.Monitor;
-import com.master.iot.entity.Board;
 import com.master.iot.entity.Timer;
 
 public class PersistenceManager {
@@ -56,9 +56,9 @@ public class PersistenceManager {
 
 	public PersistenceManager() {
 		final Configuration config = new Configuration();
-		final File f = new File("hibernate.cfg.xml");
-		System.out.println(f.getAbsolutePath() + " - " + f.exists());
-		config.configure(f);
+		final URL file = this.getClass().getResource("/hibernate.cfg.xml");
+		System.out.println(file);
+		config.configure(file);
 		config.addAnnotatedClass(Component.class);
 		config.addAnnotatedClass(Board.class);
 		config.addAnnotatedClass(History.class);

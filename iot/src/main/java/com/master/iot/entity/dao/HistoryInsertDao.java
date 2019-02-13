@@ -27,29 +27,29 @@ public class HistoryInsertDao implements Update {
 		try {
 			final PreparedStatement stmt = connection.prepareStatement(sql);
 			this.history.setId(UUID.randomUUID());
-			stmt.setString(1, this.history.getId().toString());
+			stmt.setObject(1, this.history.getId());
 			final Timer timer = this.history.getTimer();
 			if (timer == null) {
-				stmt.setNull(2, Types.VARCHAR);
+				stmt.setNull(2, Types.NULL);
 			} else {
-				stmt.setString(2, timer.getId().toString());
+				stmt.setObject(2, timer.getId());
 			}
 			final Monitor monitor = this.history.getMonitor();
 			if (monitor == null) {
-				stmt.setNull(3, Types.VARCHAR);
+				stmt.setNull(3, Types.NULL);
 			} else {
-				stmt.setString(3, monitor.getId().toString());
+				stmt.setObject(3, monitor.getId());
 			}
 			final Component component = this.history.getComponent();
 			if (component == null) {
-				stmt.setNull(4, Types.VARCHAR);
+				stmt.setNull(4, Types.NULL);
 			} else {
-				stmt.setString(4, monitor.getId().toString());
+				stmt.setObject(4, component.getId());
 			}
 			final long run = System.currentTimeMillis();
 			this.history.setRun(run);
 			stmt.setLong(5, run);
-			Float read = this.history.getRead();
+			final Float read = this.history.getRead();
 			if (read == null) {
 				stmt.setNull(6, Types.FLOAT);
 			} else {
