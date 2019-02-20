@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<project name="hibernate-teste" basedir="." default="mvn">
+<project name="iot" basedir="." default="mvn">
 	<property name="build.dir" value="target/classes" />
 	<property name="dist.dir" value="dist" />
 	<target name="mvn">
