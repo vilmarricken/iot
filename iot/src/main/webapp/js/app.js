@@ -11,18 +11,21 @@ Application.prototype.addNewForm = function( _state, _model ) {
 Application.prototype.addForm = function( _form ) {
 	if( this.actual ) {
 		this.form_content.removeChild( this.actual.getElement() );
+		this.forms.push( this.actual );
 	}
 	this.actual = _form;
-	this.forms.push( this.actual );
 	this.form_content.appendChild(this.actual.getElement()); 
 };
 
 Application.prototype.closeForm = function() {
+	if( this.actual ) {
+		this.form_content.removeChild( this.actual.getElement() );
+	}
 	if( this.forms.length == 0 ) {
-		this.form_content.innerHTML = "&nbsp";
+		this.actual = 0;
 	} else {
-		form = forms.pop();
-		this.form_content.innerHTML = "&nbsp";
+		this.actual = this.forms.pop();
+		this.form_content.appendChild(this.actual.getElement());
 	}
 };
 
@@ -39,8 +42,19 @@ Form.prototype.getElement = function() {
 Form.prototype.build = function() {
 	form = document.createElement("div");
 	form.innerHTML = this.state;
+	form.appendChild(createButton("close"));
 	this.element = form;	
 };
+
+function createButton( name ) {
+	element = document.createElement("input");
+	element.setAttribute("type", "button");
+	element.setAttribute("id", name);
+	element.setAttribute("name", name);
+	element.setAttribute("value", name);
+	element.setAttribute("onClick", "application.closeForm()");
+	return element;
+}
 
 var application;
 
