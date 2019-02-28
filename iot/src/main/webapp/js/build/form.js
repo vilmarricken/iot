@@ -4,6 +4,7 @@ function Form( _form ) {
 	for( component in _form.components ) {
 		this.form.components.push( componentFactory( component ) );
 	}
+	this.build();
 }
 
 Form.prototype.getElement = function() {
@@ -11,9 +12,6 @@ Form.prototype.getElement = function() {
 }
 
 Form.prototype.build = function() {
-	this.container = buildElement( "div", this.form.id );
-	for( component in this.form.components ) {
-		
-	}
+	this.container = createLayout( this.form._layout ).build( this.form.components );
 }
 

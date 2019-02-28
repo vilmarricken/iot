@@ -1,5 +1,6 @@
 function TextField( _textfield ) {
 	this.textfield = _textfield;
+	build();
 }
 
 Button.prototype.getElement = function() {

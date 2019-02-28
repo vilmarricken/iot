@@ -1,11 +1,5 @@
-function _buildElement( elementType ) {
+function buildElement( elementType ) {
 	return document.createElement( elementType );
-}
-
-function buildElement( elementType, id ) {
-	var element = _buildElement( elementType );
-	element.setAttribute( "id", id );
-	return element;
 }
 
 function buildComponent( elementType, type, model ) {
@@ -17,4 +11,8 @@ function buildComponent( elementType, type, model ) {
 		}
 	}
 	return element;
+}
+
+function createLayout( layout ) {
+	return LayoutForm();
 }

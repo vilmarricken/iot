@@ -7,6 +7,6 @@ Button.prototype.getElement = function() {
 }
 
 Button.prototype.build = function() {
-	this.element = buildElement( "input", this.button._type, this.button );
+	this.element = buildComponent( "input", this.button._type, this.button );
 }
 
