@@ -1,18 +1,19 @@
-function Form( _state, _form ) {
+function Form( _state, _model ) {
 	this.state = _state;
-	this.form = _form;
-	this.form.components = [];
-	for( component in _form.components ) {
-		this.form.components.push( componentFactory( component ) );
+	this.model = _model;
+	this.components = [];
+	for( component in this.model.components ) {
+		this.components.push( componentFactory( this.model.components[component] ) );
 	}
 	this.build();
 }
 
 Form.prototype.getElement = function() {
-	return this.container;
+	return this.layout.getElement();
 }
 
 Form.prototype.build = function() {
-	this.container = createLayout( this.form ).build();
+	this.layout = createLayout( this );
+	this.layout.build();
 }
 

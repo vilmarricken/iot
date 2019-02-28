@@ -9,7 +9,7 @@ LayoutForm.prototype.getElement = function() {
 LayoutForm.prototype.build = function() {
 	this.element = buildElement( "div" );
 	for( component in this.container.components ) {
-		this.element.appendChild( component.getElement() );
+		this.element.appendChild( this.container.components[component].getElement() );
 	}
 }
 

@@ -1,13 +1,13 @@
 function TextField( _textfield ) {
 	this.textfield = _textfield;
-	build();
+	this.build();
 }
 
-Button.prototype.getElement = function() {
+TextField.prototype.getElement = function() {
 	return this.element;
 }
 
-Button.prototype.build = function() {
+TextField.prototype.build = function() {
 	this.element = buildComponent( "input", this.textfield._type, this.textfield );
 }
 

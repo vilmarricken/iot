@@ -1,6 +1,6 @@
 function Label( _label ) {
 	this.label = _label;
-	build();
+	this.build();
 }
 
 Label.prototype.getElement = function() {
@@ -9,6 +9,6 @@ Label.prototype.getElement = function() {
 
 Label.prototype.build = function() {
 	this.element = buildComponent( "span" );
-	this.element.innetHTML = this.label.label;
+	this.element.innerHTML = this.label.label;
 }
 
