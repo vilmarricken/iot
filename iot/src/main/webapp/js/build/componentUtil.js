@@ -13,6 +13,6 @@ function buildComponent( elementType, type, model ) {
 	return element;
 }
 
-function createLayout( layout ) {
-	return LayoutForm();
+function createLayout( container ) {
+	return new LayoutForm( container );
 }
